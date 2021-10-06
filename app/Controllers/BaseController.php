@@ -9,6 +9,8 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
+use CodeIgniter\I18n\Time;
+use CodeIgniter\API\ResponseTrait;
 // model
 use \App\Models\ActivityLog;
 use \App\Models\Admin;
@@ -16,6 +18,7 @@ use \App\Models\Department;
 use \App\Models\DeptHistory;
 use \App\Models\EvalInfo;
 use \App\Models\EvalQuestion;
+use \App\Models\EvalType;
 use \App\Models\Evaluator;
 use \App\Models\ExeCom;
 use \App\Models\ExeComHistory;
