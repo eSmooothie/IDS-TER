@@ -96,4 +96,8 @@ class BaseController extends Controller
 		$this->queryBuilder	= \Config\Database::connect();
 
 	}
+
+	public function getCurrentDateTime(){
+		return $this->time->now()->toDateTimeString();
+	}
 }

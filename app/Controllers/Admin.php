@@ -19,6 +19,7 @@ class Admin extends BaseController
       $data = [
         'id' => $this->session->get("adminID"),
         'pageTitle' => "ADMIN | DASHBOARD",
+				'baseUrl' => base_url(),
       ];
       echo view("admin/layout/header", $data);
       echo view("admin/pages/dashboard", $data);

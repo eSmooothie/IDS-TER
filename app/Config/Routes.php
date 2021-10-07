@@ -39,6 +39,15 @@ $routes->get('/admin','Admin::index');
 $routes->post("/admin/login",'Admin::verifyCredentials');
 
 $routes->get("/admin/dashboard","Admin::dashboard");
+// admin:section
+$routes->get("/admin/section","Section::index");
+$routes->post("/admin/section/new","Section::newSection");
+$routes->get("/admin/section/grade/(:num)/(:num)","Section::viewSection/$1/$2");
+
+
+
+
+
 
 
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))
