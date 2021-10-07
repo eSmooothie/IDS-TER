@@ -10,6 +10,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
 use CodeIgniter\I18n\Time;
+
 use CodeIgniter\API\ResponseTrait;
 // model
 use \App\Models\ActivityLog;
@@ -36,6 +37,7 @@ use \App\Models\TeacherSubject;
 
 class BaseController extends Controller
 {
+	use ResponseTrait;
 	/**
 	 * Instance of the main Request object.
 	 *
@@ -50,7 +52,7 @@ class BaseController extends Controller
 	 *
 	 * @var array
 	 */
-	protected $helpers = [];
+	protected $helpers = ['url'];
 
 	/**
 	 * Constructor.

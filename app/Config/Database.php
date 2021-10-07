@@ -80,7 +80,7 @@ class Database extends Config
 		'DSN'      => '',
 		'hostname' => 'localhost',
 		'username' => 'Sherwin',
-		'password' => 'sher@I.O_26',
+		'password' => 'sher@I.O_026',
 		'database' => 'ter-ids',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
