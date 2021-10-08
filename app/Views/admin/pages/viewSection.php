@@ -39,10 +39,81 @@
   <!-- content -->
   <div class="col ps-3">
     <div class="mb-3">
-      <p>Info</p>
+      <div class="border rounded p-3 bg-light bg-gradient">
+        <div class="">
+          <p class="m-0 fs-3 fw-bold"><?php echo "${sectionData['NAME']}"; ?>
+            <small style="font-size:small;"><?php echo "(${schoolyear['S.Y']}:${schoolyear['SEMESTER']})"; ?>
+            </small>
+          </p>
+          <span class="d-flex align-items-center">
+            <span class="text-muted">Grade 7</span>
+            <span class="ms-2 me-2" style="font-size:5px;"><i class="fas fa-circle"></i></span>
+            <span class="text-success"><?php echo count($students); ?> Students</span>
+            <span class="ms-2 me-2" style="font-size:5px;"><i class="fas fa-circle"></i></span>
+            <span class=""><a href="<?php echo "$baseUrl/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}/edit"; ?>"><span class="me-1"><i class="fas fa-edit"></i></span>Edit</a></span>
+            <span class="ms-2 me-2" style="font-size:5px;"><i class="fas fa-circle"></i></span>
+            <span class=""><a href="#"><span class="me-1"><i class="fas fa-history"></i></span>History</a></span>
+          </span>
+        </div>
+      </div>
     </div>
-    <div class="contaier-fluid row row-cols-lg-4 row-cols-md-3 ps-2 gy-3">
-      <p>Student</p>
+    <div class="contaier-fluid row row-cols-md-2 ps-2 gy-3 ">
+      <!-- Students -->
+      <div class="col-6">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th colspan="3">Students</th>
+            </tr>
+            <tr>
+              <th scope="col" class="col-2">ID</th>
+              <th scope="col" class="">Name</th>
+              <th scope="col" class="col-1">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($students as $key => $student) {
+              $id = $student['ID'];
+              $fn = $student['FN'];
+              $ln = $student['LN'];
+              $status = $student['STATUS'];
+              $isActive = $student['IS_ACTIVE']
+              ?>
+              <tr>
+                <th scope="row"><?php echo "$id"; ?></th>
+                <td><a href="<?php echo ($isActive)? "":"#"; ?>" class="<?php echo ($isActive)? "":"text-muted"; ?>"><?php echo "$ln, $fn"; ?></a></td>
+                <td class="<?php echo ($status)? "bg-success":"bg-secondary"; ?>"></td>
+              </tr>
+              <?php
+            } ?>
+
+          </tbody>
+        </table>
+      </div>
+      <!-- Subject Teacher -->
+      <div class="col-6">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th colspan="3">Subjects</th>
+            </tr>
+            <tr>
+              <th scope="col" class="col-2">ID</th>
+              <th scope="col" class="">Subject</th>
+              <th scope="col" class="">Teacher</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">11</th>
+              <td><a href="#">Subject</a></td>
+              <td class=""><a href="#">Teacher</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
+</div>
+<div class="" style="height:10vh;">
 </div>

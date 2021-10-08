@@ -1,3 +1,17 @@
+var toEnroll = [];
+
+$(document).ready(function(){
+  // do something
+
+  // search
+  $('.searchStudent').on('keyup', function(){
+    var value = $(this).val().toLowerCase();
+    $(".tbodyStudents tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+
 function sendPostRequest(path,
   formData,
   done = function(data){},
@@ -14,6 +28,49 @@ function sendPostRequest(path,
   }).done(done)
   .fail(fail);
 }
+
+function remove(element){
+  var value = element.value;
+  var trData = document.getElementById(value);
+  var toAllStudentBody = document.getElementById('tbodyStudentsE');
+  trData.children[3].innerHTML = "<button onclick=\"add(this);\" class=\"btn btn-primary studentDataE\" type=\"button\" name=\"button\" value=\""+value+"\">"+
+    "<i class=\"fas fa-plus\"></i>"+
+    "</button>";
+  toAllStudentBody.prepend(trData);
+
+  let index = toEnroll.indexOf(value);
+  if(index > -1){
+    toEnroll.splice(index,1);
+  }
+}
+
+function add(element){
+  var value = element.value;
+  var trData = document.getElementById(value);
+  var toEnrollTbody = document.getElementById('tbodyEnrollee');
+  trData.children[3].innerHTML = "<button onclick=\"remove(this);\" class=\"btn btn-danger removeEnrollee\" type=\"button\" name=\"button\" value=\""+value+"\">"+
+    "<i class=\"fas fa-times\"></i>"+
+    "</button>";
+  toEnrollTbody.append(trData);
+  toEnroll.push(value);
+}
+
+$("#enroll").on("click",function(){
+
+  if(toEnroll.length > 0){
+    var path = "admin/section/student/enroll";
+    var formData = {
+                    'enrollee':toEnroll,
+                    'id': $(this).val(),
+                    };
+    var done = function(data){
+      // console.log(data);
+      window.location.reload();
+    }
+    sendPostRequest(path, formData, done);
+  }
+
+});
 
 $("#newSection").submit(function(e){
   e.preventDefault();

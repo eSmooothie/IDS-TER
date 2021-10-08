@@ -82,9 +82,11 @@ class BaseController extends Controller
 		$this->schoolyearModel = new SchoolYear();
 		$this->sectionModel = new Section();
 		$this->sectionSubjectModel = new SectionSubject();
+		
 		$this->studentModel = new Student();
 		$this->studentSectionModel = new StudentSection();
 		$this->studentStatusModel = new StudentStatus();
+
 		$this->subjectModel = new Subjects();
 		$this->teacherSubjectModel = new TeacherSubject();
 		$this->teacherModel = new Teacher();
