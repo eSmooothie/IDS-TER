@@ -68,13 +68,90 @@
       </div>
       <!-- Display Message -->
       <div class="">
-        <div class="d-none w-100 border border-success d-flex align-items-center p-2 rounded" style="background-color:#a2ff83;">
-          <p class="m-0">Message</p>
+        <div class="d-none text-dark w-100 border border-success p-2 rounded" style="background-color:#a2ff83;">
+          <p class="m-0">Succ Message</p>
         </div>
-          <div class="d-none w-100 border border-danger d-flex align-items-center p-2 rounded" style="background-color:#f67f7b;">
-            <p class="m-0">Message</p>
-          </div>
+        <div class="d-none text-dark w-100 border border-danger p-2 rounded" style="background-color:#f67f7b;">
+          <p class="m-0">Error Message</p>
         </div>
+      </div>
+        <div id="ServerErrContainer" class="d-none mb-3 w-100 border border-danger p-2 rounded" style="background-color:#f67f7b;">
+          <p class="m-0" id="ServerErrMessage"></p>
+        </div>
+      <?php
+          if($enrolledStudent){
+            ?>
+            <div class="text-dark mb-3 w-100 border border-success p-2 rounded" style="background-color:#a2ff83;">
+              <p class="m-0">Successfully Enrolled</p>
+              <ul>
+                <?php
+                  foreach ($enrolledStudent as $key => $value) {
+                    ?>
+                    <li><?php echo "$value"; ?></li>
+                    <?php
+                  }
+                 ?>
+              </ul>
+            </div>
+            <?php
+          }
+       ?>
+      <?php
+          if($invalidRows){
+            ?>
+            <div class="text-dark mb-3 w-100 border border-danger p-2 rounded" style="background-color:#f67f7b;">
+              <p class="m-0">Invalid lines</p>
+              <ul>
+                <?php
+                foreach ($invalidRows as $key => $value) {
+                  $lineNum = $value['key'] + 1;
+                  $line = $value['line'];
+                  ?>
+                  <li><?php echo "Line $lineNum: $line" ?></li>
+                  <?php
+                }
+                 ?>
+              </ul>
+            </div>
+            <?php
+          }
+       ?>
+      <?php
+          if($invalidStudentId){
+             ?>
+             <div class="text-dark mb-3 w-100 border border-danger p-2 rounded" style="background-color:#f67f7b;">
+               <p class="m-0">Invalid student id (Does not exist in the database)</p>
+               <ul>
+                 <?php
+                 foreach ($invalidStudentId as $key => $value) {
+                   ?>
+                   <li><?php echo "$value[0]" ?></li>
+                   <?php
+                 }
+                  ?>
+               </ul>
+             </div>
+             <?php
+           }
+       ?>
+      <?php
+          if($removeStudent){
+              ?>
+              <div class="text-dark mb-3 w-100 border border-danger p-2 rounded" style="background-color:#f67f7b;">
+                <p class="m-0">These students already enrolled in this school year.</p>
+                <ul>
+                  <?php
+                  foreach ($removeStudent as $key => $value) {
+                    ?>
+                    <li><?php echo "$value" ?></li>
+                    <?php
+                  }
+                   ?>
+                </ul>
+              </div>
+              <?php
+            }
+       ?>
         <!-- message -->
         <?php if($enrollStudentStatus){
 
@@ -99,7 +176,7 @@
         if(!empty($enrollStudentStatus['remove'])){
           ?>
           <div class="w-100 border border-danger p-2 rounded" style="background-color:#f67f7b;">
-            <p class="m-0"><?php echo "Already enrolled in S.Y:${schoolyear['S.Y']}:${schoolyear['SEMESTER']}"; ?></p>
+            <p class="m-0">These students already enrolled in this school year.</p>
             <ul>
               <?php
               foreach ($enrollStudentStatus['remove'] as $key => $value) {
@@ -127,7 +204,9 @@
           <div class="mb-3">
             <span class="fw-bold d-block">Note: CSV format comma separated</span>
             <span class="fw-bold d-block">Example: 2018-000,LN,FN</span>
-            <input class="form-control form-control-sm" id="bulkEnroll" type="file" accept=".csv" style="width:20rem;">
+            <input type="hidden" name="sectionId" value="<?php echo "$id"; ?>">
+            <input name="csvFile" class="form-control form-control-sm mb-3" type="file" accept=".csv" style="width:20rem;">
+            <button type="submit" name="button" class="btn btn-primary">Submit</button>
           </div>
         </form>
         <!-- Indi -->

@@ -55,6 +55,38 @@ function add(element){
   toEnroll.push(value);
 }
 
+$("#bulkEnroll").submit(function(e){
+  e.preventDefault();
+  var form = document.getElementById('bulkEnroll');
+  var formData = new FormData(form);
+  // console.log(formData);
+
+  let baseUrl = window.location.origin;
+  let apiPath = "/admin/section/student/enroll/csv";
+  let url = baseUrl + apiPath;
+
+  $.ajax({
+    type: 'post',
+    url: url,
+    data: formData,
+    cache: false,
+    contentType: false,
+    processData: false,
+    success: function(data){
+      // do something
+      // console.log(data);
+
+      window.location.reload();
+    },
+    error: function(xhr, textStatus, errorMessage){
+      // do something
+      // console.log(xhr.responseJSON);
+      $("#ServerErrContainer").removeClass("d-none");
+      document.getElementById('ServerErrMessage').innerHTML = xhr.responseJSON['message'];
+    }
+  });
+});
+
 $("#enroll").on("click",function(){
 
   if(toEnroll.length > 0){

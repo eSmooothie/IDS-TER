@@ -132,6 +132,26 @@ class Section extends BaseController{
       $data['enrollStudentStatus'] = false;
     }
 
+    if(!empty($this->session->getFlashData('invalidRows'))){
+      $data['invalidRows'] = $this->session->getFlashData('invalidRows');
+    }else{
+      $data['invalidRows'] = false;
+    }
+    if(!empty($this->session->getFlashData('invalidStudentId'))){
+      $data['invalidStudentId'] = $this->session->getFlashData('invalidStudentId');
+    }else{
+      $data['invalidStudentId'] = false;
+    }
+    if(!empty($this->session->getFlashData('removeStudent'))){
+      $data['removeStudent'] = $this->session->getFlashData('removeStudent');
+    }else{
+      $data['removeStudent'] = false;
+    }
+    if(!empty($this->session->getFlashData('enrolledStudent'))){
+      $data['enrolledStudent'] = $this->session->getFlashData('enrolledStudent');
+    }else{
+      $data['enrolledStudent'] = false;
+    }
     echo view("admin/layout/header", $data);
     echo view("admin/pages/editSection", $data);
     echo view("admin/layout/footer");
@@ -169,6 +189,7 @@ class Section extends BaseController{
       array_push($enrolled, $value);
       $this->studentSectionModel->insert($enroll);
     }
+
     $data = [
       'enrolled' => $enrolled,
       'remove' => $remove,
@@ -181,6 +202,112 @@ class Section extends BaseController{
       "message" => "OK",
       "data" => $data,
     ];
+    return $this->setResponseFormat('json')->respond($response, 200);
+  }
+
+  public function enrollStudentsCSV(){
+    header("Content-type:application/json");
+    $csvFile = $this->request->getFile("csvFile");
+    $sectionId = $this->request->getPost("sectionId");
+
+    $uploadPath = WRITEPATH.'uploads/docs/';
+
+    // upload file
+    if($csvFile->isValid() && !$csvFile->hasMoved() && $csvFile->getClientMimeType() == "application/vnd.ms-excel"){
+      $fileName = $csvFile->getRandomName();
+      $csvFile->move($uploadPath, $fileName);
+    }else{
+      $response = [
+        'message' => "Invalid CSV file",
+      ];
+      return $this->setResponseFormat('json')->respond($response, 500);
+    }
+    // read file
+    $mode = "r";
+    $filePath = $uploadPath.$fileName;
+    $file = fopen($filePath,$mode);
+    $content = fread($file, filesize($filePath));
+    $data = explode("\r\n",$content); // get each line
+
+    // TODO: loop through $data, remove quotation and separate each string base on comma.
+    $enrolleeData = [];
+    $invalidRows = [];
+    foreach ($data as $key => $value) {
+      $enroll = explode(",", $value);
+      if(count($enroll) == 3 && !empty($enroll[0])){
+        array_push($enrolleeData, $enroll);
+      }else{
+        if($key != count($data) - 1){
+          $row = ['key' => $key, 'line' => $value];
+          array_push($invalidRows, $row);
+        }
+      }
+    }
+    $this->session->setFlashdata("invalidRows",$invalidRows);
+
+    // validate enrollee id
+    $existStudent = [];
+    $notExistStudents = [];
+    foreach ($enrolleeData as $key => $value) {
+      $id = $value[0]; // get only the id
+      // check if id exist in db
+      $isExist = $this->studentModel->find($id);
+      if($isExist){
+        array_push($existStudent, $id);
+      }else{
+        array_push($notExistStudents, $value);
+      }
+    }
+    $this->session->setFlashdata("invalidStudentId", $notExistStudents);
+
+    // get current school year
+    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+
+    // check if student x is already enrolled in curr s.y
+    $remove = [];
+    foreach ($existStudent as $key => $studentId) {
+      $check = $this->studentSectionModel->where("STUDENT_ID", $studentId)
+                                        ->where("SCHOOL_YEAR_ID", $sy['ID'])
+                                        ->first();
+      if(!empty($check)){
+        // remove
+        array_push($remove, $studentId);
+        unset($existStudent[$key]);
+      }
+    }
+    $this->session->setFlashdata("removeStudent", $remove);
+
+    // start enrolling
+    foreach ($existStudent as $key => $studentId) {
+      $enroll = [
+        'STUDENT_ID' => $studentId,
+        'SECTION_ID' => $sectionId,
+        'SCHOOL_YEAR_ID' => $sy['ID'],
+        'CREATED_AT' => $this->getCurrentDateTime(),
+      ];
+
+      $this->studentSectionModel->insert($enroll);
+    }
+    $this->session->setFlashdata("enrolledStudent", $existStudent);
+
+    $data = [
+      "sectionId" => $sectionId,
+      "S.Y" => $sy,
+      "fileName" => $fileName,
+      "filePath" => $filePath,
+      "content" => $content,
+      "data" => $data,
+      "enrollee" => $enrolleeData,
+      "invalid_row" => $invalidRows,
+      "existStudent" => $existStudent,
+      "doesNotExistStudent" => $notExistStudents,
+    ];
+
+    $response = [
+      "message" => "OK",
+      "data" => $data,
+    ];
+
     return $this->setResponseFormat('json')->respond($response, 200);
   }
 
