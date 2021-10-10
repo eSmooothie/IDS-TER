@@ -1,6 +1,6 @@
 <body>
   <div class="container-fluid row">
-    <div class="border col-12 p-3 rounded">
+    <div class="border col-12 p-3 rounded mb-3">
       <div class="d-sm-flex flex-row justify-content-evenly">
         <div class="col text-center border">
           <p class="fs-3 fw-bold mb-1">XXXX XXXX Y</p>
@@ -19,7 +19,7 @@
     <!-- Quick access -->
     <div class="col-12 d-sm-flex">
       <div class="me-3">
-        <a href="#" class="btn btn-primary rounded-pill w-100 mb-3">Log out</a>
+        <a href="<?php echo $baseUrl; ?>" class="btn btn-primary rounded-pill w-100 mb-3">Log out</a>
       </div>
       <div class="me-3">
         <button type="button" name="button" class="btn btn-primary rounded-pill w-100 mb-3">New School Year</button>
@@ -29,7 +29,7 @@
       </div>
     </div>
     <!-- Content -->
-    <div class="col-12 border">
+    <div class="col-12 border rounded bg-light bg-gradient">
       <div class="container-fluid row row-cols-sm-4 p-3 g-3">
         <!-- Section -->
         <div class="col-sm-3 col-12">

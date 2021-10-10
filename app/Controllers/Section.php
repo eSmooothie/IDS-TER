@@ -116,6 +116,52 @@ class Section extends BaseController{
                                           ->where("SCHOOL_YEAR_ID",$sy['ID'])
                                           ->findAll();
     $allStudents = $this->studentModel->findAll();
+    // get teacher and its subject teaches
+    $allTeachers = [];
+    $teachers = $this->teacherModel->findAll();
+    foreach ($teachers as $key => $value) {
+      $id = $value['ID'];
+      $fn = $value['FN'];
+      $ln = $value['LN'];
+      $subjects = $this->teacherSubjectModel->where("TEACHER_ID", $id)
+                                          ->findAll();
+      $subjectTeaches = [];
+      foreach ($subjects as $key => $val) {
+        $subjectId = $val['SUBJECT_ID'];
+        $subjectData = $this->subjectModel->find($subjectId);
+
+        array_push($subjectTeaches, $subjectData);
+      }
+      $teacherData = [
+        'ID' => $id,
+        'FN' => $fn,
+        'LN' => $ln,
+        'subjects' => $subjectTeaches,
+      ];
+
+      array_push($allTeachers, $teacherData);
+    }
+
+
+    $sectionSubjects = [];
+    $sectionSubjectsTeacher = $this->sectionSubjectModel->where("SECTION_ID", $sectionId)
+                                                      ->where("SCHOOL_YEAR_ID", $sy['ID'])
+                                                      ->findAll();
+    foreach ($sectionSubjectsTeacher as $key => $rawData) {
+      $subjectId = $rawData['SUBJECT_ID'];
+      $teacherId = $rawData['TEACHER_ID'];
+
+      $subjectData = $this->subjectModel->find($subjectId);
+      $teacherData = $this->teacherModel->find($teacherId);
+
+      $sectionSubject = [
+        'teacherData' => $teacherData,
+        'subjectData' => $subjectData,
+      ];
+
+      array_push($sectionSubjects, $sectionSubject);
+    }
+
     $data = [
       'id' => $this->session->get("adminID"),
       'pageTitle' => "ADMIN | SECTION",
@@ -124,14 +170,16 @@ class Section extends BaseController{
       'schoolyear' => $sy,
       'students' => $studentsInSec,
       'allStudents' => $allStudents,
+      'teachers' => $allTeachers,
+      'sectionSubjects' => $sectionSubjects,
     ];
 
+    // status
     if(!empty($this->session->getFlashData('enroll'))){
       $data['enrollStudentStatus'] = $this->session->getFlashData('enroll');
     }else{
       $data['enrollStudentStatus'] = false;
     }
-
     if(!empty($this->session->getFlashData('invalidRows'))){
       $data['invalidRows'] = $this->session->getFlashData('invalidRows');
     }else{
@@ -152,6 +200,7 @@ class Section extends BaseController{
     }else{
       $data['enrolledStudent'] = false;
     }
+
     echo view("admin/layout/header", $data);
     echo view("admin/pages/editSection", $data);
     echo view("admin/layout/footer");

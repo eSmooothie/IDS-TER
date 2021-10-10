@@ -10,6 +10,15 @@ $(document).ready(function(){
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
   });
+
+  $('.searchSubject').on('keyup', function(){
+    var value = $(this).val().toLowerCase();
+    $(".tbodySubjects tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+
+  
 });
 
 function sendPostRequest(path,

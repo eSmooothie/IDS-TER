@@ -6,6 +6,7 @@ class Home extends BaseController
 {
 	public function index()
 	{
+		$this->session->destroy();
 		return view('landing');
 	}
 }

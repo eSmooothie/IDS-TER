@@ -60,13 +60,12 @@
     <div class="contaier-fluid">
       <div class="">
         <ul>
-          <li>Enroll student to this section (bulk(csv) or individual)</li>
           <li>Edit subjects</li>
           <li>Edit section name</li>
           <li>Edit section grade lv</li>
         </ul>
       </div>
-      <!-- Display Message -->
+      <!-- Display Err and Succ Messages -->
       <div class="">
         <div class="d-none text-dark w-100 border border-success p-2 rounded" style="background-color:#a2ff83;">
           <p class="m-0">Succ Message</p>
@@ -74,7 +73,6 @@
         <div class="d-none text-dark w-100 border border-danger p-2 rounded" style="background-color:#f67f7b;">
           <p class="m-0">Error Message</p>
         </div>
-      </div>
         <div id="ServerErrContainer" class="d-none mb-3 w-100 border border-danger p-2 rounded" style="background-color:#f67f7b;">
           <p class="m-0" id="ServerErrMessage"></p>
         </div>
@@ -192,10 +190,10 @@
           <?php
         }
       } ?>
-
+      </div>
       <!-- Enroll new  student -->
-      <div class="border rounded p-3 bg-light bg-gradient">
-        <p class="fs-3">Enroll students</p>
+      <p class="fs-3">Enroll students</p>
+      <div class="border rounded p-3 bg-light bg-gradient mb-3">
         <!-- Bulk -->
         <form id="bulkEnroll" >
           <div class="">
@@ -222,7 +220,7 @@
                 <input type="text" name="" value="" class="form-control searchStudent" placeholder="Search">
               </div>
             </div>
-            <div class="overflow-auto"  style="height:50vh;">
+            <div class="overflow-auto"  style="max-height:50vh;">
               <table class="table table-striped table-hover">
                 <thead>
                   <tr>
@@ -259,7 +257,7 @@
           <!-- To Enroll -->
           <div class="col ms-1">
             <p class="fs-5">To Enroll</p>
-            <div class="overflow-auto"  style="height:50vh;">
+            <div class="overflow-auto"  style="max-height:50vh;">
               <table class="table table-striped table-hover">
                 <thead>
                   <tr>
@@ -277,6 +275,89 @@
         </div>
         <div class="d-flex justify-content-end">
           <button type="button" class="btn btn-primary mt-3 mb-3" name="button" id="enroll" value="<?php echo "${sectionData['ID']}"; ?>">Enroll</button>
+        </div>
+      </div>
+
+      <!-- Edit subject -->
+      <p class="fs-3 mb-3">Edit subjects</p>
+      <div class="border rounded p-3 bg-light bg-gradient mb-3">
+        <div class="">
+          <div class="d-flex justify-content-start mb-3">
+            <p class="fs-5">Current Subjects</p>
+          </div>
+          <table class="table table-striped mb-3 border rounded table-hover" style="max-height: 40vh;">
+            <thead>
+              <tr>
+                <th scope="col">Subject</th>
+                <th scope="col">Teacher</th>
+                <th scope="col" class="col-1"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              foreach ($sectionSubjects as $key => $data) {
+                $teacher = $data['teacherData'];
+                $subject = $data['subjectData'];
+                ?>
+                <tr id="<?php echo $teacher['ID']; ?>">
+                  <th scope="row"><?php echo $subject['DESCRIPTION']; ?></th>
+                  <td><?php echo $teacher['LN'].", ".$teacher['FN']; ?></td>
+                  <td>
+                    <button id="<?php echo $subject['ID']; ?>" type="button" name="button" class="btn btn-danger" onclick="">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </td>
+                </tr>
+                <?php
+              }
+               ?>
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-end">
+            <button type="button" name="button" class="btn btn-primary" value="<?php echo "${sectionData['ID']}"; ?>">Update</button>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between mb-3">
+            <p class="fs-5">Add Subjects</p>
+            <div class="">
+              <input type="text" name="" value="" class="form-control searchSubject" placeholder="Search" style="width:20vw;">
+            </div>
+          </div>
+          <table class="table table-striped mb-3 border rounded table-hover" style="max-height:40vh;">
+            <thead>
+              <tr>
+                <th scope="col">Subject</th>
+                <th scope="col">Teacher</th>
+                <th scope="col" class="col-1"></th>
+              </tr>
+            </thead>
+            <tbody class="tbodySubjects">
+              <?php
+                foreach ($teachers as $key => $teacherData) {
+                  $teacherId = $teacherData['ID'];
+                  $teacherFn = $teacherData['FN'];
+                  $teacherLn = $teacherData['LN'];
+                  $subjects = $teacherData['subjects'];
+                  foreach ($subjects as $key => $subjectData) {
+                    $subjectId = $subjectData['ID'];
+                    $subjectName = $subjectData['DESCRIPTION'];
+                    ?>
+                    <tr id="<?php echo "$teacherId"; ?>" class="teacherRow">
+                      <th scope="row"><?php echo "$subjectName"; ?></th>
+                      <td><?php echo "$teacherLn, $teacherFn"; ?></td>
+                      <td>
+                        <button id="<?php echo "$subjectId"; ?>" type="button" name="button" class="btn btn-primary" onclick="">
+                          <i class="fas fa-plus"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <?php
+                  }
+                }
+               ?>
+            </tbody>
+          </table>
+
         </div>
       </div>
     </div>
