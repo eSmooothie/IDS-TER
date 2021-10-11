@@ -360,6 +360,57 @@ class Section extends BaseController{
     return $this->setResponseFormat('json')->respond($response, 200);
   }
 
+  public function updateSubject(){
+      header("Content-type:application/json");
+      $teachers = $this->request->getPost("teachers[]");
+      $subjects = $this->request->getPost("subjects[]");
+      $sectionId = $this->request->getPost("sectionId");
+
+      $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+
+      $currentSubject = $this->sectionSubjectModel->where("SECTION_ID", $sectionId)
+                                                  ->where("SCHOOL_YEAR_ID", $sy['ID'])
+                                                  ->findAll();
+      $toAdd = [];
+      for ($i=0; $i < count($teachers); $i++) {
+        $add = [
+          'TEACHER_ID' => $teachers[$i],
+          'SUBJECT_ID' => $subjects[$i],
+        ];
+        array_push($toAdd, $add);
+      }
+
+      // delete existing record
+      $this->sectionSubjectModel->where("SECTION_ID", $sectionId)
+                                          ->where("SCHOOL_YEAR_ID", $sy['ID'])
+                                          ->delete();
+      // start adding subject
+      foreach ($toAdd as $key => $value) {
+
+        $teacherId = $value['TEACHER_ID'];
+        $subjectId = $value['SUBJECT_ID'];
+
+        $insert = [
+          'SECTION_ID' => $sectionId,
+          'SUBJECT_ID' => $subjectId,
+          'TEACHER_ID' => $teacherId,
+          'SCHOOL_YEAR_ID' => $sy['ID'],
+        ];
+        $this->sectionSubjectModel->insert($insert);
+      }
+
+      $data = [
+        'toAdd' => $toAdd,
+        'currentSubject' => $currentSubject,
+      ];
+
+      $response = [
+        "message" => "OK",
+        "data" => $data,
+      ];
+      return $this->setResponseFormat('json')->respond($response, 200);
+  }
+
   public function newSection(){
     header("Content-type:application/json");
     $gradeLevel = $this->request->getPost("gradeLevel");

@@ -46,7 +46,7 @@ $routes->get("/admin/section/grade/(:num)/(:num)","Section::viewSection/$1/$2");
 $routes->get("/admin/section/grade/(:num)/(:num)/edit","Section::editSection/$1/$2");
 $routes->post("/admin/section/student/enroll","Section::enrollStudents");
 $routes->post("/admin/section/student/enroll/csv","Section::enrollStudentsCSV");
-
+$routes->post("/admin/section/subject/update","Section::updateSubject");
 
 
 

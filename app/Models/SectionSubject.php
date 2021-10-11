@@ -6,6 +6,6 @@ class SectionSubject extends Model{
   protected $table = 'sec_subj_lst';
 
   protected $primaryKey = 'ID';
-  protected $allowedFields = ['SECTION_ID','TEACHER_ID','SCHOOL_YEAR_ID'];
+  protected $allowedFields = ['SECTION_ID','TEACHER_ID','SUBJECT_ID','SCHOOL_YEAR_ID'];
 }
  ?>

@@ -65,6 +65,11 @@
           <li>Edit section grade lv</li>
         </ul>
       </div>
+      <div class="d-flex">
+        <button type="button" name="button" class="btn btn-primary me-3" onclick="changeEditContainer(1);">Enroll Students</button>
+        <button type="button" name="button" class="btn btn-primary me-3" onclick="changeEditContainer(2);">Edit Subjects</button>
+        <button type="button" name="button" class="btn btn-primary me-3" onclick="changeEditContainer(3);">Edit Section</button>
+      </div>
       <!-- Display Err and Succ Messages -->
       <div class="">
         <div class="d-none text-dark w-100 border border-success p-2 rounded" style="background-color:#a2ff83;">
@@ -192,173 +197,185 @@
       } ?>
       </div>
       <!-- Enroll new  student -->
-      <p class="fs-3">Enroll students</p>
-      <div class="border rounded p-3 bg-light bg-gradient mb-3">
-        <!-- Bulk -->
-        <form id="bulkEnroll" >
+      <div class="d-none" id="enrollStudentContainer">
+        <p class="fs-3">Enroll students</p>
+        <div class="border rounded p-3 bg-light bg-gradient mb-3">
+          <!-- Bulk -->
+          <form id="bulkEnroll" >
+            <div class="">
+              <label for="" class="form-label fs-5">Bulk</label>
+            </div>
+            <div class="mb-3">
+              <span class="fw-bold d-block">Note: CSV format comma separated</span>
+              <span class="fw-bold d-block">Example: 2018-000,LN,FN</span>
+              <input type="hidden" name="sectionId" value="<?php echo "$id"; ?>">
+              <input name="csvFile" class="form-control form-control-sm mb-3" type="file" accept=".csv" style="width:20rem;">
+              <button type="submit" name="button" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+          <!-- Indi -->
           <div class="">
-            <label for="" class="form-label fs-5">Bulk</label>
+            <label for="" class="form-label fs-5">Individual</label>
           </div>
-          <div class="mb-3">
-            <span class="fw-bold d-block">Note: CSV format comma separated</span>
-            <span class="fw-bold d-block">Example: 2018-000,LN,FN</span>
-            <input type="hidden" name="sectionId" value="<?php echo "$id"; ?>">
-            <input name="csvFile" class="form-control form-control-sm mb-3" type="file" accept=".csv" style="width:20rem;">
-            <button type="submit" name="button" class="btn btn-primary">Submit</button>
-          </div>
-        </form>
-        <!-- Indi -->
-        <div class="">
-          <label for="" class="form-label fs-5">Individual</label>
-        </div>
-        <div id="individual" class="d-flex flex-row border rounded p-2">
-          <!-- List of student -->
-          <div class="col me-1">
-            <div class="d-flex justify-content-between">
-              <p class="fs-5">List of Students</p>
-              <div class="">
-                <input type="text" name="" value="" class="form-control searchStudent" placeholder="Search">
+          <div id="individual" class="d-flex flex-row border rounded p-2">
+            <!-- List of student -->
+            <div class="col me-1">
+              <div class="d-flex justify-content-between">
+                <p class="fs-5">List of Students</p>
+                <div class="">
+                  <input type="text" name="" value="" class="form-control searchStudent" placeholder="Search">
+                </div>
+              </div>
+              <div class="overflow-auto"  style="max-height:50vh;">
+                <table class="table table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">LAST NAME</th>
+                      <th scope="col">FIRST NAME</th>
+                      <th scope="col" class="col-1"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbodyStudentsE" class="tbodyStudents">
+                    <?php
+                      foreach ($allStudents as $key => $student) {
+                        $id = $student['ID'];
+                        $ln = $student['LN'];
+                        $fn = $student['FN'];
+                        ?>
+                        <tr id="<?php echo "$id"; ?>">
+                          <th scope="row"><?php echo "$id"; ?></th>
+                          <td><?php echo "$ln"; ?></td>
+                          <td><?php echo "$fn"; ?></td>
+                          <td>
+                            <button onclick="add(this);" class="btn btn-primary studentDataE" type="button" name="button" value="<?php echo "$id"; ?>">
+                              <i class="fas fa-plus"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <?php
+                        }
+                     ?>
+                  </tbody>
+                </table>
               </div>
             </div>
-            <div class="overflow-auto"  style="max-height:50vh;">
-              <table class="table table-striped table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">LAST NAME</th>
-                    <th scope="col">FIRST NAME</th>
-                    <th scope="col" class="col-1"></th>
+            <!-- To Enroll -->
+            <div class="col ms-1">
+              <p class="fs-5">To Enroll</p>
+              <div class="overflow-auto"  style="max-height:50vh;">
+                <table class="table table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">LAST NAME</th>
+                      <th scope="col">FIRST NAME</th>
+                      <th scope="col" class="col-1"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbodyEnrollee">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-primary mt-3 mb-3" name="button" id="enroll" value="<?php echo "${sectionData['ID']}"; ?>">Enroll</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit subject -->
+      <div class="" id="editSubjectContainer">
+        <p class="fs-3 mb-3">Edit subjects</p>
+        <div class="border rounded p-3 bg-light bg-gradient mb-3">
+          <div class="">
+            <div class="d-flex justify-content-start mb-3 align-items-end">
+              <p class="fs-5 mb-0">Current Subjects</p>
+            </div>
+            <table class="table table-striped mb-3 border rounded table-hover" style="max-height: 40vh;">
+              <thead>
+                <tr>
+                  <th scope="col">Subject</th>
+                  <th scope="col">Teacher</th>
+                  <th scope="col" class="col-1"></th>
+                </tr>
+              </thead>
+              <tbody id="sectionSubjectTbody">
+                <?php
+                foreach ($sectionSubjects as $key => $data) {
+                  $teacher = $data['teacherData'];
+                  $subject = $data['subjectData'];
+                  ?>
+                  <tr id="<?php echo $teacher['ID']; ?>">
+                    <th scope="row"><?php echo $subject['DESCRIPTION']; ?></th>
+                    <td><?php echo $teacher['LN'].", ".$teacher['FN']; ?></td>
+                    <td>
+                      <button id="<?php echo $subject['ID']; ?>" type="button" name="button" class="btn btn-danger"
+                        onclick="removeSubject(this);">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </td>
                   </tr>
-                </thead>
-                <tbody id="tbodyStudentsE" class="tbodyStudents">
                   <?php
-                    foreach ($allStudents as $key => $student) {
-                      $id = $student['ID'];
-                      $ln = $student['LN'];
-                      $fn = $student['FN'];
+                }
+                 ?>
+              </tbody>
+            </table>
+            <div class="d-flex justify-content-between">
+              <p class="mb-0 text-info" id="SystemMessageSubject"></p>
+              <button id="updateSectionSubject" type="button" name="button" class="btn btn-primary" value="<?php echo "${sectionData['ID']}"; ?>">Update</button>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between mb-3">
+              <p class="fs-5">Add Subjects</p>
+              <div class="">
+                <input type="text" name="" value="" class="form-control searchSubject" placeholder="Search" style="width:20vw;">
+              </div>
+            </div>
+            <table class="table table-striped mb-3 border rounded table-hover" style="max-height:40vh;">
+              <thead>
+                <tr>
+                  <th scope="col">Subject</th>
+                  <th scope="col">Teacher</th>
+                  <th scope="col" class="col-1"></th>
+                </tr>
+              </thead>
+              <tbody class="tbodySubjects" id="listOfSubjectsTbody">
+                <?php
+                  foreach ($teachers as $key => $teacherData) {
+                    $teacherId = $teacherData['ID'];
+                    $teacherFn = $teacherData['FN'];
+                    $teacherLn = $teacherData['LN'];
+                    $subjects = $teacherData['subjects'];
+                    foreach ($subjects as $key => $subjectData) {
+                      $subjectId = $subjectData['ID'];
+                      $subjectName = $subjectData['DESCRIPTION'];
                       ?>
-                      <tr id="<?php echo "$id"; ?>">
-                        <th scope="row"><?php echo "$id"; ?></th>
-                        <td><?php echo "$ln"; ?></td>
-                        <td><?php echo "$fn"; ?></td>
+                      <tr id="<?php echo "$teacherId"; ?>" class="teacherRow">
+                        <th scope="row"><?php echo "$subjectName"; ?></th>
+                        <td><?php echo "$teacherLn, $teacherFn"; ?></td>
                         <td>
-                          <button onclick="add(this);" class="btn btn-primary studentDataE" type="button" name="button" value="<?php echo "$id"; ?>">
+                          <button id="<?php echo "$subjectId"; ?>" type="button" name="button" class="btn btn-primary"
+                            onclick="appendSubject(this);">
                             <i class="fas fa-plus"></i>
                           </button>
                         </td>
                       </tr>
                       <?php
-                      }
-                   ?>
-                </tbody>
-              </table>
-            </div>
+                    }
+                  }
+                 ?>
+              </tbody>
+            </table>
+
           </div>
-          <!-- To Enroll -->
-          <div class="col ms-1">
-            <p class="fs-5">To Enroll</p>
-            <div class="overflow-auto"  style="max-height:50vh;">
-              <table class="table table-striped table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">LAST NAME</th>
-                    <th scope="col">FIRST NAME</th>
-                    <th scope="col" class="col-1"></th>
-                  </tr>
-                </thead>
-                <tbody id="tbodyEnrollee">
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex justify-content-end">
-          <button type="button" class="btn btn-primary mt-3 mb-3" name="button" id="enroll" value="<?php echo "${sectionData['ID']}"; ?>">Enroll</button>
         </div>
       </div>
 
-      <!-- Edit subject -->
-      <p class="fs-3 mb-3">Edit subjects</p>
-      <div class="border rounded p-3 bg-light bg-gradient mb-3">
-        <div class="">
-          <div class="d-flex justify-content-start mb-3">
-            <p class="fs-5">Current Subjects</p>
-          </div>
-          <table class="table table-striped mb-3 border rounded table-hover" style="max-height: 40vh;">
-            <thead>
-              <tr>
-                <th scope="col">Subject</th>
-                <th scope="col">Teacher</th>
-                <th scope="col" class="col-1"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              foreach ($sectionSubjects as $key => $data) {
-                $teacher = $data['teacherData'];
-                $subject = $data['subjectData'];
-                ?>
-                <tr id="<?php echo $teacher['ID']; ?>">
-                  <th scope="row"><?php echo $subject['DESCRIPTION']; ?></th>
-                  <td><?php echo $teacher['LN'].", ".$teacher['FN']; ?></td>
-                  <td>
-                    <button id="<?php echo $subject['ID']; ?>" type="button" name="button" class="btn btn-danger" onclick="">
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </td>
-                </tr>
-                <?php
-              }
-               ?>
-            </tbody>
-          </table>
-          <div class="d-flex justify-content-end">
-            <button type="button" name="button" class="btn btn-primary" value="<?php echo "${sectionData['ID']}"; ?>">Update</button>
-          </div>
-          <hr>
-          <div class="d-flex justify-content-between mb-3">
-            <p class="fs-5">Add Subjects</p>
-            <div class="">
-              <input type="text" name="" value="" class="form-control searchSubject" placeholder="Search" style="width:20vw;">
-            </div>
-          </div>
-          <table class="table table-striped mb-3 border rounded table-hover" style="max-height:40vh;">
-            <thead>
-              <tr>
-                <th scope="col">Subject</th>
-                <th scope="col">Teacher</th>
-                <th scope="col" class="col-1"></th>
-              </tr>
-            </thead>
-            <tbody class="tbodySubjects">
-              <?php
-                foreach ($teachers as $key => $teacherData) {
-                  $teacherId = $teacherData['ID'];
-                  $teacherFn = $teacherData['FN'];
-                  $teacherLn = $teacherData['LN'];
-                  $subjects = $teacherData['subjects'];
-                  foreach ($subjects as $key => $subjectData) {
-                    $subjectId = $subjectData['ID'];
-                    $subjectName = $subjectData['DESCRIPTION'];
-                    ?>
-                    <tr id="<?php echo "$teacherId"; ?>" class="teacherRow">
-                      <th scope="row"><?php echo "$subjectName"; ?></th>
-                      <td><?php echo "$teacherLn, $teacherFn"; ?></td>
-                      <td>
-                        <button id="<?php echo "$subjectId"; ?>" type="button" name="button" class="btn btn-primary" onclick="">
-                          <i class="fas fa-plus"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <?php
-                  }
-                }
-               ?>
-            </tbody>
-          </table>
+      <!-- Edit Section -->
+      <div class="d-none" id="editSectionContainer">
 
-        </div>
       </div>
     </div>
   </div>
