@@ -60,9 +60,9 @@
     <div class="contaier-fluid">
       <div class="">
         <ul>
-          <li>Edit subjects</li>
           <li>Edit section name</li>
           <li>Edit section grade lv</li>
+          <li>Edit section hasRNI</li>
         </ul>
       </div>
       <div class="d-flex">
@@ -286,7 +286,7 @@
       </div>
 
       <!-- Edit subject -->
-      <div class="" id="editSubjectContainer">
+      <div class="d-none" id="editSubjectContainer">
         <p class="fs-3 mb-3">Edit subjects</p>
         <div class="border rounded p-3 bg-light bg-gradient mb-3">
           <div class="">
@@ -374,8 +374,39 @@
       </div>
 
       <!-- Edit Section -->
-      <div class="d-none" id="editSectionContainer">
-
+      <div class="" id="editSectionContainer">
+        <p class="fs-3 mb-3">Edit Section</p>
+        <div class="border rounded p-3 bg-light bg-gradient mb-3">
+          <form class="">
+            <!-- name -->
+            <div class="mb-3">
+              <label for="sectionName" class="form-label">Change Name</label>
+              <input name="sectionName" type="email" class="form-control" id="sectionName" placeholder="<?php echo $sectionData['NAME']; ?>">
+            </div>
+            <!-- grade lv -->
+            <div class="mb-3">
+              <label for="gradeLevel" class="form-label">Change Grade Level</label>
+              <select class="form-select" aria-label="Grade Level" name="gradeLevel">
+                <option value="" selected>Select Grade Level</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+              </select>
+            </div>
+            <!-- has rni -->
+            <div class="form-check form-switch mb-3">
+              <label class="form-check-label" for="hasRNI">Has research and immersion</label>
+              <input class="form-check-input" type="checkbox" id="hasRNI" <?php echo ($sectionData['HAS_RNI'])? "checked":"";  ?>>
+            </div>
+            <div class="d-flex justify-content-between">
+              <button type="button" name="button" class="btn btn-danger">Remove</button>
+              <button type="button" name="button" class="btn btn-primary">Update</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>

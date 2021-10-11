@@ -18,7 +18,9 @@ class Section extends BaseController{
       $gradeLevel = [];
 
       for ($i=7; $i <= 12 ; $i++) {
-        $sections = $this->sectionModel->where("GRADE_LV", $i)->findAll();
+        $sections = $this->sectionModel->where("GRADE_LV", $i)
+                                      ->where("IS_ACTIVE", "1")
+                                      ->findAll();
         $gradeLevel[$i] = $sections;
       }
 

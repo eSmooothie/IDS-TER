@@ -50,7 +50,7 @@
             <span class="ms-2 me-2" style="font-size:5px;"><i class="fas fa-circle"></i></span>
             <span class="text-success"><?php echo count($students); ?> Students</span>
             <span class="ms-2 me-2" style="font-size:5px;"><i class="fas fa-circle"></i></span>
-            <span class=""><a href="<?php echo "$baseUrl/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}/edit"; ?>"><span class="me-1"><i class="fas fa-edit"></i></span>Edit</a></span>
+            <span class=""><a href="<?php echo "$baseUrl/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}/edit"; ?>"><span class="me-1"><i class="fas fa-cog"></i></span>Option</a></span>
             <span class="ms-2 me-2" style="font-size:5px;"><i class="fas fa-circle"></i></span>
             <span class=""><a href="#"><span class="me-1"><i class="fas fa-history"></i></span>History</a></span>
           </span>

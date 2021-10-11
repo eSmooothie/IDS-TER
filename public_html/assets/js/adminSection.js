@@ -3,33 +3,36 @@ var toEnroll = [];
 $(document).ready(function(){
   // do something
   var updateSectionSubject = document.getElementById('updateSectionSubject');
-  updateSectionSubject.addEventListener("click",function(){
-    var sectionSubjectTbody = document.getElementById('sectionSubjectTbody');
-    var subjectTr = sectionSubjectTbody.children;
-    var teachers = [];
-    var subjects = [];
-    for (var indx in subjectTr) {
-      if (subjectTr.hasOwnProperty(indx)) {
-        const teacherId = subjectTr[indx].id;
-        const subjectId = subjectTr[indx].children[2].children[0].id;
-        teachers.push(teacherId);
-        subjects.push(subjectId);
+  if(updateSectionSubject != null){
+    updateSectionSubject.addEventListener("click",function(){
+      var sectionSubjectTbody = document.getElementById('sectionSubjectTbody');
+      var subjectTr = sectionSubjectTbody.children;
+      var teachers = [];
+      var subjects = [];
+      for (var indx in subjectTr) {
+        if (subjectTr.hasOwnProperty(indx)) {
+          const teacherId = subjectTr[indx].id;
+          const subjectId = subjectTr[indx].children[2].children[0].id;
+          teachers.push(teacherId);
+          subjects.push(subjectId);
+        }
       }
-    }
 
-    var formData = {
-      'sectionId' : this.value,
-      'teachers[]' : teachers,
-      'subjects[]' : subjects,
-    }
+      var formData = {
+        'sectionId' : this.value,
+        'teachers[]' : teachers,
+        'subjects[]' : subjects,
+      }
 
-    var path = "/admin/section/subject/update";
-    var done = function(data){
-      // console.log(data);
-      window.location.reload();
-    };
-    sendPostRequest(path, formData, done);
-  });
+      var path = "/admin/section/subject/update";
+      var done = function(data){
+        // console.log(data);
+        window.location.reload();
+      };
+      sendPostRequest(path, formData, done);
+    });
+  }
+
 
   // search
   $('.searchStudent').on('keyup', function(){
