@@ -11,13 +11,17 @@ $(document).ready(function(){
   });
 
   $("#filterBtn").on('click', function(){
-    $("#filterContainer").toggle("slow");
+    $("#filterContainer").toggle("fast");
     if($("#filterIcon").hasClass("fa-chevron-right")){
       $("#filterIcon").removeClass("fa-chevron-right");
       $("#filterIcon").addClass("fa-chevron-left");
+      $("#studentsColContainer").removeClass("col");
+      $("#studentsColContainer").addClass("col-7");
     }else{
       $("#filterIcon").addClass("fa-chevron-right");
       $("#filterIcon").removeClass("fa-chevron-left");
+      $("#studentsColContainer").removeClass("col-7");
+      $("#studentsColContainer").addClass("col");
     }
   });
 });

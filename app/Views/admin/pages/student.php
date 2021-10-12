@@ -37,7 +37,7 @@
     </a>
   </div>
   <!-- content -->
-  <div class="col-2" id="filterContainer" style="display:none;">
+  <div class="col-xl-2 col-lg-3" id="filterContainer" style="display:none;">
     <div class="border rounded p-3 bg-light bg-gradient ">
       <p>Filter</p>
       <form class="">
@@ -50,7 +50,7 @@
       </form>
     </div>
   </div>
-  <div class="col ps-3">
+  <div class="col ps-3" id="studentsColContainer">
     <div class="border rounded p-3 bg-light bg-gradient d-flex align-items-center justify-content-between mb-2">
       <div class="">
         <button type="button" name="button" class="btn btn-primary" id="filterBtn">
