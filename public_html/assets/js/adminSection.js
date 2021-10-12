@@ -165,6 +165,35 @@ function add(element){
   toEnroll.push(value);
 }
 
+$("#editSectionForm").submit(function(e){
+  e.preventDefault();
+  var formData = $(this).serializeArray();
+
+  var path = "/admin/section/update";
+  var done = function(data){
+    window.location.reload();
+  };
+  sendPostRequest(path, formData, done);
+
+});
+
+$("#removeSectionForm").submit(function(e){
+  e.preventDefault();
+  var formData = $(this).serializeArray();
+
+  var path = "/admin/section/remove";
+  var done = function(data){
+    const isMatch = data['data'];
+    console.log(isMatch);
+    if(isMatch){
+      window.location.href = "/admin/section";
+    }else{
+      document.getElementById('removeSectionName').classList.add('is-invalid');
+    }
+  }
+  sendPostRequest(path, formData, done);
+});
+
 $("#bulkEnroll").submit(function(e){
   e.preventDefault();
   var form = document.getElementById('bulkEnroll');

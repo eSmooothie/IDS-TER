@@ -46,7 +46,7 @@
             </small>
           </p>
           <span class="d-flex align-items-center">
-            <span class="text-muted">Grade 7</span>
+            <span class="text-muted">Grade <?php echo $sectionData['GRADE_LV']; ?></span>
             <span class="ms-2 me-2" style="font-size:5px;"><i class="fas fa-circle"></i></span>
             <span class="text-success"><?php echo count($students); ?> Students</span>
             <span class="ms-2 me-2" style="font-size:5px;"><i class="fas fa-circle"></i></span>
@@ -58,13 +58,6 @@
       </div>
     </div>
     <div class="contaier-fluid">
-      <div class="">
-        <ul>
-          <li>Edit section name</li>
-          <li>Edit section grade lv</li>
-          <li>Edit section hasRNI</li>
-        </ul>
-      </div>
       <div class="d-flex">
         <button type="button" name="button" class="btn btn-primary me-3" onclick="changeEditContainer(1);">Enroll Students</button>
         <button type="button" name="button" class="btn btn-primary me-3" onclick="changeEditContainer(2);">Edit Subjects</button>
@@ -377,11 +370,12 @@
       <div class="" id="editSectionContainer">
         <p class="fs-3 mb-3">Edit Section</p>
         <div class="border rounded p-3 bg-light bg-gradient mb-3">
-          <form class="">
+          <form class="" id="editSectionForm">
+            <input type="hidden" name="sectionId" value="<?php echo $sectionData['ID']; ?>">
             <!-- name -->
             <div class="mb-3">
               <label for="sectionName" class="form-label">Change Name</label>
-              <input name="sectionName" type="email" class="form-control" id="sectionName" placeholder="<?php echo $sectionData['NAME']; ?>">
+              <input name="sectionName" type="text" class="form-control" id="sectionName" placeholder="<?php echo $sectionData['NAME']; ?>">
             </div>
             <!-- grade lv -->
             <div class="mb-3">
@@ -399,15 +393,44 @@
             <!-- has rni -->
             <div class="form-check form-switch mb-3">
               <label class="form-check-label" for="hasRNI">Has research and immersion</label>
-              <input class="form-check-input" type="checkbox" id="hasRNI" <?php echo ($sectionData['HAS_RNI'])? "checked":"";  ?>>
+              <input name="hasRNI" class="form-check-input" type="checkbox" id="hasRNI" <?php echo ($sectionData['HAS_RNI'])? "checked":"";  ?>>
             </div>
             <div class="d-flex justify-content-between">
-              <button type="button" name="button" class="btn btn-danger">Remove</button>
-              <button type="button" name="button" class="btn btn-primary">Update</button>
+              <button type="button" name="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#removeSection">Remove</button>
+              <button type="submit" name="button" class="btn btn-primary">Update</button>
             </div>
           </form>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="removeSection" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form class="" id="removeSectionForm">
+        <div class="modal-body">
+          <p><span class="fw-bold">Note: </span> This will inactive the section which no longer be seen or interact with.</p>
+          <p>Please type <span class="fw-bold text-danger"><?php echo $sectionData['NAME']; ?></span> to confirm</p>
+          <div class="">
+            <input type="hidden" name="sectionID" value="<?php echo $sectionData['ID']; ?>">
+            <input name="removeSectionName" type="text" class="form-control" id="removeSectionName" aria-describedby="sectionName">
+            <div class="invalid-feedback">
+              Does not match.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </form>
+
     </div>
   </div>
 </div>

@@ -413,6 +413,71 @@ class Section extends BaseController{
       return $this->setResponseFormat('json')->respond($response, 200);
   }
 
+  public function updateSection(){
+      header("Content-type:application/json");
+      $sectionId = $this->request->getPost("sectionId");
+      $newSectionName = $this->request->getPost("sectionName");
+      $newGradeLv = $this->request->getPost("gradeLevel");
+      $hasRNI = $this->request->getPost("hasRNI");
+
+      // if data is not empty update
+      $newData = [];
+      if(!empty($newSectionName)){
+        $newData['NAME'] = $newSectionName;
+      }
+      if(!empty($newGradeLv)){
+        $newData['GRADE_LV'] = $newGradeLv;
+      }
+
+      $newData['HAS_RNI'] = (!empty($hasRNI))? 1:0;
+
+
+      if(!empty($newData)){
+        $this->sectionModel->update($sectionId, $newData);
+      }
+
+      $data = [
+        'name' => $newSectionName,
+        'gradeLv' => $newGradeLv,
+        'hasRNI' => $hasRNI,
+      ];
+      $response = [
+        "message" => "OK",
+        "data" => $data,
+      ];
+      return $this->setResponseFormat('json')->respond($response, 200);
+  }
+
+  public function removeSection(){
+      header("Content-type:application/json");
+      $sectionId = $this->request->getPost("sectionID");
+      $confirmatioName = $this->request->getPost("removeSectionName");
+
+      // query section
+      $sectionData = $this->sectionModel->find($sectionId);
+      $isMatch = ($sectionData['NAME'] === $confirmatioName)? true : false;
+
+      if($isMatch){
+        $inActive = [
+          'IS_ACTIVE' => 0,
+        ];
+        $this->sectionModel->update($sectionId, $inActive);
+      }
+
+      $data = [
+        'sectionData' => $sectionData,
+        'inputtedName' => $confirmatioName,
+        'isMatch' => $isMatch,
+      ];
+
+      $response = [
+        "message" => "OK",
+        "data" => $isMatch,
+      ];
+
+      return $this->setResponseFormat('json')->respond($response, 200);
+  }
+
   public function newSection(){
     header("Content-type:application/json");
     $gradeLevel = $this->request->getPost("gradeLevel");
