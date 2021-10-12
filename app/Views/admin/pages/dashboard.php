@@ -45,7 +45,7 @@
         </div>
         <!-- Student -->
         <div class="col-sm-3 col-12">
-          <a href="#" class="btn btn-outline-primary w-100" style="">
+          <a href="<?php echo $baseUrl; ?>/admin/student" class="btn btn-outline-primary w-100" style="">
             <div class="text-start">
               <div class="d-flex align-items-center">
                 <span class="fs-2"><i class="fas fa-users"></i></span>
@@ -57,7 +57,7 @@
         </div>
         <!-- Teacher -->
         <div class="col-sm-3 col-12">
-          <a href="#" class="btn btn-outline-primary w-100" style="">
+          <a href="<?php echo $baseUrl; ?>/admin/teacher" class="btn btn-outline-primary w-100" style="">
             <div class="text-start">
               <div class="d-flex align-items-center">
                 <span class="fs-2"><i class="fas fa-user-tie"></i></span>
@@ -69,7 +69,7 @@
         </div>
         <!-- Subject -->
         <div class="col-sm-3 col-12">
-          <a href="#" class="btn btn-outline-primary w-100" style="">
+          <a href="<?php echo $baseUrl; ?>/admin/subject" class="btn btn-outline-primary w-100" style="">
             <div class="text-start">
               <div class="d-flex align-items-center">
                 <span class="fs-2"><i class="fas fa-journal-whills"></i></span>
@@ -81,7 +81,7 @@
         </div>
         <!-- Execom -->
         <div class="col-sm-3 col-12">
-          <a href="#" class="btn btn-outline-primary w-100" style="">
+          <a href="<?php echo $baseUrl; ?>/admin/execom" class="btn btn-outline-primary w-100" style="">
             <div class="text-start">
               <div class="d-flex align-items-center">
                 <span class="fs-2"><i class="fas fa-user-secret"></i></span>
@@ -93,7 +93,7 @@
         </div>
         <!-- Execom -->
         <div class="col-sm-3 col-12">
-          <a href="#" class="btn btn-outline-primary w-100" style="">
+          <a href="<?php echo $baseUrl; ?>/admin/activitylog" class="btn btn-outline-primary w-100" style="">
             <div class="text-start">
               <div class="d-flex align-items-center">
                 <span class="fs-2"><i class="fas fa-clipboard-list"></i></span>
