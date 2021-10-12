@@ -46,7 +46,7 @@
             </small>
           </p>
           <span class="d-flex align-items-center">
-            <span class="text-muted">Grade 7</span>
+            <span class="text-muted">Grade <?php echo $sectionData['GRADE_LV']; ?></span>
             <span class="ms-2 me-2" style="font-size:5px;"><i class="fas fa-circle"></i></span>
             <span class="text-success"><?php echo count($students); ?> Students</span>
             <span class="ms-2 me-2" style="font-size:5px;"><i class="fas fa-circle"></i></span>
@@ -63,7 +63,7 @@
         <table class="table table-striped table-hover">
           <thead>
             <tr>
-              <th colspan="3">Students</th>
+              <th colspan="3" class="text-center">Students</th>
             </tr>
             <tr>
               <th scope="col" class="col-2">ID</th>
@@ -95,20 +95,27 @@
         <table class="table table-striped table-hover">
           <thead>
             <tr>
-              <th colspan="3">Subjects</th>
+              <th colspan="3" class="text-center">Section Subjects</th>
             </tr>
             <tr>
-              <th scope="col" class="col-2">ID</th>
               <th scope="col" class="">Subject</th>
               <th scope="col" class="">Teacher</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">11</th>
-              <td><a href="#">Subject</a></td>
-              <td class=""><a href="#">Teacher</a></td>
-            </tr>
+            <?php
+              foreach ($subjects as $key => $value) {
+                $subjectData = $value['subject'];
+                $teacherData = $value['teacher'];
+                ?>
+                <tr>
+                  <td><a href="#"><?php echo $subjectData['DESCRIPTION']; ?></a></td>
+                  <td class=""><a href="#"><?php echo "{$teacherData['LN']}, {$teacherData['FN']}"; ?></a></td>
+                </tr>
+                <?php
+              }
+             ?>
+
           </tbody>
         </table>
       </div>

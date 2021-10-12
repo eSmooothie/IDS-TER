@@ -48,10 +48,29 @@ class Section extends BaseController{
     }
     $sy = $this->schoolyearModel->orderBy("ID","DESC")->first(); // get current school year
     $sectionData = $this->sectionModel->where("ID", $sectionId)->first();
-    $subjects = $this->sectionSubjectModel->where("SECTION_ID", $sectionId)->findAll();
+
+    $sectionSubject = $this->sectionSubjectModel->where("SECTION_ID", $sectionId)
+                                          ->where("SCHOOL_YEAR_ID", $sy['ID'])
+                                          ->findAll();
+
     $studentsInSec = $this->studentSectionModel->where("SECTION_ID", $sectionId)
                                           ->where("SCHOOL_YEAR_ID",$sy['ID'])
                                           ->findAll();
+
+    $subjects = [];
+    foreach ($sectionSubject as $key => $row) {
+      $subjectId = $row['SUBJECT_ID'];
+      $teacherId = $row['TEACHER_ID'];
+      $subjectData = $this->subjectModel->find($subjectId);
+      $teacherData = $this->teacherModel->find($teacherId);
+
+      $secSub = [
+        'subject' => $subjectData,
+        'teacher' => $teacherData,
+      ];
+
+      array_push($subjects, $secSub);
+    }
     $students = [];
     foreach ($studentsInSec as $key => $student) {
       $studentID = $student['STUDENT_ID'];

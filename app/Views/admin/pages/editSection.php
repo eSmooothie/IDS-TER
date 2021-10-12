@@ -190,7 +190,7 @@
       } ?>
       </div>
       <!-- Enroll new  student -->
-      <div class="d-none" id="enrollStudentContainer">
+      <div class="" id="enrollStudentContainer">
         <p class="fs-3">Enroll students</p>
         <div class="border rounded p-3 bg-light bg-gradient mb-3">
           <!-- Bulk -->
@@ -367,7 +367,7 @@
       </div>
 
       <!-- Edit Section -->
-      <div class="" id="editSectionContainer">
+      <div class="d-none" id="editSectionContainer">
         <p class="fs-3 mb-3">Edit Section</p>
         <div class="border rounded p-3 bg-light bg-gradient mb-3">
           <form class="" id="editSectionForm">
