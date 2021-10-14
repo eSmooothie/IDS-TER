@@ -6,6 +6,6 @@ class Student extends Model{
   protected $table = 'student';
 
   protected $primaryKey = 'ID';
-  protected $allowedFields = ['LN','FN','PASSWORD','IS_ACTIVE','PROFILE_PICTURE'];
+  protected $allowedFields = ['ID','LN','FN','PASSWORD','IS_ACTIVE','PROFILE_PICTURE'];
 }
  ?>

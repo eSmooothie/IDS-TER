@@ -1,6 +1,14 @@
 $(document).ready(function(){
   // do something
-
+  var loading = $('#loading').modal('hide');
+  $(document)
+    .ajaxStart(function () {
+      // $loading.show();
+      console.log("loading");
+      loading.modal('show');
+    })
+    .ajaxStop(function () {
+    });
 
   // search
   $('.searchStudent').on('keyup', function(){
@@ -42,3 +50,33 @@ function sendPostRequest(path,
   }).done(done)
   .fail(fail);
 }
+
+
+
+$("#addNewStudents").submit(function(e){
+  e.preventDefault();
+  var form = document.getElementById('addNewStudents');
+  var formData = new FormData(form);
+
+  var path = "admin/student/add/csv";
+  var baseUrl = "http://dev-ter-ids:9094/";
+  var url = baseUrl + path;
+
+  var done = function(data){
+
+    window.location.reload();
+  };
+
+  var fail = function(xhr, textStatus, errorMessage){
+    console.log(xhr);
+  };
+
+  $.ajax({
+    type: 'post',
+    url: url,
+    data: formData,
+    cache: false,
+    contentType: false,
+    processData: false,
+  }).done(done).fail(fail);
+});

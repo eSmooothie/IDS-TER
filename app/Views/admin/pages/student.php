@@ -62,6 +62,35 @@
         <input type="text" name="" value="" class="form-control searchStudent" placeholder="Search">
       </div>
     </div>
+    <?php
+      if(!empty($uploadStudentMsg)){
+        $message = $uploadStudentMsg['message'];
+        $data = $uploadStudentMsg['data'];
+        $isErr = ($data != "Done")? true:false;
+        ?>
+        <div class="mb-3 <?php echo ($isErr)?"bg-danger":"bg-success"; ?> text-light bg-gradient border rounded p-2">
+          <p class="m-0">
+            <i class="fas <?php echo ($isErr)?"fa-exclamation-circle":"fa-check-circle"; ?>"></i>
+            <span><?php echo "$message"; ?></span>
+            <?php if($data != "Done"){
+              ?>
+              <ul>
+                <?php
+                  if(!empty($data)){
+                      ?>
+                        <li><?php echo implode(", ", $data); ?></li>
+                      <?php
+                  }
+                 ?>
+              </ul>
+              <?php
+            } ?>
+          </p>
+        </div>
+        <?php
+      }
+     ?>
+
     <!-- table -->
     <div class="border rounded p-3 bg-light bg-gradient">
       <table class="table table-striped table-hover">
@@ -105,16 +134,43 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="staticBackdropLabel">Enroll New Students</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="document.getElementById('addNewStudents').reset();"></button>
+      </div>
+      <form class="" id="addNewStudents">
+        <div class="modal-body">
+          <div class="mb-3">
+            <p class="fs-5">Upload CSV file</p>
+            <p><span class="text-info fw-bold">Note:</span> File format comma separated <span class="fw-bold">(ID, LN, FN, SECTION NAME)</span></p>
+            <input class="form-control" type="file" id="formFile" name="bulkEnroll" required>
+          </div>
+          <hr>
+          <!-- <div class="">
+            <p class="fs-5">Individual</p>
+            <p><span class=""></span></p>
+          </div> -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="document.getElementById('addNewStudents').reset();">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="loading" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Please Wait</h5>
       </div>
       <div class="modal-body">
-        ...
+        <p class="text-danger">Do not reload the page!</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
+
       </div>
+      </form>
     </div>
   </div>
 </div>
