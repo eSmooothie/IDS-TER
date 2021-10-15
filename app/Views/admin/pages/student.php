@@ -37,10 +37,14 @@
     </a>
   </div>
   <!-- content -->
+  <!-- Filter -->
   <div class="col-xl-2 col-lg-3" id="filterContainer" style="display:none;">
     <div class="border rounded p-3 bg-light bg-gradient ">
       <p>Filter</p>
       <form class="">
+        <div class="border p-2 rounded mb-3">
+          <p>School Year</p>
+        </div>
         <div class="border p-2 rounded mb-3">
           <p>Section</p>
         </div>
@@ -104,7 +108,7 @@
             <th scope="col">Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="tbodyStudents">
           <?php
             foreach ($students as $key => $value) {
               $id = $value['ID'];

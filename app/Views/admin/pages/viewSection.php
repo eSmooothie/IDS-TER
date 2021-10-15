@@ -81,7 +81,8 @@
               ?>
               <tr>
                 <th scope="row"><?php echo "$id"; ?></th>
-                <td><a href="<?php echo ($isActive)? "":"#"; ?>" class="<?php echo ($isActive)? "":"text-muted"; ?>"><?php echo "$ln, $fn"; ?></a></td>
+                <td><a href="<?php echo ($isActive)? "$baseUrl/admin/student/view/$id":"#"; ?>" 
+                  class="<?php echo ($isActive)? "":"text-muted"; ?>"><?php echo "$ln, $fn"; ?></a></td>
                 <td class="<?php echo ($status)? "bg-success":"bg-secondary"; ?>"></td>
               </tr>
               <?php

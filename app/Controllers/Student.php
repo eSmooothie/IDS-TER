@@ -12,29 +12,28 @@ namespace App\Controllers;
 // }
 class Student extends BaseController
 {
-	public function index()
-	{
+	public function index(){
 		if(!$this->session->has("adminID")){
 			return redirect()->to("/admin");
 		}
 
-		$studentData = $this->studentModel->orderBy("LN","ASC")->findAll();
+
+
 		$sy = $this->schoolyearModel->orderBy("ID","DESC")->first(); // get current school year
+		$studentSection = $this->studentSectionModel->join("`student`","`student`.`ID` = `student_section`.`STUDENT_ID`")
+																								->where("SCHOOL_YEAR_ID", $sy['ID'])
+																								->orderBy("`student`.`LN`","ASC")
+																								->findAll();
 		$students = [];
 
-		foreach ($studentData as $key => $value) {
+		foreach ($studentSection as $key => $value) {
 			$studentInfo = [
 				'ID' => $value['ID'],
 				'LN' => $value['LN'],
 				'FN' => $value['FN'],
 			];
 
-			// get latest section
-			$studentSection = $this->studentSectionModel->where("STUDENT_ID", $value['ID'])
-																									->where("SCHOOL_YEAR_ID", $sy['ID'])
-																									->first();
-
-		  $section = $this->sectionModel->where("ID", $studentSection['SECTION_ID'])->first();
+		  $section = $this->sectionModel->where("ID", $value['SECTION_ID'])->first();
 			$studentInfo['section'] = $section['NAME'];
 
 			// current status
@@ -60,6 +59,42 @@ class Student extends BaseController
 
 		echo view("admin/layout/header", $data);
 		echo view("admin/pages/student", $data);
+		echo view("admin/layout/footer");
+	}
+
+	public function viewStudent($id = false){
+		if(!$this->session->has("adminID")){
+			return redirect()->to("/admin");
+		}
+		if(!$id){
+			return redirect()->to("/admin/student");
+		}
+
+		$studentData = $this->studentModel->find($id);
+
+		$sections = $this->studentSectionModel->join("`section`","`section`.`ID` = `student_section`.`SECTION_ID`")
+																					->join("`school_year`","`school_year`.`ID` = `student_section`.`SCHOOL_YEAR_ID`")
+																					->where("STUDENT_ID",$id)
+																					->orderBy("SCHOOL_YEAR_ID","DESC")
+																					->findAll();
+
+		$status = $this->studentStatusModel->where("STUDENT_ID", $id)
+																			->orderBy("SCHOOL_YEAR_ID","DESC")
+																			->findAll();
+
+		// TODO: get student evaluation data
+
+		$data = [
+			'id' => $this->session->get("adminID"),
+			'pageTitle' => "ADMIN | STUDENT",
+			'baseUrl' => base_url(),
+			'studentData' => $studentData,
+			'sections' => $sections,
+			'status' => $status,
+		];
+
+		echo view("admin/layout/header", $data);
+		echo view("admin/pages/studentData", $data);
 		echo view("admin/layout/footer");
 	}
 
