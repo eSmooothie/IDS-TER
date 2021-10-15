@@ -53,7 +53,8 @@ $routes->post("/admin/section/remove","Section::removeSection");
 $routes->get("/admin/student","Student::index");
 $routes->post("/admin/student/add/csv","Student::addNewStudentCSV");
 $routes->get("/admin/student/view/(:any)", "Student::viewStudent/$1");
-
+// admin:teacher
+$routes->get("/admin/teacher","Teacher::index");
 
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))
 {
