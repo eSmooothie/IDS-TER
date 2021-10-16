@@ -93,7 +93,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">New Teacher</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="document.getElementById('addNewStudents').reset();"></button>
+        <button type="button" class="btn-close resetAddTeacherForm" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form class="" id="addNewTeacher">
         <div class="modal-body">
@@ -101,28 +101,28 @@
           <div class="mb-3">
             <!-- ID -->
             <div class="mb-3 row">
-              <label for="" class="col-sm-4 col-form-label">ID</label>
+              <label for="" class="col-sm-4 col-form-label">ID<span class="text-danger">*</span></label>
               <div class="col-sm-8">
                 <input name="id" type="text" class="form-control" id="teacherId" placeholder="2021-XXXX" required>
               </div>
             </div>
             <!-- FN -->
             <div class="mb-3 row">
-              <label for="" class="col-sm-4 col-form-label">First Name</label>
+              <label for="" class="col-sm-4 col-form-label">First Name<span class="text-danger">*</span></label>
               <div class="col-sm-8">
                 <input name="fn" type="text" class="form-control" id="teacherFn" placeholder="First Name" required>
               </div>
             </div>
             <!-- LN -->
             <div class="mb-3 row">
-              <label for="" class="col-sm-4 col-form-label">Last Name</label>
+              <label for="" class="col-sm-4 col-form-label">Last Name<span class="text-danger">*</span></label>
               <div class="col-sm-8">
                 <input name="ln" type="text" class="form-control" id="teacherLn" placeholder="Last Name" required>
               </div>
             </div>
             <!-- Password -->
             <div class="mb-3 row">
-              <label for="" class="col-sm-4 col-form-label">Password</label>
+              <label for="" class="col-sm-4 col-form-label">Password<span class="text-danger">*</span></label>
               <div class="col-sm-8">
                 <input name="password" type="password" class="form-control" id="teacherPassword" placeholder="Password" required>
               </div>
@@ -131,12 +131,12 @@
             <div class="mb-3 row">
               <label for="" class="col-sm-4 col-form-label">Mobile Number</label>
               <div class="col-sm-8">
-                <input name="mobileNumber" type="text" class="form-control" id="teacherCellNo" placeholder="09xxxxxxxxx" required>
+                <input name="mobileNumber" type="text" class="form-control" id="teacherCellNo" placeholder="09xxxxxxxxx">
               </div>
             </div>
             <!-- Department -->
             <div class="mb-5 row">
-              <label for="" class="col-sm-4 col-form-label">Department</label>
+              <label for="" class="col-sm-4 col-form-label">Department<span class="text-danger">*</span></label>
               <div class="col-sm-8">
                 <select class="form-select" name="department" required>
                   <option value="" selected>Select a department</option>
@@ -153,11 +153,10 @@
               </div>
             </div>
             <!-- Is Lecturer -->
-            <div class="mb-3 row">
-              <label for="" class="col-sm-4 col-form-label"></label>
-              <div class="form-check form-switch col-sm-8 d-flex align-items-center">
+            <div class="mb-3">
+              <div class="form-check form-switch d-flex align-items-center">
                 <input name="isLecturer" class="form-check-input" type="checkbox" role="switch" style="height:25px;width:60px;">
-                <label class="form-check-label ms-2" for="">is a lecturer?</label>
+                <label class="form-check-label ms-2" for="">is a lecturer?<span class="text-danger">*</span></label>
               </div>
             </div>
             <!-- message -->
@@ -167,9 +166,12 @@
               </div>
             </div>
           </div>
+          <div class="">
+            <p class="text-end"><small>Field with <span class="text-danger">*</span> is required.</small></p>
+          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="document.getElementById('addNewStudents').reset();">Close</button>
+          <button type="reset" class="btn btn-secondary resetAddTeacherForm" data-bs-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </form>

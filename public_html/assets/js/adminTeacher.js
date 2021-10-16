@@ -23,6 +23,13 @@ $(document).ready(function(){
     });
   });
 
+  $(".resetAddTeacherForm").on('click',function(){
+    $("#addNewTeacher")[0].reset();
+    if(!$("#errContainer").hasClass("d-none")){
+      $("#errContainer").addClass("d-none");
+    }
+  });
+
   $("#addNewTeacher").submit(function(e){
     e.preventDefault();
     var formData = $(this).serializeArray();
@@ -37,6 +44,9 @@ $(document).ready(function(){
         $("#errContainer").removeClass("d-none");
         $("#errMessage").html(message);
       }else{
+        if(!$("#errContainer").hasClass("d-none")){
+          $("#errContainer").addClass("d-none");
+        }
         window.location.reload();
       }
     }
