@@ -20,11 +20,14 @@ class Teacher extends BaseController{
                                           ->orderBy("LN","ASC")
                                           ->findAll();
 
+    $department = $this->departmentModel->findAll();
+
     $data = [
 			'id' => $this->session->get("adminID"),
 			'pageTitle' => "ADMIN | TEACHER",
 			'baseUrl' => base_url(),
       'teacherData' => $teacherData,
+      'departmentData' => $department,
 		];
 
     echo view("admin/layout/header", $data);
@@ -32,6 +35,62 @@ class Teacher extends BaseController{
 		echo view("admin/layout/footer");
   }
 
+  public function add(){
+    header("Content-type:application/json");
+    // do something here
+    $id = $this->request->getPost("id");
+    $fn = $this->request->getPost("fn");
+    $ln = $this->request->getPost("ln");
+    $isLecturer = $this->request->getPost("isLecturer");
+    $password = $this->request->getPost("password");
+    $mobileNumber = $this->request->getPost("mobileNumber");
+    $department = $this->request->getPost("department");
+
+    // check if inputted id is valid
+    $pattern = "/^\d{4}(-)(\d{1,}|\d{4})$/";
+    $isValid = preg_match($pattern,$id);
+
+    if(!$isValid){
+      $response = [
+        "message" => "Invalid ID format",
+        "data" => null,
+      ];
+      return $this->setResponseFormat('json')->respond($response, 202);
+    }
+
+    // check if id is already exist.
+    $isExist = $this->teacherModel->find($id);
+    if($isExist){
+      $response = [
+        "message" => "ID already exist.",
+        "data" => null,
+      ];
+      return $this->setResponseFormat('json')->respond($response, 202);
+    }
+
+    // hash password
+    $hash_password = password_hash($password, PASSWORD_DEFAULT);
+
+    $teacherData = [
+      'ID' => $id,
+      'FN' => $fn,
+      'LN' => $ln,
+      'PASSWORD' => $hash_password,
+      'MOBILE_NO' => $mobileNumber,
+      'DEPARTMENT_ID' => $department,
+      'IS_LECTURER' => (empty($isLecturer))? 0:1,
+    ];
+
+    $this->teacherModel->insert($teacherData);
+
+     // {end}
+    $data = [];
+    $response = [
+      "message" => "OK",
+      "data" => null,
+    ];
+    return $this->setResponseFormat('json')->respond($response, 200);
+  }
 
   public function func_name(){
     header("Content-type:application/json");

@@ -98,6 +98,75 @@
       <form class="" id="addNewTeacher">
         <div class="modal-body">
           <!-- Do Something -->
+          <div class="mb-3">
+            <!-- ID -->
+            <div class="mb-3 row">
+              <label for="" class="col-sm-4 col-form-label">ID</label>
+              <div class="col-sm-8">
+                <input name="id" type="text" class="form-control" id="teacherId" placeholder="2021-XXXX" required>
+              </div>
+            </div>
+            <!-- FN -->
+            <div class="mb-3 row">
+              <label for="" class="col-sm-4 col-form-label">First Name</label>
+              <div class="col-sm-8">
+                <input name="fn" type="text" class="form-control" id="teacherFn" placeholder="First Name" required>
+              </div>
+            </div>
+            <!-- LN -->
+            <div class="mb-3 row">
+              <label for="" class="col-sm-4 col-form-label">Last Name</label>
+              <div class="col-sm-8">
+                <input name="ln" type="text" class="form-control" id="teacherLn" placeholder="Last Name" required>
+              </div>
+            </div>
+            <!-- Password -->
+            <div class="mb-3 row">
+              <label for="" class="col-sm-4 col-form-label">Password</label>
+              <div class="col-sm-8">
+                <input name="password" type="password" class="form-control" id="teacherPassword" placeholder="Password" required>
+              </div>
+            </div>
+            <!-- Mobile Number -->
+            <div class="mb-3 row">
+              <label for="" class="col-sm-4 col-form-label">Mobile Number</label>
+              <div class="col-sm-8">
+                <input name="mobileNumber" type="text" class="form-control" id="teacherCellNo" placeholder="09xxxxxxxxx" required>
+              </div>
+            </div>
+            <!-- Department -->
+            <div class="mb-5 row">
+              <label for="" class="col-sm-4 col-form-label">Department</label>
+              <div class="col-sm-8">
+                <select class="form-select" name="department" required>
+                  <option value="" selected>Select a department</option>
+                  <?php
+                  foreach ($departmentData as $key => $value) {
+                    $id = $value['ID'];
+                    $name = $value['NAME'];
+                    ?>
+                    <option value="<?php echo "$id"; ?>"><?php echo "$name"; ?></option>
+                    <?php
+                  }
+                   ?>
+                </select>
+              </div>
+            </div>
+            <!-- Is Lecturer -->
+            <div class="mb-3 row">
+              <label for="" class="col-sm-4 col-form-label"></label>
+              <div class="form-check form-switch col-sm-8 d-flex align-items-center">
+                <input name="isLecturer" class="form-check-input" type="checkbox" role="switch" style="height:25px;width:60px;">
+                <label class="form-check-label ms-2" for="">is a lecturer?</label>
+              </div>
+            </div>
+            <!-- message -->
+            <div class="mb-3 d-none" id="errContainer">
+              <div class="p-2 border border-danger bg-danger text-white rounded-pill text-center">
+                <p id="errMessage" class="m-0">XXX</p>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="document.getElementById('addNewStudents').reset();">Close</button>
