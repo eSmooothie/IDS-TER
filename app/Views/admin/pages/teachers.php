@@ -23,6 +23,10 @@
       <i class="fas fa-user-tie"></i>
       <span class="ms-3">Teacher</span>
     </a>
+    <a href="<?php echo "$baseUrl/admin/department"; ?>" class="side-nav btn btn-outline-primary w-100 text-start  d-flex align-items-center fs-5">
+      <i class="fas fa-users"></i>
+      <span class="ms-3">Department</span>
+    </a>
     <a href="<?php echo "$baseUrl/admin/subject"; ?>" class="side-nav btn btn-outline-primary w-100 text-start  d-flex align-items-center fs-5">
       <i class="fas fa-journal-whills"></i>
       <span class="ms-3">Subject</span>

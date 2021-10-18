@@ -4,7 +4,7 @@
   }
 </style>
 <body>
-<div class="container-fluid row pt-5">
+<div class="container-fluid row pt-5 mb-5">
   <!-- Nav -->
   <div id="nav" class="col-lg-2 col-sm-4 p-0">
     <a href="<?php echo "$baseUrl/admin/dashboard"; ?>" class="side-nav btn btn-outline-primary w-100 text-start  d-flex align-items-center fs-5">
@@ -45,51 +45,38 @@
     <!-- content -->
     <div class="border rounded p-3 bg-light bg-gradient mb-3">
       <div class="mb-2">
-        <span class="fs-4"><?php echo "{$studentData['LN']}, {$studentData['FN']}"; ?></span>
+        <span class="fs-4"><?php echo "{$teacherData['LN']}, {$teacherData['FN']}"; ?></span>
       </div>
-      <div class="" style="width:20vw;">
-        <span class="mb-2 text-white bg-primary border ps-2 pe-2 border-primary rounded-pill"><small><?php echo "{$studentData['ID']}"; ?></small></span>
-        <span class="mb-2 text-white border ps-2 pe-2 <?php echo ($studentData['IS_ACTIVE'])? "border-primary bg-primary":"border-secondary bg-secondary"; ?> rounded-pill">
-          <small><?php echo ($studentData['IS_ACTIVE'])? "Active":"In Active"; ?></small></span>
-          <?php
-          $currStatus = $status[0];
-          $latestSection = $sections[0];
-           ?>
-        <span class="mb-2 text-white border ps-2 pe-2 <?php echo ($currStatus['STATUS'])? "border-success bg-success":"border-secondary bg-secondary"; ?> rounded-pill">
-          <small><?php echo ($currStatus['STATUS'])? "Cleared":"Not cleared"; ?></small></span>
-        <span class="mb-2 text-white bg-primary border ps-2 pe-2 border-primary rounded-pill"><small>Grade <?php echo "{$latestSection['GRADE_LV']}"; ?></small></span>
+      <div class="" style="width:50vw;">
+        <span class="me-2 mb-2 text-white bg-primary border ps-2 pe-2 border-primary rounded-pill">
+            <small class="text-uppercase">
+              <?php echo "{$teacherData['ID']}"; ?>
+            </small>
+        </span>
         <span class="mb-2 text-white bg-primary border ps-2 pe-2 border-primary rounded-pill">
-          <a class="mb-2 text-white" href="<?php echo $baseUrl."/admin/section/grade/{$latestSection['GRADE_LV']}/{$latestSection['SECTION_ID']}"; ?>">
-            <small><?php echo "{$latestSection['NAME']}"; ?></small>
+          <a class="text-white text-decoration-none" href="<?php echo "$baseUrl/admin/department/view/{$teacherData['DEPARTMENT_ID']}"; ?>">
+            <small class="text-uppercase">
+              <?php echo ($teacherData['DEPARTMENT'])?"{$teacherData['DEPARTMENT']}":"No Department"; ?>
+               department
+            </small>
           </a>
         </span>
-        <span class="text-white bg-primary border ps-2 pe-2 border-primary rounded-pill"><small><?php echo "{$latestSection['S.Y']}"; ?></small></span>
       </div>
     </div>
     <div class="border rounded p-3 bg-light bg-gradient mb-3">
-      <p>History</p>
-      <table class="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th scope="col" class="col-1">School Year</th>
-            <th scope="col" class="col-1">Grade</th>
-            <th scope="col">Section</th>
-            <th scope="col">Total Subject</th>
-            <th scope="col">Total Rated</th>
-            <th scope="col">Cleared</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row"></th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="bg-success"></td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="">
+        <a href="#" class="text-decoration-none"><i class="fas fa-cog"></i> Edit</a>
+        <a href="#" class="ms-3 text-decoration-none"><i class="fas fa-download"></i> Download Evaluation PDF</a>
+      </div>
+    </div>
+    <div class="border rounded p-3 bg-light bg-gradient mb-3">
+      <p>GRAPH</p>
+    </div>
+    <div class="border rounded p-3 bg-light bg-gradient mb-3">
+      <p>Subject Handles</p>
+    </div>
+    <div class="border rounded p-3 bg-light bg-gradient mb-3">
+      <p>Recent Activities</p>
     </div>
   </div>
 </div>

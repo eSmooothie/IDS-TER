@@ -55,6 +55,7 @@ $routes->post("/admin/student/add/csv","Student::addNewStudentCSV");
 $routes->get("/admin/student/view/(:any)", "Student::viewStudent/$1");
 // admin:teacher
 $routes->get("/admin/teacher","Teacher::index");
+$routes->get("/admin/teacher/view/(:any)","Teacher::viewTeacher/$1");
 $routes->post("/admin/teacher/add","Teacher::add");
 
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))

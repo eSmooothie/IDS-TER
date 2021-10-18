@@ -67,6 +67,18 @@
             </div>
           </a>
         </div>
+        <!-- Department -->
+        <div class="col-sm-3 col-12">
+          <a href="<?php echo $baseUrl; ?>/admin/department" class="btn btn-outline-primary w-100" style="">
+            <div class="text-start">
+              <div class="d-flex align-items-center">
+                <span class="fs-2"><i class="fas fa-users"></i></span>
+                <p class="ms-3 mb-0 fw-bold fs-2">Department</p>
+              </div>
+              <span>Manage IDS Departments</span>
+            </div>
+          </a>
+        </div>
         <!-- Subject -->
         <div class="col-sm-3 col-12">
           <a href="<?php echo $baseUrl; ?>/admin/subject" class="btn btn-outline-primary w-100" style="">
