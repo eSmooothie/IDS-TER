@@ -10,22 +10,23 @@
   <script src="<?php echo base_url(); ?>/bootstrap-5.0.2/js/bootstrap.min.js" charset="utf-8"></script>
   <title>IDS | TER</title>
 </head>
-<body class=" h-100" style="
+<body class="h-100" style="
 background-color: #420516;
 background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
 ">
   <div class="d-flex flex-row h-100" style="">
-    <div class="d-sm-block d-none col  h-100"></div>
-    <div class="col-3 h-100 d-flex align-items-center">
-      <div class="shadow-lg w-100 h-75 rounded d-flex flex-column justify-content-start align-items-center" style="background-color: #e6577f;">
+    <div class="d-sm-block d-none col h-100"></div>
+
+    <div class="col-3 d-flex align-items-center">
+      <div class="p-3 shadow-lg w-100 rounded d-flex flex-column justify-content-start align-items-center" style="background-color: #e6577f;">
         <div class="col pt-5">
           <a href="<?php echo base_url(); ?>/admin"><img src="https://via.placeholder.com/150" alt="" class="d-block mx-auto rounded-circle"></a>
           <div class="text-center mt-3">
             <span class="d-block fs-3 text-white">INTEGRATED DEVELOPMENTAL SCHOOL</span>
-            <span class="d-block fs-4 text-white">TEACHING EFFICIENCY RATING</span>
+            <span class="d-block fs-4 text-white mb-3">TEACHING EFFICIENCY RATING</span>
           </div>
         </div>
-        <div class="col d-flex align-items-center">
+        <div class="col">
           <form class="" action="" method="post">
             <!-- Log in as -->
             <div class="d-flex justify-content-around mb-3">
@@ -55,7 +56,8 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
         </div>
       </div>
     </div>
-    <div class="d-sm-block d-none col  h-100"></div>
+
+    <div class="d-sm-block d-none col h-100"></div>
   </div>
 </body>
 </html>
