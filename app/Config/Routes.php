@@ -61,7 +61,8 @@ $routes->post("/admin/teacher/editProfileInfo","Teacher::editProfileInfo");
 $routes->post("/admin/teacher/editPassword","Teacher::editPassword");
 $routes->post("/admin/teacher/addSubject","Teacher::addSubject");
 $routes->post("/admin/teacher/add","Teacher::add");
-
+// admin:department
+$routes->get("/admin/department","Department::index");
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))
 {
 	require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';

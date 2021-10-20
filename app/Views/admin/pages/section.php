@@ -1,96 +1,54 @@
-<style media="screen">
-  .side-nav {
-    height: 5rem;
-  }
-</style>
-<body>
-<div class="container-fluid row pt-5">
-  <!-- Nav -->
-  <div id="nav" class="col-lg-2 col-sm-4 p-0">
-    <a href="<?php echo "$baseUrl/admin/dashboard"; ?>" class="side-nav btn btn-outline-primary w-100 text-start  d-flex align-items-center fs-5">
-      <i class="fas fa-columns"></i>
-      <span class="ms-3">Dashboard</span>
-    </a>
-    <a href="<?php echo "$baseUrl/admin/section"; ?>" class="side-nav btn btn-outline-primary w-100 text-start  d-flex align-items-center fs-5">
-      <i class="fab fa-buromobelexperte"></i>
-      <span class="ms-3">Section</span>
-    </a>
-    <a href="<?php echo "$baseUrl/admin/student"; ?>" class="side-nav btn btn-outline-primary w-100 text-start  d-flex align-items-center fs-5">
-      <i class="fas fa-users"></i>
-      <span class="ms-3">Student</span>
-    </a>
-    <a href="<?php echo "$baseUrl/admin/teacher"; ?>" class="side-nav btn btn-outline-primary w-100 text-start  d-flex align-items-center fs-5">
-      <i class="fas fa-user-tie"></i>
-      <span class="ms-3">Teacher</span>
-    </a>
-    <a href="<?php echo "$baseUrl/admin/department"; ?>" class="side-nav btn btn-outline-primary w-100 text-start  d-flex align-items-center fs-5">
-      <i class="fas fa-users"></i>
-      <span class="ms-3">Department</span>
-    </a>
-    <a href="<?php echo "$baseUrl/admin/subject"; ?>" class="side-nav btn btn-outline-primary w-100 text-start  d-flex align-items-center fs-5">
-      <i class="fas fa-journal-whills"></i>
-      <span class="ms-3">Subject</span>
-    </a>
-    <a href="<?php echo "$baseUrl/admin/execom"; ?>" class="side-nav btn btn-outline-primary w-100 text-start  d-flex align-items-center fs-5">
-      <i class="fas fa-user-secret"></i>
-      <span class="ms-3">ExeCom</span>
-    </a>
-    <a href="<?php echo "$baseUrl/admin/activitylog"; ?>" class="side-nav btn btn-outline-primary w-100 text-start  d-flex align-items-center fs-5">
-      <i class="fas fa-clipboard-list"></i>
-      <span class="ms-3">Activity Log</span>
-    </a>
-  </div>
-  <!-- content -->
-  <div class="col ps-3">
-    <div class="mb-3">
-      <button type="button" name="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSection">
-        <i class="fas fa-plus"></i>
-        <span>Add Section</span>
-      </button>
-    </div>
-    <div class="contaier-fluid row row-cols-lg-4 row-cols-md-3 ps-2 gy-3">
-      <?php
-        foreach ($gradeLevel as $lv => $sections) {
-          ?>
-          <div class="card me-3">
-            <div class="card-body">
-              <span class="card-title fs-3 text-primary">Grade <?php echo "$lv"; ?></span>
-              <div class="">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col">Name</th>
-                      <th scope="col" class="col-1"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php
-                      foreach ($sections as $key => $section) {
-                        $id = $section['ID'];
-                        $name = $section['NAME'];
-                        ?>
-                        <tr>
-                          <td><?php echo "$name"; ?></td>
-                          <td>
-                            <a href="<?php echo "$baseUrl/admin/section/grade/$lv/$id"; ?>" class="d-flex">
-                              <span>View</span>
-                            </a>
-                          </td>
-                        </tr>
-                        <?php
-                      }
-                     ?>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <?php
-        }
-       ?>
-    </div>
-  </div>
+<!-- content -->
+<div class="col ps-3">
+<div class="mb-3">
+  <button type="button" name="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSection">
+    <i class="fas fa-plus"></i>
+    <span>Add Section</span>
+  </button>
 </div>
+<div class="contaier-fluid row row-cols-lg-4 row-cols-md-3 ps-2 gy-3">
+  <?php
+    foreach ($gradeLevel as $lv => $sections) {
+      ?>
+      <div class="card me-3">
+        <div class="card-body">
+          <span class="card-title fs-3 text-primary">Grade <?php echo "$lv"; ?></span>
+          <div class="">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col" class="col-1"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                  foreach ($sections as $key => $section) {
+                    $id = $section['ID'];
+                    $name = $section['NAME'];
+                    ?>
+                    <tr>
+                      <td><?php echo "$name"; ?></td>
+                      <td>
+                        <a href="<?php echo "$baseUrl/admin/section/grade/$lv/$id"; ?>" class="d-flex">
+                          <span>View</span>
+                        </a>
+                      </td>
+                    </tr>
+                    <?php
+                  }
+                 ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <?php
+    }
+   ?>
+</div>
+</div>
+
 <!-- Modal -->
 <div class="modal fade" id="addSection" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">

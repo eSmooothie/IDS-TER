@@ -31,6 +31,7 @@ class Section extends BaseController{
         'gradeLevel' => $gradeLevel,
       ];
       echo view("admin/layout/header", $data);
+      echo view("admin/pages/nav",$data);
       echo view("admin/pages/section", $data);
       echo view("admin/layout/footer");
     }else{
@@ -119,6 +120,7 @@ class Section extends BaseController{
     ];
 
     echo view("admin/layout/header", $data);
+    echo view("admin/pages/nav",$data);
     echo view("admin/pages/viewSection", $data);
     echo view("admin/layout/footer");
   }
@@ -223,6 +225,7 @@ class Section extends BaseController{
     }
 
     echo view("admin/layout/header", $data);
+    echo view("admin/pages/nav",$data);
     echo view("admin/pages/editSection", $data);
     echo view("admin/layout/footer");
   }

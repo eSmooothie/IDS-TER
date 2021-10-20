@@ -31,6 +31,7 @@ class Teacher extends BaseController{
 		];
 
     echo view("admin/layout/header", $data);
+    echo view("admin/pages/nav",$data);
 		echo view("admin/pages/teachers", $data);
 		echo view("admin/layout/footer");
   }
@@ -65,6 +66,7 @@ class Teacher extends BaseController{
 
     ];
     echo view("admin/layout/header", $data);
+    echo view("admin/pages/nav",$data);
     echo view("admin/pages/viewTeacher", $data);
     echo view("admin/layout/footer");
   }
@@ -156,6 +158,7 @@ class Teacher extends BaseController{
       $data['subjectFormMessage'] = null;
     }
     echo view("admin/layout/header", $data);
+    echo view("admin/pages/nav",$data);
     echo view("admin/pages/editTeacher", $data);
     echo view("admin/layout/footer");
   }

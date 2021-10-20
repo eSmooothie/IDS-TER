@@ -58,6 +58,7 @@ class Student extends BaseController
 		 			$this->session->getFlashData("uploadStudentMsg"): null;
 
 		echo view("admin/layout/header", $data);
+		echo view("admin/pages/nav",$data);
 		echo view("admin/pages/student", $data);
 		echo view("admin/layout/footer");
 	}
@@ -94,6 +95,7 @@ class Student extends BaseController
 		];
 
 		echo view("admin/layout/header", $data);
+		echo view("admin/pages/nav",$data);
 		echo view("admin/pages/studentData", $data);
 		echo view("admin/layout/footer");
 	}
