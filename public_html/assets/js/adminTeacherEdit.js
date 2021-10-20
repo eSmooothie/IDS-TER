@@ -49,6 +49,38 @@ $("#changePassword").submit(function(e){
   sendRequest(path,formData,done);
 });
 
+$("#submitSubject").on("click", function(){
+  var addSubject = $("#mySubjects");
+  var childCount = addSubject[0].childElementCount;
+  if(childCount > 0){
+    var children = addSubject[0].children;
+
+    var subjectId = [];
+    var teacherId = $(this).val();
+
+    for (var index in children) {
+      if (children.hasOwnProperty(index)) {
+        var child = children[index];
+        var id = child.id;
+        subjectId.push(id);
+      }
+    }
+
+
+    var formData = {
+      'id': teacherId,
+      'subjects[]' : subjectId,
+    }
+    var path = "admin/teacher/addSubject";
+    var done = function (data){
+      window.location.reload();
+    };
+
+    sendRequest(path, formData, done);
+  }
+
+});
+
 function addSubject(e){
   var parentNode = e.parentNode.parentNode;
   var cloneNode = parentNode.cloneNode(true);

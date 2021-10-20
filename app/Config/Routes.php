@@ -59,6 +59,7 @@ $routes->get("/admin/teacher/view/(:segment)","Teacher::viewTeacher/$1");
 $routes->get("/admin/teacher/view/(:segment)/edit","Teacher::editTeacher/$1");
 $routes->post("/admin/teacher/editProfileInfo","Teacher::editProfileInfo");
 $routes->post("/admin/teacher/editPassword","Teacher::editPassword");
+$routes->post("/admin/teacher/addSubject","Teacher::addSubject");
 $routes->post("/admin/teacher/add","Teacher::add");
 
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))

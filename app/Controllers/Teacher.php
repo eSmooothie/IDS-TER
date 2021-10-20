@@ -149,6 +149,12 @@ class Teacher extends BaseController{
     }else{
       $data['passwordFormMessage'] = null;
     }
+
+    if(!empty($this->session->getFlashData("update2"))){
+      $data['subjectFormMessage'] = $this->session->getFlashData("update2");
+    }else{
+      $data['subjectFormMessage'] = null;
+    }
     echo view("admin/layout/header", $data);
     echo view("admin/pages/editTeacher", $data);
     echo view("admin/layout/footer");
@@ -294,6 +300,51 @@ class Teacher extends BaseController{
       "data" => $data,
     ];
     $this->session->setFlashData("update1",$response);
+    return $this->setResponseFormat('json')->respond($response, 200);
+  }
+
+  public function addSubject(){
+    header("Content-type:application/json");
+    // do something here
+    $id = $this->request->getPost("id");
+    $subjects = $this->request->getPost("subjects[]");
+
+    $currSY = $this->schoolyearModel->orderBy("ID","DESC")->first();
+
+    // delete current all subjects
+    $this->teacherSubjectModel
+    ->where("TEACHER_ID", $id)
+    ->where("SCHOOL_YEAR_ID", $currSY['ID'])
+    ->delete();
+
+    foreach ($subjects as $key => $subjectId) {
+      $isExist = $this->teacherSubjectModel
+      ->where("TEACHER_ID", $id)
+      ->where("SUBJECT_ID", $subjectId)
+      ->where("SCHOOL_YEAR_ID", $currSY['ID'])
+      ->findAll();
+
+      if(empty($isExist)){
+        $add = [
+          'TEACHER_ID' => $id,
+          'SUBJECT_ID' => $subjectId,
+          'SCHOOL_YEAR_ID' => $currSY['ID'],
+        ];
+
+        $this->teacherSubjectModel->insert($add);
+      }
+    }
+    // {end}
+    $data = [
+      'id' => $id,
+      'subject' => $subjects,
+    ];
+    $response = [
+      "message" => "Done",
+      "data" => $data,
+    ];
+
+    $this->session->setFlashData("update2",$response);
     return $this->setResponseFormat('json')->respond($response, 200);
   }
 

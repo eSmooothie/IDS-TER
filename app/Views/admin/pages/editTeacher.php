@@ -138,13 +138,14 @@
       </form>
     </div>
     <!-- subject -->
-    <div class="border rounded p-1 bg-info text-white bg-gradient mb-3 <?php echo (false)? "d-none":"d-block"; ?>">
-      <p class="m-0"><?php echo "message"; ?></p>
+    <div class="border rounded p-1 bg-info text-white bg-gradient mb-3
+    <?php echo (empty($subjectFormMessage))? "d-none":"d-block"; ?>">
+      <p class="m-0"><?php echo "{$subjectFormMessage['message']}"; ?></p>
     </div>
     <div class="border rounded p-3 bg-light bg-gradient mb-3">
       <div class="d-flex justify-content-between">
         <p><i class="fas fa-edit"></i> Subject Handles</p>
-        <button type="button" class="btn btn-primary" name="button" id="submitSubject">Submit</button>
+        <button type="button" class="btn btn-primary" name="button" id="submitSubject" value="<?php echo "{$teacherData['ID']}"; ?>">Submit</button>
       </div>
       <div class="d-flex">
         <!-- table for all subject -->
