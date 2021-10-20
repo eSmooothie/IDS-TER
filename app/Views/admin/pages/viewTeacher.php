@@ -54,7 +54,7 @@
             </small>
         </span>
         <span class="mb-2 text-white bg-primary border ps-2 pe-2 border-primary rounded-pill">
-          <a class="text-white text-decoration-none" href="<?php echo "$baseUrl/admin/department/view/{$teacherData['DEPARTMENT_ID']}"; ?>">
+          <a class="text-white text-decoration-none" href="<?php echo ($teacherData['DEPARTMENT'])? "$baseUrl/admin/department/view/{$teacherData['DEPARTMENT_ID']}":"#"; ?>">
             <small class="text-uppercase">
               <?php echo ($teacherData['DEPARTMENT'])?"{$teacherData['DEPARTMENT']}":"No Department"; ?>
                department
@@ -65,7 +65,7 @@
     </div>
     <div class="border rounded p-3 bg-light bg-gradient mb-3">
       <div class="">
-        <a href="#" class="text-decoration-none"><i class="fas fa-cog"></i> Edit</a>
+        <a href="<?php echo "$baseUrl/admin/teacher/view/{$teacherData['ID']}/edit"; ?>" class="text-decoration-none"><i class="fas fa-cog"></i> Edit</a>
         <a href="#" class="ms-3 text-decoration-none"><i class="fas fa-download"></i> Download Evaluation PDF</a>
       </div>
     </div>

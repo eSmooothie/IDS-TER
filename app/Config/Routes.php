@@ -55,7 +55,10 @@ $routes->post("/admin/student/add/csv","Student::addNewStudentCSV");
 $routes->get("/admin/student/view/(:any)", "Student::viewStudent/$1");
 // admin:teacher
 $routes->get("/admin/teacher","Teacher::index");
-$routes->get("/admin/teacher/view/(:any)","Teacher::viewTeacher/$1");
+$routes->get("/admin/teacher/view/(:segment)","Teacher::viewTeacher/$1");
+$routes->get("/admin/teacher/view/(:segment)/edit","Teacher::editTeacher/$1");
+$routes->post("/admin/teacher/editProfileInfo","Teacher::editProfileInfo");
+$routes->post("/admin/teacher/editPassword","Teacher::editPassword");
 $routes->post("/admin/teacher/add","Teacher::add");
 
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))
