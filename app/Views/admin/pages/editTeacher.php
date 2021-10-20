@@ -138,6 +138,9 @@
       </form>
     </div>
     <!-- subject -->
+    <div class="border rounded p-1 bg-info text-white bg-gradient mb-3 <?php echo (false)? "d-none":"d-block"; ?>">
+      <p class="m-0"><?php echo "message"; ?></p>
+    </div>
     <div class="border rounded p-3 bg-light bg-gradient mb-3">
       <div class="d-flex justify-content-between">
         <p><i class="fas fa-edit"></i> Subject Handles</p>
