@@ -67,6 +67,10 @@ $routes->get("/admin/department/view/(:segment)","Department::view/$1");
 $routes->get("/admin/department/view/(:segment)/edit","Department::edit/$1");
 $routes->post("/admin/department/change/name","Department::changeName");
 $routes->post("/admin/department/change/chairperson", "Department::changeChairperson");
+// admin::subject
+$routes->get("/admin/subject","Subject::index");
+$routes->post("/admin/subject/add","Subject::add");
+
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))
 {
 	require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
