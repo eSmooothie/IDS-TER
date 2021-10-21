@@ -6,6 +6,6 @@ class Department extends Model{
   protected $table = 'department';
 
   protected $primaryKey = 'id';
-  protected $allowedFields = ['col_nm'];
+  protected $allowedFields = ['NAME'];
 }
  ?>
