@@ -70,6 +70,10 @@ $routes->post("/admin/department/change/chairperson", "Department::changeChairpe
 // admin::subject
 $routes->get("/admin/subject","Subject::index");
 $routes->post("/admin/subject/add","Subject::add");
+// admin::execom
+$routes->get("/admin/execom","Execom::index");
+$routes->get("/admin/execom/change/(:num)","Execom::change/$1");
+$routes->post("/admin/execom/update","Execom::assign");
 
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))
 {
