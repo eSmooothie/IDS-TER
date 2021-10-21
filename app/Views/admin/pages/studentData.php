@@ -21,7 +21,7 @@
           <small><?php echo "{$latestSection['NAME']}"; ?></small>
         </a>
       </span>
-      <span class="text-white bg-primary border ps-2 pe-2 border-primary rounded-pill"><small><?php echo "{$latestSection['S.Y']}"; ?></small></span>
+      <span class="text-white bg-primary border ps-2 pe-2 border-primary rounded-pill"><small><?php echo "{$latestSection['SY']}"; ?></small></span>
     </div>
   </div>
   <div class="border rounded p-3 bg-light bg-gradient mb-3">

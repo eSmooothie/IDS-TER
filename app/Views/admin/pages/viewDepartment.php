@@ -14,7 +14,7 @@
         <?php
         foreach ($school_year as $key => $value) {
           $id = $value['ID'];
-          $sy = $value['S.Y'];
+          $sy = $value['SY'];
           $sem = $value['SEMESTER'];
 
           ?>

@@ -10,7 +10,7 @@
     </div>
   </div>
   <div class="bg-light bg-gradient rounded border mb-3 p-3">
-    <p>Assign new <?php echo "{$execom['NAME']}"; ?> for school year <?php echo "{$school_year['S.Y']}:{$school_year['SEMESTER']}"; ?></p>
+    <p>Assign new <?php echo "{$execom['NAME']}"; ?> for school year <?php echo "{$school_year['SY']}:{$school_year['SEMESTER']}"; ?></p>
     <form id="changeTeacher">
       <input type="hidden" name="id" value="<?php echo "{$execom['ID']}"; ?>">
       <div class="mb-3">

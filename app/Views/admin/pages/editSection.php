@@ -4,7 +4,7 @@
     <div class="border rounded p-3 bg-light bg-gradient">
       <div class="">
         <p class="m-0 fs-3 fw-bold"><?php echo "${sectionData['NAME']}"; ?>
-          <small style="font-size:small;"><?php echo "(${schoolyear['S.Y']}:${schoolyear['SEMESTER']})"; ?>
+          <small style="font-size:small;"><?php echo "(${schoolyear['SY']}:${schoolyear['SEMESTER']})"; ?>
           </small>
         </p>
         <span class="d-flex align-items-center">

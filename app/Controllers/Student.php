@@ -20,21 +20,31 @@ class Student extends BaseController
 
 
 		$sy = $this->schoolyearModel->orderBy("ID","DESC")->first(); // get current school year
-		$studentSection = $this->studentSectionModel->join("`student`","`student`.`ID` = `student_section`.`STUDENT_ID`")
-																								->where("SCHOOL_YEAR_ID", $sy['ID'])
-																								->orderBy("`student`.`LN`","ASC")
-																								->findAll();
+
+
+		$rawStudent = $this->studentModel
+		->orderBy("`LN`","ASC")
+		->findAll();
+
 		$students = [];
 
-		foreach ($studentSection as $key => $value) {
+		foreach ($rawStudent as $key => $value) {
 			$studentInfo = [
 				'ID' => $value['ID'],
 				'LN' => $value['LN'],
 				'FN' => $value['FN'],
 			];
 
-		  $section = $this->sectionModel->where("ID", $value['SECTION_ID'])->first();
-			$studentInfo['section'] = $section['NAME'];
+			$studentSection = $this->studentSectionModel
+			->where("STUDENT_ID", $value['ID'])
+			->where("SCHOOL_YEAR_ID", $sy['ID'])
+			->first();
+
+		  $section = $this->sectionModel
+			->where("ID", $studentSection['SECTION_ID'])
+			->first();
+
+			$studentInfo['section'] = (empty($section))? "NOT ENROLLED":$section['NAME'];
 
 			// current status
 			$studentStatus = $this->studentStatusModel->where("STUDENT_ID", $value['ID'])

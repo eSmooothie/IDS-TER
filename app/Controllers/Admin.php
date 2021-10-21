@@ -16,10 +16,20 @@ class Admin extends BaseController
 
   public function dashboard(){
     if($this->session->has("adminID")){
+			$school_year = $this->schoolyearModel->orderBy("ID","DESC")->first();
+
+			$countStudents = $this->studentModel->countAll();
+			$countTeacher = $this->teacherModel->countAll();
+
+
       $data = [
         'id' => $this->session->get("adminID"),
         'pageTitle' => "ADMIN | DASHBOARD",
 				'baseUrl' => base_url(),
+				'school_year' => $school_year,
+				'countStudent' => $countStudents,
+				'countTeacher' => $countTeacher,
+
       ];
       echo view("admin/layout/header", $data);
       echo view("admin/pages/dashboard", $data);
@@ -28,6 +38,63 @@ class Admin extends BaseController
       return redirect()->to("/admin");
     }
   }
+
+	public function addSchoolYear(){
+		header("Content-type:application/json");
+		// do something here
+		$from = $this->request->getPost("from");
+		$to = $this->request->getPost("to");
+		$semester = $this->request->getPost("semester");
+
+		$from = (int)substr($from, 0, 4);
+		$to = (int)substr($to,0,4);
+
+		if($from >= $to){
+			$response = [
+				"message" => "Invalid school year",
+				"data" => null,
+			];
+			return $this->setResponseFormat('json')->respond($response, 200);
+		}
+
+		$sy = "$from-$to";
+
+		$allSy = $this->schoolyearModel->findAll();
+		$isExist = null;
+		foreach ($allSy as $key => $value) {
+			if(strcmp($sy, $value['SY']) == 0 && $value['SEMESTER'] == $semester){
+				$isExist = 1;
+				break;
+			}
+		}
+
+		if(!empty($isExist)){
+			$response = [
+				"message" => "$from-$to:$semester already exist.",
+				"data" => null,
+			];
+			return $this->setResponseFormat('json')->respond($response, 200);
+		}
+		$add = [
+			'SY' => $sy,
+			'SEMESTER' => $semester,
+		];
+
+		$this->schoolyearModel->insert($add);
+
+		// add
+		// {end}
+		$data = [
+			'from' => $from,
+			'to' => $to,
+			'semester' => $semester,
+		];
+		$response = [
+			"message" => "OK",
+			"data" => $data,
+		];
+		return $this->setResponseFormat('json')->respond($response, 200);
+	}
 
   public function verifyCredentials(){
     header("Content-type:application/json");

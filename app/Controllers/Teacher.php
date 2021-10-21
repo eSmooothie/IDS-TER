@@ -108,7 +108,6 @@ class Teacher extends BaseController{
 
     if(empty($currentSubjects)){
       $schoolYear = $this->schoolyearModel->findAll();
-      $currSY = null;
       foreach ($schoolYear as $key => $value) {
         $sy_id = $value['ID'];
         $currentSubjects = $this->teacherSubjectModel
@@ -122,7 +121,7 @@ class Teacher extends BaseController{
         ->findAll();
 
         if(!empty($currentSubjects)){
-          $currSY = $schoolYear[$key];
+          $subjectSY = $schoolYear[$key];
           break;
         }
       }
@@ -136,7 +135,8 @@ class Teacher extends BaseController{
       'baseUrl' => base_url(),
       'teacherData' => $teacherData,
       'teacherSubjects' => $currentSubjects,
-      'currSySubject' => $currSY,
+      'currSY' => $currSY,
+      'currSySubject' => $subjectSY,
       'subjects' => $subjects,
     ];
 

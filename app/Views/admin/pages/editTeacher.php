@@ -147,11 +147,21 @@
     </div>
 
     <!-- teacher subject -->
+    <?php
+      $display = "";
+      if(empty($currSySubject)){
+        $display = "No assigned subject ever since.";
+      }else if($currSySubject['ID'] != $currSY['ID']){
+        $display = "This is school year {$currSySubject['SY']}:{$currSySubject['SEMESTER']} subjects."
+        ." If it is still the same for school year {$currSY['SY']}:{$currSY['SEMESTER']} click \"SUBMIT\""
+        ." otherwise edit it for current school year.";
+      }else{
+        $display = "{$currSySubject['SY']}:{$currSySubject['SEMESTER']} subjects";
+      }
+     ?>
     <div class="w-100 ms-1">
       <p>My Subjects (<small class="text-danger">
-        <?php echo (empty($currSySubject))?
-        "No assigned subject ever since":
-        "{$currSySubject['S.Y']}:{$currSySubject['SEMESTER']} subjects"; ?>
+        <?php echo $display; ?>
       </small>)</p>
       <div class="overflow-auto" style="max-height:50vh;">
         <table class="table table-striped border">

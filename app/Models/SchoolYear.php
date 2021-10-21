@@ -6,6 +6,6 @@ class SchoolYear extends Model{
   protected $table = 'school_year';
 
   protected $primaryKey = 'ID';
-  protected $allowedFields = ['S.Y','SEMESTER'];
+  protected $allowedFields = ['SY','SEMESTER'];
 }
  ?>
