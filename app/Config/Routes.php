@@ -83,12 +83,15 @@ $routes->get("/user/teacher/rate/supervisor","User::supervisor");
 $routes->get("/user/teacher/analytics/rating","User::analyticsRating");
 $routes->get("/user/teacher/analytics/comment","User::analyticsComment");
 $routes->get("/user/teacher/analytics/download","User::analyticsDownload");
+// user::student
+$routes->get("/user/student","User::student");
 // evaluation
 $routes->get("/evaluate/peer/(:segment)","Evaluation::peer/$1");
-$routes->get("/evaluate/student/(:segment)","Evaluation::student/$1");
+$routes->get("/evaluate/student/(:segment)/(:segment)","Evaluation::student/$1/$2");
 $routes->get("/evaluate/supervisor/(:segment)","Evaluation::supervisor/$1");
-
 $routes->post("/evaluate/submit","Evaluation::submit");
+// pdf
+$routes->get("/download/individual/(:segment)/","PdfController::individual/$1/$2");
 
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))
 {
