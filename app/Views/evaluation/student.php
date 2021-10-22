@@ -39,56 +39,77 @@
         </tbody>
       </table>
     </div>
-    <div class="">
-      <form class="evaluation">
-        <input type="hidden" name="evaluated_id" value="<?php echo "{$evaluated['ID']}"; ?>">
-        <input type="hidden" name="evaluator_id" value="<?php echo "$evaluator_id"; ?>">
-        <input type="hidden" name="eval_type" value="1">
+    <?php
+      if($isDone){
+        ?>
+        <div class="p-3 text-center bg-success bg-gradient text-white rounded border">
+          <p class="mb-0">DONE</p>
+        </div>
         <?php
-          $counter = 0;
-          foreach ($questions as $key => $value) {
-            $counter += 1;
-            $qid = $value['ID'];
-            $question = $value['QUESTION'];
-            ?>
-            <div class="border mb-3 d-flex p-2 rounded border-primary">
-              <p class="fw-bold me-2">#<?php echo "$counter"; ?></p>
-              <div class="w-100">
-                <p class="text-wrap"><?php echo "$question"; ?></p>
-                <div class="">
-                  <table class="table">
-                     <tr>
-                       <td class="chc"></td>
-                       <td class="chc">1</td>
-                       <td class="chc">2</td>
-                       <td class="chc">3</td>
-                       <td class="chc">4</td>
-                       <td class="chc">5</td>
-                       <td class="chc">6</td>
-                       <td class="chc"></td>
-                     </tr>
-                     <tr>
-                       <td class="">Never</td>
-                       <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="1" required></td>
-                       <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="2" required></td>
-                       <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="3" required></td>
-                       <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="4" required></td>
-                       <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="5" required></td>
-                       <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="6" required></td>
-                       <td class="">Always</td>
-                     </tr>
-                  </table>
-                </div>
-              </div>
-            </div>
+      }else{
+        ?>
+        <div class="">
+          <form class="evaluation">
+            <input type="hidden" name="evaluated_id" value="<?php echo "{$evaluated['ID']}"; ?>">
+            <input type="hidden" name="evaluator_id" value="<?php echo "$evaluator_id"; ?>">
+            <input type="hidden" name="eval_type" value="1">
+            <input type="hidden" name="subject" value="<?php echo "$subject_id"; ?>">
             <?php
-          }
-         ?>
-         <div class="d-flex justify-content-center mb-3 mt-2">
-           <button type="submit" class="btn btn-primary" name="button">Submit</button>
-         </div>
-      </form>
+              $counter = 0;
+              foreach ($questions as $key => $value) {
+                $counter += 1;
+                $qid = $value['ID'];
+                $question = $value['QUESTION'];
+                ?>
+                <div class="border mb-3 d-flex p-2 rounded border-primary">
+                  <p class="fw-bold me-2">#<?php echo "$counter"; ?></p>
+                  <div class="w-100">
+                    <p class="text-wrap"><?php echo "$question"; ?></p>
+                    <div class="">
+                      <table class="table">
+                         <tr>
+                           <td class="chc"></td>
+                           <td class="chc">1</td>
+                           <td class="chc">2</td>
+                           <td class="chc">3</td>
+                           <td class="chc">4</td>
+                           <td class="chc">5</td>
+                           <td class="chc">6</td>
+                           <td class="chc"></td>
+                         </tr>
+                         <tr>
+                           <td class="">Never</td>
+                           <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="1" required></td>
+                           <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="2" required></td>
+                           <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="3" required></td>
+                           <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="4" required></td>
+                           <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="5" required></td>
+                           <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="6" required></td>
+                           <td class="">Always</td>
+                         </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <?php
+              }
+             ?>
+
+             <div class="form-floating mb-3">
+               <textarea name="comment" class="form-control" placeholder="Leave a comment here" id="comment"></textarea>
+               <label for="comment">Comments</label>
+             </div>
+
+             <div class="d-flex justify-content-center mb-3 mt-2">
+               <button type="submit" class="btn btn-primary" name="button">Submit</button>
+             </div>
+
+
+          </form>
     </div>
+    <?php
+  }
+    ?>
   </div>
   <div class="col-xl-3 col-lg-2"></div>
 </div>

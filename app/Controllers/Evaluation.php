@@ -59,12 +59,12 @@ class Evaluation extends BaseController{
 		echo view("evaluation/layout/footer");
   }
 
-  public function student($evaluated = false){
+  public function student($evaluated = false, $subject = false){
     if(!$this->session->has("userID")){
       return redirect()->to("/");
     }
 
-    if(!$evaluated){
+    if(!$evaluated || !$subject){
       return redirect()->to("/");
     }
     // do something here
@@ -86,9 +86,11 @@ class Evaluation extends BaseController{
     // check if done rated
     $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
 
+
     $isExist = $this->evalInfoModel
     ->where("EVALUATOR_ID", $evaluator_id)
     ->where("EVALUATED_ID", $evaluated)
+    ->where("SUBJECT_ID", $subject)
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->where("EVAL_TYPE_ID", 1)
     ->countAllResults();
@@ -106,6 +108,7 @@ class Evaluation extends BaseController{
       'baseUrl' => base_url(),
       // add some variables here
       'evaluator_id' => $evaluator_id,
+      'subject_id' => $subject,
       'evaluated' => $teacher,
       'isDone' => ($isExist > 0)? true: false,
       'questions' => $questions,
@@ -188,6 +191,13 @@ class Evaluation extends BaseController{
       'SCHOOL_YEAR_ID' => $sy['ID'],
       'EVAL_TYPE_ID' => $eval_type_id,
     ];
+
+    if($eval_type_id == 1){
+      $subject_id = $this->request->getPost("subject");
+      $eval_info['SUBJECT_ID'] = $subject_id;
+      $comment = $this->request->getPost("comment");
+      $eval_info['COMMENT'] = $comment;
+    }
 
     $this->evalInfoModel->insert($eval_info);
     $eval_info_id =  $this->evalInfoModel->insertID;

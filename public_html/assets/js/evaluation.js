@@ -18,10 +18,10 @@ function sendRequest(
 $(".evaluation").submit(function(e){
   e.preventDefault();
   var formData = $(this).serializeArray();
-  console.log(formData);
+
   var path = "evaluate/submit";
   var done = function(data){
-    console.log(data);
+    window.location.reload();
   };
 
   sendRequest(path, formData, done);
