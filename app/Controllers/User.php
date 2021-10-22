@@ -418,7 +418,7 @@ class User extends BaseController{
       return redirect()->to("/");
     }
     $id = $this->session->get("userID");
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $sy = $this->schoolyearModel->orderBy("ID","DESC")->findAll();
     $myData = $this->teacherModel->find($id);
     $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
 
@@ -437,6 +437,110 @@ class User extends BaseController{
   }
 
   // student
+  public function student(){
+    if(!$this->session->has("userID")){
+      return redirect()->to("/");
+    }
+    // do something here
+    $id = $this->session->get("userID");
+    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $myData = $this->studentModel->find($id);
+    $currSection = $this->studentSectionModel
+    ->where("STUDENT_ID", $myData['ID'])
+    ->where("SCHOOL_YEAR_ID", $sy['ID'])
+    ->first();
+
+    $mySection = $this->sectionModel->find($currSection['SECTION_ID']);
+
+    $evaluator = $this->evaluatorModel
+    ->where("STUDENT_ID", $myData['ID'])
+    ->first();
+
+    if(empty($evaluator)){
+      $_create = [
+        'STUDENT_ID' => $id,
+      ];
+      $this->evaluatorModel->insert($_create);
+      $evaluator_id = $this->evaluatorModel->insertID;
+    }else{
+      $evaluator_id = $evaluator['ID'];
+    }
+
+    $subjects = [];
+    $isCleared = false;
+    $count_isDone = 0;
+    if(!empty($mySection)){
+      // get subjects
+      $sectionSubject = $this->sectionSubjectModel
+      ->where("SECTION_ID", $mySection['ID'])
+      ->where("SCHOOL_YEAR_ID", $sy['ID'])
+      ->findAll();
+
+      foreach ($sectionSubject as $key => $subject) {
+        $subject_id = $subject['SUBJECT_ID'];
+        $teacher_id = $subject['TEACHER_ID'];
+
+        // check if is done rating
+        $isDone = $this->evalInfoModel
+        ->where("EVALUATOR_ID", $evaluator_id)
+        ->where("EVALUATED_ID", $teacher_id)
+        ->where("SUBJECT_ID", $subject_id)
+        ->where("SCHOOL_YEAR_ID", $sy['ID'])
+        ->where("EVAL_TYPE_ID", 1)
+        ->countAllResults();
+
+        if($isDone > 0){
+          $count_isDone += 1;
+        }
+
+        $teacherData = $this->teacherModel->find($teacher_id);
+        $subjectData = $this->subjectModel->find($subject_id);
+
+        $add = [
+          'isDone' => ($isDone > 0)? true:false,
+          'teacher' => $teacherData,
+          'subject' => $subjectData,
+        ];
+
+        array_push($subjects, $add);
+      }
+
+      $count_sectionSubject = $this->sectionSubjectModel
+      ->where("SECTION_ID", $mySection['ID'])
+      ->where("SCHOOL_YEAR_ID", $sy['ID'])
+      ->countAllResults();
+
+      $isCleared = ($count_sectionSubject == $count_isDone)? true:false;
+
+      if($isCleared){
+        $updateStatus = [
+          'STATUS' => 1,
+          'DATE' => $this->getCurrentDateTime(),
+        ];
+
+        $this->studentStatusModel
+        ->where("SCHOOL_YEAR_ID", $sy['ID'])
+        ->where("STUDENT_ID", $myData['ID'])
+        ->set($updateStatus)
+        ->update();
+      }
+    }
+    $data = [
+      'id' => $this->session->get("userID"),
+      'pageTitle' => "STUDENT | DASHBOARD",
+      'baseUrl' => base_url(),
+      // add some variables here
+      'myData' => $myData,
+      'sy' => $sy,
+      'mySection' => $mySection,
+      'subjects' => $subjects,
+      'isCleared' => $isCleared,
+      'ttlEvaluated' => $count_isDone,
+    ];
+    echo view("student/layout/header", $data);
+    echo view("student/index", $data);
+    echo view("student/layout/footer");
+  }
 
   public function func_name(){
     header("Content-type:application/json");

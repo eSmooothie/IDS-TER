@@ -50,7 +50,7 @@
             <tr class="">
               <th scope="row"><?php echo "{$teacher['ID']}"; ?></th>
               <td class=""><?php echo "{$teacher['LN']}, {$teacher['FN']}"; ?></td>
-              <td><a target="_blank" href="<?php echo "$path"; ?>" class="btn <?php echo ($isDone)?"btn-success":"btn-primary"; ?>"><?php echo ($isDone)?"Done":"Evaluate"; ?></a></td>
+              <td><a <?php echo ($isDone)?"":"target=\"_blank\""; ?> href="<?php echo "$path"; ?>" class="btn <?php echo ($isDone)?"btn-success":"btn-primary"; ?>"><?php echo ($isDone)?"Done":"Evaluate"; ?></a></td>
             </tr>
             <?php
           }

@@ -25,10 +25,19 @@
           <th scope="col" class="col-1">Download Link</th>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">SY</th>
-            <td><a href="#">Download</a></td>
-          </tr>
+          <?php
+            foreach ($sy as $key => $value) {
+              $id = $value['ID'];
+              $sy = $value['SY'];
+              $sem = $value['SEMESTER'];
+              ?>
+              <tr>
+                <th scope="row"><?php echo "$sy:$sem"; ?></th>
+                <td><a target="_blank" href="<?php echo "$baseUrl/download/individual/$id"; ?>">Download</a></td>
+              </tr>
+              <?php
+            }
+           ?>
         </tbody>
       </table>
     </div>
