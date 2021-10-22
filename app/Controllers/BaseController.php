@@ -71,16 +71,22 @@ class BaseController extends Controller
 		$this->adminModel = new Admin();
 		$this->departmentModel = new Department();
 		$this->departmentHistoryModel = new DeptHistory();
+
 		$this->evalInfoModel = new EvalInfo();
 		$this->evalQuestionModel = new EvalQuestion();
 		$this->evalTypeModel = new EvalType();
 		$this->evaluatorModel = new Evaluator();
+
 		$this->execomModel = new ExeCom();
 		$this->execomHistoryModel = new ExeComHistory();
+		
 		$this->ratingModel = new Rating();
 		$this->reportModel = new Report();
+
 		$this->schoolyearModel = new SchoolYear();
+
 		$this->sectionModel = new Section();
+
 		$this->sectionSubjectModel = new SectionSubject();
 
 		$this->studentModel = new Student();

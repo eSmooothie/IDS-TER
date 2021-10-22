@@ -27,30 +27,36 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
           </div>
         </div>
         <div class="col">
-          <form class="" action="" method="post">
+          <form id="userLogin">
             <!-- Log in as -->
             <div class="d-flex justify-content-around mb-3">
               <div class="">
-                <input type="radio" class="btn-check" id="btn-check-student" name="logInAs" required>
+                <input type="radio" class="btn-check" id="btn-check-student" name="logInAs" value="student" required>
                 <label class="btn btn-primary" for="btn-check-student">I'm a student</label>
               </div>
               <div class="">
-                <input type="radio" class="btn-check" id="btn-check-teacher" name="logInAs" required>
+                <input type="radio" class="btn-check" id="btn-check-teacher" name="logInAs" value="teacher" required>
                 <label class="btn btn-primary" for="btn-check-teacher">I'm a teacher</label>
               </div>
             </div>
             <!-- Username -->
             <div class="input-group flex-nowrap mb-4">
               <span class="input-group-text" id="label-username"><i class="fas fa-id-card-alt"></i></span>
-              <input required type="text" class="form-control" placeholder="School ID Number" aria-label="Username" aria-describedby="label-username">
+              <input required type="text" name="username" class="form-control" placeholder="School ID Number" aria-label="Username" aria-describedby="label-username">
             </div>
             <!-- Password -->
-            <div class="input-group flex-nowrap mb-5">
+            <div class="input-group flex-nowrap mb-2">
               <span class="input-group-text" id="label-password"><i class="fas fa-key"></i></span>
-              <input required type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="label-password">
+              <input required type="password" name="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="label-password">
             </div>
+            <!-- err message -->
+            <div class="mb-2 text-center text-white">
+              <span class="" id="errMsg"></span>
+            </div>
+
+
             <div class="d-flex justify-content-center">
-              <button type="submit" name="button" class="btn btn-primary">Submit</button>
+              <button type="submit" name="button" class="btn btn-primary">Login</button>
             </div>
           </form>
         </div>
@@ -59,5 +65,8 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
 
     <div class="d-sm-block d-none col h-100"></div>
   </div>
+  <div class="mb-5 mt-5" style="height:50px;">
+  </div>
 </body>
 </html>
+<script src="<?php echo base_url(); ?>/assets/js/login.js" charset="utf-8"></script>

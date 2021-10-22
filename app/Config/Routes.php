@@ -75,6 +75,10 @@ $routes->post("/admin/subject/add","Subject::add");
 $routes->get("/admin/execom","Execom::index");
 $routes->get("/admin/execom/change/(:num)","Execom::change/$1");
 $routes->post("/admin/execom/update","Execom::assign");
+// user::
+$routes->post("/user/login","User::login");
+// user::teacher
+$routes->get("/user/teacher","User::teacher");
 
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))
 {
