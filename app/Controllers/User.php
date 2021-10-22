@@ -113,6 +113,7 @@ class User extends BaseController{
     $id = $this->session->get("userID");
     $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
     $myData = $this->teacherModel->find($id);
+    $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
     // get subjects
     $mySubjects = $this->teacherSubjectModel
     ->select("
@@ -136,16 +137,27 @@ class User extends BaseController{
 
     foreach ($colleagues as $key => $colleague) {
       // check if done rated
-      $my_evalutor_id = $this->evaluatorModel
+      $evaluator = $this->evaluatorModel
       ->where("TEACHER_ID", $id)
-      ->find();
+      ->first();
 
+      if(empty($evaluator)){
+        // if no evaluator id, create one
+        $create_evaluator_id = [
+          'TEACHER_ID' => $id,
+        ];
+
+        $this->evaluatorModel->insert($create_evaluator_id);
+        $myEvaluatorId = $this->evaluatorModel->insertID;
+      }else{
+        $myEvaluatorId = $evaluator['ID'];
+      }
       $isDone = $this->evalInfoModel
-      ->where("EVALUATOR_ID", $my_evalutor_id)
+      ->where("EVALUATOR_ID", $myEvaluatorId)
       ->where("EVALUATED_ID", $colleague['ID'])
       ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->where("EVAL_TYPE", 2)
-      ->countAll();
+      ->where("EVAL_TYPE_ID", 2)
+      ->countAllResults();
 
       $d = [
         'isDone' => ($isDone > 0)? true: false,
@@ -159,13 +171,13 @@ class User extends BaseController{
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
     ->where("TEACHER_ID", $myData['ID'])
-    ->countAll();
+    ->countAllResults();
 
     $isPrincipal = $this->execomHistoryModel
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->where("EXECOM_ID", 1)
     ->where("TEACHER_ID", $myData['ID'])
-    ->countAll();
+    ->countAllResults();
 
     $isSupervisor = ($isChairperson > 0 || $isPrincipal > 0)? true: false;
 
@@ -176,16 +188,184 @@ class User extends BaseController{
       // add some variables here
       'myData' => $myData,
       'mySubject' => $mySubjects,
+      'myDept' => $myDept,
+      'sy' => $sy,
       'peer' => $peer,
       'isSupervisor' => $isSupervisor,
+      'isChairperson' => $isChairperson ,
+      'isPrincipal' => $isPrincipal ,
 		];
-    
+
     echo view("teacher/layout/header", $data);
 		echo view("teacher/index.php", $data);
 		echo view("teacher/layout/footer");
   }
 
+  public function supervisor(){
+    if(!$this->session->has("userID")){
+      return redirect()->to("/");
+    }
+    // do something here
+    // get data
+    $id = $this->session->get("userID");
+    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $myData = $this->teacherModel->find($id);
+    $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
+    // check if a supervisor
+    $isChairperson = $this->departmentHistoryModel
+    ->where("SCHOOL_YEAR_ID", $sy['ID'])
+    ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
+    ->where("TEACHER_ID", $myData['ID'])
+    ->countAllResults();
 
+    $isPrincipal = $this->execomHistoryModel
+    ->where("SCHOOL_YEAR_ID", $sy['ID'])
+    ->where("EXECOM_ID", 1)
+    ->where("TEACHER_ID", $myData['ID'])
+    ->countAllResults();
+
+    $teachers = [];
+
+    if($isChairperson){
+      // get colleagues
+      $colleagues = $this->teacherModel
+      ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
+      ->where("ID !=", $id)
+      ->findAll();
+
+      foreach ($colleagues as $key => $colleague) {
+        // check if done rated
+        $evaluator = $this->evaluatorModel
+        ->where("TEACHER_ID", $id)
+        ->first();
+
+        if(empty($evaluator)){
+          // if no evaluator id, create one
+          $create_evaluator_id = [
+            'TEACHER_ID' => $id,
+          ];
+
+          $this->evaluatorModel->insert($create_evaluator_id);
+          $myEvaluatorId = $this->evaluatorModel->insertID;
+        }else{
+          $myEvaluatorId = $evaluator['ID'];
+        }
+        $isDone = $this->evalInfoModel
+        ->where("EVALUATOR_ID", $myEvaluatorId)
+        ->where("EVALUATED_ID", $colleague['ID'])
+        ->where("SCHOOL_YEAR_ID", $sy['ID'])
+        ->where("EVAL_TYPE_ID", 3)
+        ->countAllResults();
+
+        $d = [
+          'isDone' => ($isDone > 0)? true: false,
+          'teacher' => $colleague,
+        ];
+
+        array_push($teachers, $d);
+      }
+    }else if($isPrincipal){
+      // get all chairperson
+      $chairpersons = $this->departmentHistoryModel
+      ->where("SCHOOL_YEAR_ID", $sy['ID'])
+      ->findAll();
+
+      foreach ($chairpersons as $key => $value) {
+        // check if done rated
+        $evaluator = $this->evaluatorModel
+        ->where("TEACHER_ID", $id)
+        ->first();
+
+        if(empty($evaluator)){
+          // if no evaluator id, create one
+          $create_evaluator_id = [
+            'TEACHER_ID' => $id,
+          ];
+
+          $this->evaluatorModel->insert($create_evaluator_id);
+          $myEvaluatorId = $this->evaluatorModel->insertID;
+        }else{
+          $myEvaluatorId = $evaluator['ID'];
+        }
+        $isDone = $this->evalInfoModel
+        ->where("EVALUATOR_ID", $myEvaluatorId)
+        ->where("EVALUATED_ID", $value['TEACHER_ID'])
+        ->where("SCHOOL_YEAR_ID", $sy['ID'])
+        ->where("EVAL_TYPE_ID", 3)
+        ->countAllResults();
+
+        $dept = $this->departmentModel->find($value['DEPARTMENT_ID']);
+        $teacher = $this->teacherModel->find($value['TEACHER_ID']);
+        $d = [
+          'isDone' => ($isDone > 0)? true: false,
+          'position' => $dept['NAME'],
+          'teacher' => $teacher,
+        ];
+
+        array_push($teachers, $d);
+      }
+
+      $execom = $this->execomHistoryModel
+      ->where("SCHOOL_YEAR_ID", $sy['ID'])
+      ->where("EXECOM_ID !=", 1)
+      ->findAll();
+
+      foreach ($execom as $key => $value) {
+        // check if done rated
+        $evaluator = $this->evaluatorModel
+        ->where("TEACHER_ID", $id)
+        ->first();
+
+        if(empty($evaluator)){
+          // if no evaluator id, create one
+          $create_evaluator_id = [
+            'TEACHER_ID' => $id,
+          ];
+
+          $this->evaluatorModel->insert($create_evaluator_id);
+          $myEvaluatorId = $this->evaluatorModel->insertID;
+        }else{
+          $myEvaluatorId = $evaluator['ID'];
+        }
+        $isDone = $this->evalInfoModel
+        ->where("EVALUATOR_ID", $myEvaluatorId)
+        ->where("EVALUATED_ID", $value['TEACHER_ID'])
+        ->where("SCHOOL_YEAR_ID", $sy['ID'])
+        ->where("EVAL_TYPE_ID", 3)
+        ->countAllResults();
+
+        $execom = $this->execomModel->find($value['EXECOM_ID']);
+        $teacher = $this->teacherModel->find($value['TEACHER_ID']);
+        $d = [
+          'isDone' => ($isDone > 0)? true: false,
+          'position' => $execom['NAME'],
+          'teacher' => $teacher,
+        ];
+
+        array_push($teachers, $d);
+      }
+    }
+
+    $isSupervisor = ($isChairperson > 0 || $isPrincipal > 0)? true: false;
+
+    $data = [
+      'id' => $this->session->get("userID"),
+      'pageTitle' => "TEACHER | DASHBOARD",
+      'baseUrl' => base_url(),
+      // add some variables here
+      'myData' => $myData,
+      'myDept' => $myDept,
+      'sy' => $sy,
+      'teachers' => $teachers,
+      'isSupervisor' => $isSupervisor,
+      'isChairperson' => $isChairperson ,
+      'isPrincipal' => $isPrincipal ,
+    ];
+
+    echo view("teacher/layout/header", $data);
+    echo view("teacher/pages/supervisor", $data);
+    echo view("teacher/layout/footer");
+  }
   // student
 
   public function func_name(){
