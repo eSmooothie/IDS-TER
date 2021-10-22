@@ -366,6 +366,76 @@ class User extends BaseController{
     echo view("teacher/pages/supervisor", $data);
     echo view("teacher/layout/footer");
   }
+
+  public function analyticsRating(){
+    if(!$this->session->has("userID")){
+      return redirect()->to("/");
+    }
+    $id = $this->session->get("userID");
+    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $myData = $this->teacherModel->find($id);
+    $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
+
+    $data = [
+			'id' => $this->session->get("userID"),
+			'pageTitle' => "TEACHER | ANALYTICS",
+			'baseUrl' => base_url(),
+      // add some variables here
+      'myData' => $myData,
+      'myDept' => $myDept,
+      'sy' => $sy,
+		];
+    echo view("teacher/layout/header", $data);
+    echo view("teacher/pages/analyticsRating", $data);
+    echo view("teacher/layout/footer");
+  }
+
+  public function analyticsComment(){
+    if(!$this->session->has("userID")){
+      return redirect()->to("/");
+    }
+    $id = $this->session->get("userID");
+    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $myData = $this->teacherModel->find($id);
+    $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
+
+    $data = [
+      'id' => $this->session->get("userID"),
+      'pageTitle' => "TEACHER | ANALYTICS",
+      'baseUrl' => base_url(),
+      // add some variables here
+      'myData' => $myData,
+      'myDept' => $myDept,
+      'sy' => $sy,
+    ];
+    echo view("teacher/layout/header", $data);
+    echo view("teacher/pages/analyticsComments", $data);
+    echo view("teacher/layout/footer");
+  }
+
+  public function analyticsDownload(){
+    if(!$this->session->has("userID")){
+      return redirect()->to("/");
+    }
+    $id = $this->session->get("userID");
+    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $myData = $this->teacherModel->find($id);
+    $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
+
+    $data = [
+      'id' => $this->session->get("userID"),
+      'pageTitle' => "TEACHER | ANALYTICS",
+      'baseUrl' => base_url(),
+      // add some variables here
+      'myData' => $myData,
+      'myDept' => $myDept,
+      'sy' => $sy,
+    ];
+    echo view("teacher/layout/header", $data);
+    echo view("teacher/pages/analyticsDownload", $data);
+    echo view("teacher/layout/footer");
+  }
+
   // student
 
   public function func_name(){

@@ -80,7 +80,15 @@ $routes->post("/user/login","User::login");
 // user::teacher
 $routes->get("/user/teacher","User::teacher");
 $routes->get("/user/teacher/rate/supervisor","User::supervisor");
+$routes->get("/user/teacher/analytics/rating","User::analyticsRating");
+$routes->get("/user/teacher/analytics/comment","User::analyticsComment");
+$routes->get("/user/teacher/analytics/download","User::analyticsDownload");
+// evaluation
+$routes->get("/evaluate/peer/(:segment)","Evaluation::peer/$1");
+$routes->get("/evaluate/student/(:segment)","Evaluation::student/$1");
+$routes->get("/evaluate/supervisor/(:segment)","Evaluation::supervisor/$1");
 
+$routes->post("/evaluate/submit","Evaluation::submit");
 
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))
 {

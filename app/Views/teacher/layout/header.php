@@ -27,19 +27,20 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
     <p class="text-center fw-bold mb-0" style="font-size:14px;"><small><?php echo "{$myData['ID']}"; ?></small></p>
   </div>
   <div class="">
-    <a href="#" class="btn btn-outline-primary w-100 rounded-0 text-start">
+    <a href="<?php echo "$baseUrl/user/teacher/"; ?>" class="btn btn-outline-primary w-100 rounded-0 text-start">
       <i class="fas fa-star"></i>
       Evaluate
     </a>
-    <a href="#" class="btn btn-outline-primary w-100 rounded-0 text-start">
+    <a href="<?php echo "$baseUrl/user/teacher/analytics/rating"; ?>" class="btn btn-outline-primary w-100 rounded-0 text-start">
       <i class="fas fa-chart-bar"></i>
       Analytics
     </a>
-    <a href="#" class="btn btn-outline-primary w-100 rounded-0 text-start">
+    <a href="<?php echo "$baseUrl/user/teacher/settings"; ?>" class="btn btn-outline-warning w-100 rounded-0 text-start">
       <i class="fas fa-cog"></i>
       Settings
+      <i class="fas fa-exclamation-triangle"></i>
     </a>
-    <a href="#" class="btn btn-outline-primary w-100 rounded-0 text-start">
+    <a href="<?php echo "$baseUrl/"; ?>" class="btn btn-outline-primary w-100 rounded-0 text-start">
       <i class="fas fa-sign-out-alt"></i>
       Logout
     </a>

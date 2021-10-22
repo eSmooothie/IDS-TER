@@ -36,13 +36,13 @@
             $position = $value['position'];
             $teacher = $value['teacher'];
 
-            $path = ($isDone)?"#":"$baseUrl/evaluate/peer/{$teacher['ID']}";
+            $path = ($isDone)?"#":"$baseUrl/evaluate/supervisor/{$teacher['ID']}";
             ?>
             <tr class="">
               <th scope="row"><?php echo "{$teacher['ID']}"; ?></th>
               <td><?php echo "$position"; ?></td>
               <td class=""><?php echo "{$teacher['LN']}, {$teacher['FN']}"; ?></td>
-              <td><a href="<?php echo "$path"; ?>" class="btn <?php echo ($isDone)?"btn-success":"btn-primary"; ?>"><?php echo ($isDone)?"Done":"Evaluate"; ?></a></td>
+              <td><a target="_blank" href="<?php echo "$path"; ?>" class="btn <?php echo ($isDone)?"btn-success":"btn-primary"; ?>"><?php echo ($isDone)?"Done":"Evaluate"; ?></a></td>
             </tr>
             <?php
           }
