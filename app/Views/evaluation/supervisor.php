@@ -79,12 +79,12 @@
                          </tr>
                          <tr>
                            <td class="">Never</td>
-                           <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="1" required></td>
-                           <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="2" required></td>
-                           <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="3" required></td>
-                           <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="4" required></td>
                            <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="5" required></td>
                            <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="6" required></td>
+                           <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="7" required></td>
+                           <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="8" required></td>
+                           <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="9" required></td>
+                           <td class=""><input type="radio" name="<?php echo "$qid"; ?>" value="10" required></td>
                            <td class="">Always</td>
                          </tr>
                       </table>

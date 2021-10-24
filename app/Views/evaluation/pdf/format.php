@@ -1,19 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <!-- FontAwsome -->
-  <script src="https://kit.fontawesome.com/b24469f289.js" crossorigin="anonymous"></script>
-  <!-- JQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="<?php echo base_url(); ?>/bootstrap-5.0.2/css/bootstrap.min.css">
-  <script src="<?php echo base_url(); ?>/bootstrap-5.0.2/js/bootstrap.min.js" charset="utf-8"></script>
-  <title><?php echo "$document_title"; ?></title>
-</head>
-<body>
-  <p>TEST</p>
-</body>
-</html>
+
+  <div class="" style="
+  border:2px solid black;
+  padding: 20px;
+  margin-bottom: 20px;
+  ">
+    <img src="<?php echo "/assets/img/test_img.jpg"; ?>" alt=""
+    style="
+    border:2px solid black;
+    width:150px;
+    height:150px;">
+    <p>text</p>
+    <img  src="<?php echo "/assets/img/test_img.jpg"; ?>" alt=""
+    style="
+    border:2px solid black;
+    width:150px;
+    height:150px;">
+  </div>
+  <!-- table -->
+  <div style="
+  border:2px solid black;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  ">
+    <div class="">
+      <p style="
+      font-weight: bold;
+      ">Name:
+      <span style="
+      border-bottom: 2px solid black;
+      padding-left: 15px;
+      padding-right: 15px;
+      ">
+        <?php echo "$baseUrl"; ?>
+      </span>
+      </p>
+    </div>
+  </div>

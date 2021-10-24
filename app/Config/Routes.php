@@ -91,7 +91,8 @@ $routes->get("/evaluate/student/(:segment)/(:segment)","Evaluation::student/$1/$
 $routes->get("/evaluate/supervisor/(:segment)","Evaluation::supervisor/$1");
 $routes->post("/evaluate/submit","Evaluation::submit");
 // pdf
-$routes->get("/download/individual/(:segment)/","PdfController::individual/$1/$2");
+$routes->get("/download/individual/(:segment)","PdfController::individual/$1");
+// $routes->get("/download/individual/(:segment)","PdfController::index/$1");
 
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))
 {
