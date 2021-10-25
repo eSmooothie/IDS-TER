@@ -42,7 +42,7 @@
         </div>
       </div>
       <div class="border">
-        <p>GRAPH HERE TIME SERIES</p>
+        <p>TIME SERIES GRAPH HERE</p>
       </div>
     </div>
     <!-- tabular -->
@@ -50,7 +50,15 @@
       <p>Tabular</p>
       <div class="mb-2">
         <select id="select_sy" class="form-select">
-          <option value="">LATEST SY</option>
+          <?php
+            foreach ($schoolyears as $key => $value) {
+              ?>
+                <option value="<?php echo "{$value['ID']}"; ?>">
+                  <?php echo "{$value['SY']}:{$value['SEMESTER']}"; ?>
+                </option>
+              <?php
+            }
+           ?>
         </select>
       </div>
       <table class="text-center table table-striped table-hover border rounded">

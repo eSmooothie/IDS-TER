@@ -79,10 +79,13 @@ $routes->post("/admin/execom/update","Execom::assign");
 $routes->post("/user/login","User::login");
 // user::teacher
 $routes->get("/user/teacher","User::teacher");
+$routes->get("/user/teacher/settings","User::teacherSetting");
 $routes->get("/user/teacher/rate/supervisor","User::supervisor");
 $routes->get("/user/teacher/analytics/rating","User::analyticsRating");
 $routes->get("/user/teacher/analytics/comment","User::analyticsComment");
 $routes->get("/user/teacher/analytics/download","User::analyticsDownload");
+
+$routes->post("/user/teacher/update/password", "User::updateTeacherPassword");
 // user::student
 $routes->get("/user/student","User::student");
 // evaluation

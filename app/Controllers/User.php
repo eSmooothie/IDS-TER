@@ -375,6 +375,24 @@ class User extends BaseController{
     $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
     $myData = $this->teacherModel->find($id);
     $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
+    $schoolyears = $this->schoolyearModel->orderBy("ID","DESC")->findAll();
+
+    // rating
+    $student_rating = [];
+    $peer_rating = [];
+    $supervisor_rating = [];
+
+
+    // equation
+    // n : Question #
+    // W[n] : Total rating recieve
+    // T[n] : Total person rated
+    // Q[n] : Average rate in `n` question
+    // Q[n] = W[n] / T[n]
+
+    // N : Total number of question
+    // category_ov = sum(Q[n]) / N
+    // overall = student_ov * .5 + peer_ov * .2 + super_ov * .3
 
     $data = [
 			'id' => $this->session->get("userID"),
@@ -384,6 +402,10 @@ class User extends BaseController{
       'myData' => $myData,
       'myDept' => $myDept,
       'sy' => $sy,
+      'schoolyears' => $schoolyears,
+      'student_rating' => $student_rating,
+      'peer_rating' => $peer_rating,
+      'supervisor_rating' => $supervisor_rating,
 		];
     echo view("teacher/layout/header", $data);
     echo view("teacher/pages/analyticsRating", $data);
@@ -434,6 +456,87 @@ class User extends BaseController{
     echo view("teacher/layout/header", $data);
     echo view("teacher/pages/analyticsDownload", $data);
     echo view("teacher/layout/footer");
+  }
+
+  public function teacherSetting(){
+    if(!$this->session->has("userID")){
+      return redirect()->to("/");
+    }
+    // do something here
+    // get data
+    $id = $this->session->get("userID");
+    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $myData = $this->teacherModel->find($id);
+    $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
+    // get subjects
+    $mySubjects = $this->teacherSubjectModel
+    ->select("
+    `subject`.`ID` AS `ID`,
+    `subject`.`DESCRIPTION` AS `NAME`,
+    `school_year`.`SY` AS `SY`,
+    `school_year`.`SEMESTER` AS `SEMESTER`
+    ")
+    ->join("`subject`","`subject`.`ID` = `tchr_subj_lst`.`SUBJECT_ID`","INNER")
+    ->join("`school_year`","`school_year`.`ID` = `tchr_subj_lst`.`SCHOOL_YEAR_ID`","INNER")
+    ->where("`tchr_subj_lst`.`TEACHER_ID`", $id)
+    ->findAll();
+
+    $data = [
+      'id' => $this->session->get("userID"),
+      'pageTitle' => "TEACHER | SETTINGS",
+      'baseUrl' => base_url(),
+      // add some variables here
+      'myData' => $myData,
+      'mySubject' => $mySubjects,
+      'myDept' => $myDept,
+      'sy' => $sy,
+    ];
+    echo view("teacher/layout/header", $data);
+    echo view("teacher/pages/settings", $data);
+    echo view("teacher/layout/footer");
+  }
+
+  public function updateTeacherPassword(){
+    header("Content-type:application/json");
+    // do something here
+    $id = $this->session->get("userID");
+    $oldPassword = $this->request->getPost("oldPass");
+    $newPassword = $this->request->getPost("confirmPass");
+
+    $teacher = $this->teacherModel->find($id);
+    $currentPassword = $teacher['PASSWORD'];
+
+    $isMatch = password_verify($oldPassword, $currentPassword);
+
+    if(!$isMatch){
+      $response = [
+        "message" => "Invalid old password",
+        "data" => null,
+      ];
+
+      return $this->setResponseFormat('json')->respond($response, 200);
+    }
+
+
+    $passwordhash = password_hash($newPassword, PASSWORD_DEFAULT);
+
+    $changePass = [
+      'PASSWORD' => $passwordhash,
+    ];
+
+    $this->teacherModel->update($id, $changePass);
+    // {end}
+    $data = [
+      'id' => $id,
+      'isMatch' => $isMatch,
+    ];
+
+    $response = [
+      "message" => "Change password successfully",
+      "data" => $data,
+    ];
+
+    return $this->setResponseFormat('json')->respond($response, 200);
   }
 
   // student

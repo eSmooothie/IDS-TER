@@ -9,6 +9,7 @@
         <p class="mb-0">School Year: <?php echo "{$sy['SY']}:{$sy['SEMESTER']}"; ?></p>
         <p class="mb-0">Department: <?php echo "{$myDept['NAME']}"; ?></p>
         <p class="mb-0">Is Lecturer: <?php echo ($myData['IS_LECTURER'])? "True":"False"; ?></p>
+        <p class="mb-0">Is Supervisor: <?php echo ($isSupervisor)? "True" : "False"; ?></p>
         <p class="mb-0">Total Evaluated: X</p>
         <p class="mb-0">Status: Cleared</p>
         <p class="mb-0">Mode: Peer</p>
