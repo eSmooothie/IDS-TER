@@ -131,41 +131,46 @@ class User extends BaseController{
     $colleagues = $this->teacherModel
     ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
     ->where("ID !=", $id)
+    ->where("IS_LECTURER", 0)
     ->findAll();
 
     $peer = [];
 
-    foreach ($colleagues as $key => $colleague) {
-      // check if done rated
-      $evaluator = $this->evaluatorModel
-      ->where("TEACHER_ID", $id)
-      ->first();
+    if($myData['IS_LECTURER'] == 0){
+      foreach ($colleagues as $key => $colleague) {
+        // check if done rated
+        $evaluator = $this->evaluatorModel
+        ->where("TEACHER_ID", $id)
+        ->first();
 
-      if(empty($evaluator)){
-        // if no evaluator id, create one
-        $create_evaluator_id = [
-          'TEACHER_ID' => $id,
+        if(empty($evaluator)){
+          // if no evaluator id, create one
+          $create_evaluator_id = [
+            'TEACHER_ID' => $id,
+          ];
+
+          $this->evaluatorModel->insert($create_evaluator_id);
+          $myEvaluatorId = $this->evaluatorModel->insertID;
+        }else{
+          $myEvaluatorId = $evaluator['ID'];
+        }
+        $isDone = $this->evalInfoModel
+        ->where("EVALUATOR_ID", $myEvaluatorId)
+        ->where("EVALUATED_ID", $colleague['ID'])
+        ->where("SCHOOL_YEAR_ID", $sy['ID'])
+        ->where("EVAL_TYPE_ID", 2)
+        ->countAllResults();
+
+        $d = [
+          'isDone' => ($isDone > 0)? true: false,
+          'teacher' => $colleague,
         ];
 
-        $this->evaluatorModel->insert($create_evaluator_id);
-        $myEvaluatorId = $this->evaluatorModel->insertID;
-      }else{
-        $myEvaluatorId = $evaluator['ID'];
+        array_push($peer, $d);
       }
-      $isDone = $this->evalInfoModel
-      ->where("EVALUATOR_ID", $myEvaluatorId)
-      ->where("EVALUATED_ID", $colleague['ID'])
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->where("EVAL_TYPE_ID", 2)
-      ->countAllResults();
 
-      $d = [
-        'isDone' => ($isDone > 0)? true: false,
-        'teacher' => $colleague,
-      ];
-
-      array_push($peer, $d);
     }
+
     // check if a supervisor
     $isChairperson = $this->departmentHistoryModel
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
@@ -231,6 +236,7 @@ class User extends BaseController{
       $colleagues = $this->teacherModel
       ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
       ->where("ID !=", $id)
+      ->where("IS_LECTURER", 0)
       ->findAll();
 
       foreach ($colleagues as $key => $colleague) {
@@ -553,7 +559,12 @@ class User extends BaseController{
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->first();
 
-    $mySection = $this->sectionModel->find($currSection['SECTION_ID']);
+    if(!empty($currSection)){
+      $mySection = $this->sectionModel->find($currSection['SECTION_ID']);
+    }else{
+      $mySection = null;
+    }
+
 
     $evaluator = $this->evaluatorModel
     ->where("STUDENT_ID", $myData['ID'])
@@ -643,6 +654,82 @@ class User extends BaseController{
     echo view("student/layout/header", $data);
     echo view("student/index", $data);
     echo view("student/layout/footer");
+  }
+
+  public function studentSetting(){
+    if(!$this->session->has("userID")){
+      return redirect()->to("/");
+    }
+    // do something here
+    $id = $this->session->get("userID");
+    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $myData = $this->studentModel->find($id);
+    $currSection = $this->studentSectionModel
+    ->where("STUDENT_ID", $myData['ID'])
+    ->where("SCHOOL_YEAR_ID", $sy['ID'])
+    ->first();
+
+    if(!empty($currSection)){
+      $mySection = $this->sectionModel->find($currSection['SECTION_ID']);
+    }else{
+      $mySection = null;
+    }
+
+    $data = [
+      'id' => $this->session->get("userID"),
+      'pageTitle' => "STUDENT | SETTINGS",
+      'baseUrl' => base_url(),
+      // add some variables here
+      'myData' => $myData,
+      'sy' => $sy,
+      'mySection' => $mySection,
+    ];
+    echo view("student/layout/header", $data);
+    echo view("student/pages/settings", $data);
+    echo view("student/layout/footer");
+  }
+
+  public function updateStudentPassword(){
+    header("Content-type:application/json");
+    // do something here
+    $id = $this->session->get("userID");
+    $oldPassword = $this->request->getPost("oldPass");
+    $newPassword = $this->request->getPost("confirmPass");
+
+    $student = $this->studentModel->find($id);
+    $currentPassword = $student['PASSWORD'];
+
+    $isMatch = (strcmp($oldPassword, $currentPassword) === 0)? true: false;
+
+    if(!$isMatch){
+      $response = [
+        "message" => "Invalid old password",
+        "data" => null,
+      ];
+
+      return $this->setResponseFormat('json')->respond($response, 200);
+    }
+
+
+    $password = $newPassword;
+
+    $changePass = [
+      'PASSWORD' => $password,
+    ];
+
+    $this->studentModel->update($id, $changePass);
+    // {end}
+    $data = [
+      'id' => $id,
+      'isMatch' => $isMatch,
+    ];
+
+    $response = [
+      "message" => "Change password successfully",
+      "data" => $data,
+    ];
+
+    return $this->setResponseFormat('json')->respond($response, 200);
   }
 
   public function func_name(){

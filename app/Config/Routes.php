@@ -88,6 +88,9 @@ $routes->get("/user/teacher/analytics/download","User::analyticsDownload");
 $routes->post("/user/teacher/update/password", "User::updateTeacherPassword");
 // user::student
 $routes->get("/user/student","User::student");
+$routes->get("/user/student/settings","User::studentSetting");
+
+$routes->post("/user/student/update/password", "User::updateStudentPassword");
 // evaluation
 $routes->get("/evaluate/peer/(:segment)","Evaluation::peer/$1");
 $routes->get("/evaluate/student/(:segment)/(:segment)","Evaluation::student/$1/$2");

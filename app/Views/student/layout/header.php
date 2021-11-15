@@ -31,10 +31,9 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
       <i class="fas fa-star"></i>
       Evaluate
     </a>
-    <a href="<?php echo "$baseUrl/user/student/settings"; ?>" class="btn btn-outline-warning w-100 rounded-0 text-start">
+    <a href="<?php echo "$baseUrl/user/student/settings"; ?>" class="btn btn-outline-primary w-100 rounded-0 text-start">
       <i class="fas fa-cog"></i>
       Settings
-      <i class="fas fa-exclamation-triangle"></i>
     </a>
     <a href="<?php echo "$baseUrl/"; ?>" class="btn btn-outline-primary w-100 rounded-0 text-start">
       <i class="fas fa-sign-out-alt"></i>

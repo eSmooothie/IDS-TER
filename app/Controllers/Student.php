@@ -122,7 +122,7 @@ class Student extends BaseController
 	      $upload_file->move($uploadPath, $fileName); // move the tmp file to the folder
 	    }else{
 	      $response = [
-	        'message' => "Invalid CSV file",
+	        'message' => "Invalid CSV file" ,
 					'data' => null,
 	      ];
 				$this->session->setFlashData("uploadStudentMsg", $response);

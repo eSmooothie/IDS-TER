@@ -163,7 +163,7 @@
           <div class="mb-3">
             <span class="fw-bold d-block">Note: CSV format comma separated</span>
             <span class="fw-bold d-block">Example: 2018-000,LN,FN</span>
-            <input type="hidden" name="sectionId" value="<?php echo "$id"; ?>">
+            <input type="hidden" name="sectionId" value="<?php echo "{$sectionData['ID']}"; ?>">
             <input name="csvFile" class="form-control form-control-sm mb-3" type="file" accept=".csv" style="width:20rem;">
             <button type="submit" name="button" class="btn btn-primary">Submit</button>
           </div>
