@@ -58,12 +58,27 @@ class Teacher extends BaseController{
     ->join("`department`","`department`.`ID` = `teacher`.`DEPARTMENT_ID`","LEFT")
     ->find($id);
 
+    // get teacher subjects
+    $subjectHandles = $this->teacherSubjectModel->select(
+      "
+      `tchr_subj_lst`.`ID` AS `ID`,
+      `subject`.`DESCRIPTION` AS `SUBJECT_NAME`,
+      `school_year`.`SY` AS `YEAR`,
+      `school_year`.`SEMESTER` AS `SEMESTER`
+      "
+    )
+    ->join("`subject`","`tchr_subj_lst`.`SUBJECT_ID` = `subject`.`ID`","LEFT")
+    ->join("`school_year`","`tchr_subj_lst`.`SCHOOL_YEAR_ID` = `school_year`.`ID`","LEFT")
+    ->where("`tchr_subj_lst`.`TEACHER_ID` =", $id)
+    ->orderBy("`ID`","DESC")
+    ->findAll();
+
     $data = [
       'id' => $this->session->get("adminID"),
       'pageTitle' => "ADMIN | TEACHER",
       'baseUrl' => base_url(),
       'teacherData' => $teacherData,
-
+      'subjectHandles' => $subjectHandles,
     ];
     echo view("admin/layout/header", $data);
     echo view("admin/pages/nav",$data);
@@ -105,6 +120,8 @@ class Teacher extends BaseController{
     ->where("SCHOOL_YEAR_ID", $currSY['ID'])
     ->where("TEACHER_ID", $id)
     ->findAll();
+    
+    $subjectSY = null;
 
     if(empty($currentSubjects)){
       $schoolYear = $this->schoolyearModel->findAll();

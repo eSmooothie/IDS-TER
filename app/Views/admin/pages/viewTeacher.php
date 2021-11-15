@@ -32,6 +32,35 @@
   </div>
   <div class="border rounded p-3 bg-light bg-gradient mb-3">
     <p>Subject Handles</p>
+    <table class="table table-striped table-hover border">
+      <thead>
+        <tr>
+          <th scope="col">School Year</th>
+          <th scope="col">Subject</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+          foreach ($subjectHandles as $key => $subject) {
+            $subjectName = $subject['SUBJECT_NAME'];
+            $year = $subject['YEAR'];
+            $semester = $subject['SEMESTER'];
+            ?>
+            <tr>
+              <td><?php
+              echo "$year : $semester";
+              ?></td>
+              <td>
+                <?php
+                echo "$subjectName";
+                ?>
+              </td>
+            </tr>
+            <?php
+          }
+            ?>
+      </tbody>
+    </table>
   </div>
   <div class="border rounded p-3 bg-light bg-gradient mb-3">
     <p>Recent Activities</p>
