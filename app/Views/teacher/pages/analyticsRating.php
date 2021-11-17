@@ -41,13 +41,13 @@
           </label>
         </div>
       </div>
-      <div class="border">
-        <p>TIME SERIES GRAPH HERE</p>
+      <div class="border p-2">
+        <p>TIME SERIES GRAPH HERE (SOON)</p>
       </div>
     </div>
     <!-- tabular -->
     <div class="bg-light bg-gradient rounded border mb-3 p-3">
-      <p>Tabular</p>
+      <p>Tabular Data</p>
       <div class="mb-2">
         <select id="select_sy" class="form-select">
           <?php
@@ -69,23 +69,55 @@
           <th scope="col">Supervisor</th>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>s</td>
-            <td>p</td>
-            <td>s</td>
-          </tr>
+          <?php
+            $ratings = [];
+            $n = 1; // question number
+            foreach ($studentRating["RATING"] as $key => $value) {
+              // code...
+              $ratings[$n]["STUDENT"] = round($value["avg"] * 10, 2);
+              $n += 1;
+            }
+            $n = 1;
+            foreach ($peerRating["RATING"] as $key => $value) {
+              // code...
+              $ratings[$n]["PEER"] = round($value["avg"] * 10, 2);
+              $n += 1;
+            }
+            $n = 1;
+            foreach ($supervisorRating["RATING"] as $key => $value) {
+              // code...
+              $ratings[$n]["SUPERVISOR"] = round($value["avg"] * 10, 2);
+              $n += 1;
+            }
+
+            for ($i = 1 ; $i < $n ; $i++) {
+              ?>
+              <tr>
+                <th scope="row"><?php echo "$i"; ?></th>
+                <td><?php echo (!empty($ratings[$i]["STUDENT"]))? "{$ratings[$i]["STUDENT"]}":""; ?></td>
+                <td><?php echo "{$ratings[$i]["PEER"]}"; ?></td>
+                <td><?php echo "{$ratings[$i]["SUPERVISOR"]}"; ?></td>
+              </tr>
+              <?php
+            }
+           ?>
         </tbody>
         <tfoot>
+          <?php
+            $studentOverall = round($studentRating["OVERALL"] * 10, 2);
+            $peerOverall = round($peerRating["OVERALL"] * 10, 2);
+            $supervisorOverall = round($supervisorRating["OVERALL"] * 10, 2);
+
+           ?>
           <tr>
             <th scope="row">Overall</th>
-            <td>os</td>
-            <td>op</td>
-            <td>os</td>
+            <td><?php echo "$studentOverall"; ?></td>
+            <td><?php echo "$peerOverall"; ?></td>
+            <td><?php echo "$supervisorOverall"; ?></td>
           </tr>
           <tr>
             <th colspan="3" class="border"></th>
-            <th>TTL</th>
+            <th><?php echo round($totalOverall * 10, 2);  ?></th>
           </tr>
         </tfoot>
       </table>

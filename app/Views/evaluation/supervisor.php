@@ -1,8 +1,8 @@
 <div class="container-fluid d-flex justify-content-center flex-row p-3">
   <div class="col-xl-3 col-lg-2"></div>
-  <div class="col-sm bg-light bg-gradient rounded border mb-3 p-3">
+  <div class="col-sm bg-light bg-gradient rounded  mb-3 p-3">
     <div class="d-flex flex-row mb-3">
-      <div class="col-2 border me-2">
+      <div class="col-2  me-2">
 
       </div>
       <div class="col">
@@ -43,7 +43,7 @@
     <?php
       if($isDone){
         ?>
-        <div class="p-3 text-center bg-success bg-gradient text-white rounded border">
+        <div class="p-3 text-center bg-success bg-gradient text-white rounded ">
           <p class="mb-0">DONE</p>
         </div>
         <?php
@@ -61,7 +61,7 @@
                 $qid = $value['ID'];
                 $question = $value['QUESTION'];
                 ?>
-                <div class="border mb-3 d-flex p-2 rounded border-primary">
+                <div class=" mb-3 d-flex p-2 rounded">
                   <p class="fw-bold me-2">#<?php echo "$counter"; ?></p>
                   <div class="w-100">
                     <p class="text-wrap"><?php echo "$question"; ?></p>

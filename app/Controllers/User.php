@@ -391,10 +391,11 @@ class User extends BaseController{
     $schoolyears = $this->schoolyearModel->orderBy("ID","DESC")->findAll();
 
     // rating
-    $student_rating = [];
-    $peer_rating = [];
-    $supervisor_rating = [];
+    $studentRating = $this->getRating($id, 1, $schoolyears[0]["ID"]);
+    $peerRating = $this->getRating($id, 2, $schoolyears[0]["ID"]);
+    $supervisorRating = $this->getRating($id, 3, $schoolyears[0]["ID"]);
 
+    $totalOverall = $this->getOverallRating($studentRating["OVERALL"], $peerRating["OVERALL"], $supervisorRating["OVERALL"]);
 
     // equation
     // n : Question #
@@ -416,9 +417,10 @@ class User extends BaseController{
       'myDept' => $myDept,
       'sy' => $sy,
       'schoolyears' => $schoolyears,
-      'student_rating' => $student_rating,
-      'peer_rating' => $peer_rating,
-      'supervisor_rating' => $supervisor_rating,
+      'studentRating' => $studentRating,
+      'peerRating' => $peerRating,
+      'supervisorRating' => $supervisorRating,
+      'totalOverall' => $totalOverall,
 		];
     echo view("teacher/layout/header", $data);
     echo view("teacher/pages/analyticsRating", $data);
@@ -434,6 +436,26 @@ class User extends BaseController{
     $myData = $this->teacherModel->find($id);
     $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
 
+    $schoolyears = $this->schoolyearModel->orderBy("ID","DESC")->findAll();
+
+    $evalinfo = $this->evalInfoModel->where("EVALUATED_ID", $id)
+    ->where("SCHOOL_YEAR_ID", $sy['ID'])
+    ->where("EVAL_TYPE_ID", 1)
+    ->findAll();
+
+    $comments = [];
+    foreach ($evalinfo as $key => $value) {
+      $comment = $value['COMMENT'];
+
+      if(!empty($comment)){
+        $data = [
+          'ID' => $key,
+          'COMMENT' => $comment,
+        ];
+        array_push($comments, $data);
+      }
+    }
+
     $data = [
       'id' => $this->session->get("userID"),
       'pageTitle' => "TEACHER | ANALYTICS",
@@ -442,6 +464,8 @@ class User extends BaseController{
       'myData' => $myData,
       'myDept' => $myDept,
       'sy' => $sy,
+      'schoolyears' => $schoolyears,
+      'comments' => $comments,
     ];
     echo view("teacher/layout/header", $data);
     echo view("teacher/pages/analyticsComments", $data);

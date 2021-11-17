@@ -22,23 +22,35 @@
       <p></p>
       <div class="mb-2">
         <select id="select_sy" class="form-select">
-          <option value="">LATEST SY</option>
+          <?php
+            foreach ($schoolyears as $key => $value) {
+              $id = $value['ID'];
+              $sy = $value['SY'];
+              $semester = $value['SEMESTER'];
+              ?>
+                <option value="<?php echo "$id"; ?>"><?php echo "$sy : $semester"; ?></option>
+              <?php
+            }
+           ?>
+
         </select>
       </div>
     </div>
     <div class="bg-light bg-gradient rounded border mb-3 p-3" id="commentContainer">
-      <div class="border text-wrap p-2 rounded mb-3">
-        <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse fermentum imperdiet iaculis. Ut tincidunt fringilla erat, a rhoncus ligula sagittis a. Pellentesque lacinia luctus enim eu porttitor. Aliquam sagittis erat urna. Curabitur eget dignissim quam. Nunc a libero ac eros dictum dictum. Nulla facilisi. Pellentesque convallis ut nibh id mollis. Integer et bibendum sem, et accumsan justo.</span>
-        <div class="d-flex justify-content-end">
-          <span style="font-size:10px;">ID:HASH</span>
-        </div>
-      </div>
-      <div class="border text-wrap p-2 rounded mb-3">
-        <span>Suspendisse commodo lacus eu magna ullamcorper, non sagittis nibh lobortis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec laoreet dui et pellentesque ultricies. Nam nunc magna, bibendum quis suscipit ac, ultricies lacinia felis. Ut ultricies magna ipsum, sollicitudin faucibus augue tempor at. Aliquam erat volutpat. Ut magna purus, eleifend nec turpis ut, cursus rutrum urna. Nam sit amet auctor sem, vel vehicula arcu. Curabitur dui nibh, tincidunt eget ornare in, tincidunt et ipsum. Sed condimentum, nibh ut gravida blandit, urna diam placerat turpis, at fringilla nunc velit a lectus.</span>
-        <div class="d-flex justify-content-end">
-          <span style="font-size:10px;">ID:HASH</span>
-        </div>
-      </div>
+      <?php
+        foreach ($comments as $key => $value) {
+            $hashId = password_hash($value["ID"], PASSWORD_DEFAULT);
+            $comment = $value['COMMENT'];
+          ?>
+          <div class="border text-wrap p-2 rounded mb-3">
+            <span><?php echo "$comment"; ?></span>
+            <div class="d-flex justify-content-end mt-3">
+              <span style="font-size:10px;">ID:<?php echo "$hashId"; ?></span>
+            </div>
+          </div>
+          <?php
+        }
+       ?>
     </div>
     <div class="mb-5">
     </div>

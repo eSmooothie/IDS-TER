@@ -79,7 +79,7 @@ class BaseController extends Controller
 
 		$this->execomModel = new ExeCom();
 		$this->execomHistoryModel = new ExeComHistory();
-		
+
 		$this->ratingModel = new Rating();
 		$this->reportModel = new Report();
 
@@ -107,5 +107,92 @@ class BaseController extends Controller
 
 	public function getCurrentDateTime(){
 		return $this->time->now()->toDateTimeString();
+	}
+
+	/**
+	 * Compute the rating of teacher X
+	 *
+	 * @param $teacherId
+	 * @param $evalTypeId
+	 * @param $schoolyearId
+	 *
+	 * @return {"rating":[],"overall":}
+	 */
+	public function getRating($teacherId, $evalTypeId, $schoolyearId){
+		// equation
+		// n : Question #
+		// W[n] : Total rating recieve
+		// T[n] : Total person rated
+		// Q[n] : Average rate in `n` question
+		// Q[n] = W[n] / T[n]
+
+		// N : Total number of question
+		// category_ov = sum(Q[n]) / N
+		// overall = student_ov * .5 + peer_ov * .2 + super_ov * .3
+
+		// get all evaluation info of teacher Y in S.Y. Z as type X
+		$evaluationInfo = $this->evalInfoModel
+		->where("EVALUATED_ID", $teacherId)
+		->where("SCHOOL_YEAR_ID", $schoolyearId)
+		->where("EVAL_TYPE_ID", $evalTypeId)
+		->findAll();
+
+		$evaluationQuestionaire = $this->evalQuestionModel->where("EVAL_TYPE_ID", $evalTypeId)
+		->orderBy("ID","ASC")
+		->findAll();
+
+		$rating = [];
+
+		// set rating
+		foreach ($evaluationQuestionaire as $key => $value) {
+			$questionId = $value["ID"];
+
+			$rating[$questionId]["weight"] = 0;
+			$rating[$questionId]["avg"] = 0;
+			$rating[$questionId]["t"] = 0;
+		}
+
+
+		foreach ($evaluationInfo as $key => $info) {
+			$evalInfoId = $info['ID'];
+
+			// add all rating
+			foreach ($evaluationQuestionaire as $key => $question) {
+				$questionId = $question["ID"];
+
+				$rate = $this->ratingModel->where("EVAL_QUESTION_ID", $questionId)
+				->where("EVAL_INFO_ID", $evalInfoId)
+				->first();
+
+				$value = (int)$rate["RATING"];
+
+				$rating[$questionId]["weight"] = $rating[$questionId]["weight"] + $value;
+				$rating[$questionId]["t"] += 1;
+			}
+
+		}
+
+		// Q[n] = W[n] / T[n]
+		foreach ($rating as $key => $value) {
+			if($rating[$key]["t"] != 0){
+					$rating[$key]["avg"] = $rating[$key]["weight"] / $rating[$key]["t"];
+			}
+		}
+
+		// computer over all
+		// N = len(Q[n])
+		// category_ov = sum(Q[n]) / N
+		$sumAvg = 0;
+		foreach ($rating as $key => $value) {
+			$sumAvg = $value["avg"] + $sumAvg;
+		}
+
+		$overall = $sumAvg / count($rating);
+
+		return ["RATING" => $rating, "OVERALL" => $overall];
+	}
+
+	function getOverallRating($studentOverall, $peerOverall, $supervisorOverall){
+		return ($studentOverall * .5) + ($peerOverall * .2) + ($supervisorOverall * .3);
 	}
 }
