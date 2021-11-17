@@ -9,6 +9,7 @@
         <p class="mb-0">School Year: <?php echo "{$sy['SY']}:{$sy['SEMESTER']}"; ?></p>
         <p class="mb-0">Department: <?php echo "{$myDept['NAME']}"; ?></p>
         <p class="mb-0">Is Lecturer: <?php echo ($myData['IS_LECTURER'])? "True":"False"; ?></p>
+        <p class="mb-0">Is Supervisor: <?php echo ($isSupervisor)? "True" : "False"; ?></p>
         <p class="mb-0">Total Evaluated: <?php echo "$evaluatedCounter"; ?></p>
         <p class="mb-0">Status: <?php echo ($isCleared)?"CLEARED":"NOT CLEARED"; ?></p>
         <p class="mb-0">Mode: Supervisor</p>
@@ -21,7 +22,9 @@
       <thead>
         <tr>
           <th scope="col" class="col-2">ID</th>
-          <th scope="col">Position</th>
+          <?php
+          echo ($isPrincipal)?"<th scope=\"col\">Position</th>":"";
+           ?>
           <th scope="col">Name</th>
           <th scope="" class="col-1">Action</th>
         </tr>
@@ -33,14 +36,18 @@
         <?php
           foreach ($teachers as $key => $value) {
             $isDone = $value['isDone'];
-            $position = $value['position'];
+            $position = (isset($value['position']))? $value['position']:"";
             $teacher = $value['teacher'];
 
             $path = ($isDone)?"#":"$baseUrl/evaluate/supervisor/{$teacher['ID']}";
             ?>
             <tr class="">
               <th scope="row"><?php echo "{$teacher['ID']}"; ?></th>
-              <td><?php echo "$position"; ?></td>
+              <?php
+                if($isPrincipal){
+                  ?><td><?php echo "$position"; ?></td><?php
+                }
+               ?>
               <td class=""><?php echo "{$teacher['LN']}, {$teacher['FN']}"; ?></td>
               <td><a <?php echo ($isDone)?"":"target=\"_blank\""; ?> href="<?php echo "$path"; ?>" class="btn <?php echo ($isDone)?"btn-success":"btn-primary"; ?>"><?php echo ($isDone)?"Done":"Evaluate"; ?></a></td>
             </tr>
