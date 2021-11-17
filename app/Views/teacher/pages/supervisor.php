@@ -9,8 +9,8 @@
         <p class="mb-0">School Year: <?php echo "{$sy['SY']}:{$sy['SEMESTER']}"; ?></p>
         <p class="mb-0">Department: <?php echo "{$myDept['NAME']}"; ?></p>
         <p class="mb-0">Is Lecturer: <?php echo ($myData['IS_LECTURER'])? "True":"False"; ?></p>
-        <p class="mb-0">Total Evaluated: X</p>
-        <p class="mb-0">Status: Cleared</p>
+        <p class="mb-0">Total Evaluated: <?php echo "$evaluatedCounter"; ?></p>
+        <p class="mb-0">Status: <?php echo ($isCleared)?"CLEARED":"NOT CLEARED"; ?></p>
         <p class="mb-0">Mode: Supervisor</p>
       </div>
       <div class="">
@@ -52,3 +52,11 @@
     </table>
   </div>
 </div>
+<script>
+// refresh the page when active
+  document.addEventListener("visibilitychange", function() {
+     if (!document.hidden){
+         location.reload();
+     }
+  });
+</script>

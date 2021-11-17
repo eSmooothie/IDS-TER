@@ -31,9 +31,14 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
       <i class="fas fa-star"></i>
       Evaluate
     </a>
-    <a href="<?php echo "$baseUrl/user/teacher/analytics/rating"; ?>" class="btn btn-outline-primary w-100 rounded-0 text-start">
-      <i class="fas fa-chart-bar"></i>
-      Analytics
+    <a href="<?php echo ($isCleared)? "$baseUrl/user/teacher/analytics/rating":""; ?>" class="btn btn-outline-primary w-100 rounded-0 text-start">
+      <?php
+        if($isCleared){
+          ?><i class="fas fa-chart-bar"></i> Analytics<?php
+        }else{
+          ?><i class="fas fa-lock"></i> Analytics (lock)<?php
+        }
+       ?>
     </a>
     <a href="<?php echo "$baseUrl/user/teacher/settings"; ?>" class="btn btn-outline-primary w-100 rounded-0 text-start">
       <i class="fas fa-cog"></i>

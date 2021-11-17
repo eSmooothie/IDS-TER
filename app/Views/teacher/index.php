@@ -11,7 +11,7 @@
         <p class="mb-0">Is Lecturer: <?php echo ($myData['IS_LECTURER'])? "True":"False"; ?></p>
         <p class="mb-0">Is Supervisor: <?php echo ($isSupervisor)? "True" : "False"; ?></p>
         <p class="mb-0">Total Evaluated: <?php echo $evaluatedCounter; ?></p>
-        <p class="mb-0">Status: <?php echo ($evaluatedCounter == count($peer))? "CLEARED":"NOT CLEARED"; ?></p>
+        <p class="mb-0">Status: <?php echo ($isCleared)? "CLEARED":"NOT CLEARED"; ?></p>
         <p class="mb-0">Mode: Peer</p>
       </div>
       <div class="">
