@@ -13,6 +13,7 @@ class Teacher extends BaseController{
                                             `teacher`.`LN` AS `LN`,
                                             `teacher`.`FN` AS `FN`,
                                             `teacher`.`IS_LECTURER` AS `IS_LECTURER`,
+                                            `teacher`.`ON_LEAVE` AS `ON_LEAVE`,
                                             `department`.`NAME` AS `DEPARTMENT_NAME`
                                           ")
                                       ->join("`department`",
@@ -52,6 +53,7 @@ class Teacher extends BaseController{
     `teacher`.`MOBILE_NO` AS `MOBILE_NO`,
     `teacher`.`PROFILE_PICTURE` AS `PROFILE_PICTURE`,
     `teacher`.`IS_LECTURER` AS `IS_LECTURER`,
+    `teacher`.`ON_LEAVE` AS `ON_LEAVE`,
     `department`.`ID` AS `DEPARTMENT_ID`,
     `department`.`NAME` AS `DEPARTMENT`
     ")
@@ -103,6 +105,7 @@ class Teacher extends BaseController{
     `teacher`.`MOBILE_NO` AS `MOBILE_NO`,
     `teacher`.`PROFILE_PICTURE` AS `PROFILE_PICTURE`,
     `teacher`.`IS_LECTURER` AS `IS_LECTURER`,
+    `teacher`.`ON_LEAVE` AS `ON_LEAVE`,
     `department`.`ID` AS `DEPARTMENT_ID`,
     `department`.`NAME` AS `DEPARTMENT`
     ")
@@ -245,6 +248,7 @@ class Teacher extends BaseController{
     $ln = $this->request->getPost("ln");
     $mobileNumber = $this->request->getPost("mobileNumber");
     $isLecturer = $this->request->getPost("isLecturer");
+    $onLeave = $this->request->getPost("onLeave");
 
     $updateData = [];
     if(!empty($fn)){
@@ -256,6 +260,7 @@ class Teacher extends BaseController{
     if(!empty($mobileNumber)){
       $updateData['MOBILE_NUMBER'] = $mobileNumber;
     }
+    $updateData['ON_LEAVE'] = (empty($onLeave))? 0:1;
     $updateData['IS_LECTURER'] = (empty($isLecturer))? 0:1;
 
     $this->teacherModel->update($id, $updateData);

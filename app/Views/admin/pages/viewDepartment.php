@@ -52,6 +52,7 @@
         <th scope="col" class="col-1">ID</th>
         <th scope="col">Last Name</th>
         <th scope="col">First Name</th>
+        <th scope="col"></th>
         <th scope="col" class="col-1">
         </th>
       </thead>
@@ -61,11 +62,13 @@
           $id = $value['ID'];
           $fn = $value['FN'];
           $ln = $value['LN'];
+          $onLeave = $value['ON_LEAVE'];
           ?>
-          <tr>
+          <tr class="<?php echo ($onLeave)? "text-danger":""; ?>">
             <th scope="row"><?php echo "$id"; ?></th>
             <td><?php echo "$ln"; ?></td>
             <td><?php echo "$fn"; ?></td>
+            <td><?php echo ($onLeave)? "ON LEAVE":""; ?></td>
             <td><a href="<?php echo "$baseUrl/admin/teacher/view/$id"; ?>">View</a></td>
           </tr>
           <?php

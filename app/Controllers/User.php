@@ -131,46 +131,46 @@ class User extends BaseController{
     $colleagues = $this->teacherModel
     ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
     ->where("ID !=", $id)
+    ->where("ON_LEAVE", 0)
     ->findAll();
 
     $peer = [];
-
-
     $evaluatedCounter = 0;
-    foreach ($colleagues as $key => $colleague) {
-      // check if X done rated Y
-      $evaluator = $this->evaluatorModel
-      ->where("TEACHER_ID", $id)
-      ->first();
+    if(!$myData['ON_LEAVE']){
+      foreach ($colleagues as $key => $colleague) {
+        // check if X done rated Y
+        $evaluator = $this->evaluatorModel
+        ->where("TEACHER_ID", $id)
+        ->first();
 
-      if(empty($evaluator)){
-        // if no evaluator id, create one
-        $create_evaluator_id = [
-          'TEACHER_ID' => $id,
+        if(empty($evaluator)){
+          // if no evaluator id, create one
+          $create_evaluator_id = [
+            'TEACHER_ID' => $id,
+          ];
+
+          $this->evaluatorModel->insert($create_evaluator_id);
+          $myEvaluatorId = $this->evaluatorModel->insertID;
+        }else{
+          $myEvaluatorId = $evaluator['ID'];
+        }
+        $isDone = $this->evalInfoModel
+        ->where("EVALUATOR_ID", $myEvaluatorId)
+        ->where("EVALUATED_ID", $colleague['ID'])
+        ->where("SCHOOL_YEAR_ID", $sy['ID'])
+        ->where("EVAL_TYPE_ID", 2)
+        ->countAllResults();
+
+        $d = [
+          'isDone' => ($isDone > 0)? true: false,
+          'teacher' => $colleague,
         ];
 
-        $this->evaluatorModel->insert($create_evaluator_id);
-        $myEvaluatorId = $this->evaluatorModel->insertID;
-      }else{
-        $myEvaluatorId = $evaluator['ID'];
+        $evaluatedCounter = ($isDone > 0)? $evaluatedCounter + 1:$evaluatedCounter;
+
+        array_push($peer, $d);
       }
-      $isDone = $this->evalInfoModel
-      ->where("EVALUATOR_ID", $myEvaluatorId)
-      ->where("EVALUATED_ID", $colleague['ID'])
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->where("EVAL_TYPE_ID", 2)
-      ->countAllResults();
-
-      $d = [
-        'isDone' => ($isDone > 0)? true: false,
-        'teacher' => $colleague,
-      ];
-
-      $evaluatedCounter = ($isDone > 0)? $evaluatedCounter + 1:$evaluatedCounter;
-
-      array_push($peer, $d);
     }
-
 
     // check if a supervisor
     $isChairperson = $this->departmentHistoryModel
@@ -197,6 +197,7 @@ class User extends BaseController{
     $totalPeers = $this->teacherModel
     ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
     ->where("ID !=", $id)
+    ->where("ON_LEAVE", 0)
     ->countAllResults();
 
     $TeacherstoRate = $totalPeers;
@@ -211,10 +212,12 @@ class User extends BaseController{
       ->countAllResults();
 
       $TeacherstoRate = $TeacherstoRate + $totalChairpersons + $totalExecoms;
-    }else if($isChairperson){
+    }
+    else if($isChairperson){
       $colleagues = $this->teacherModel
       ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
       ->where("ID !=", $id)
+      ->where("ON_LEAVE", 0)
       ->countAllResults();
 
       $TeacherstoRate = $TeacherstoRate + $colleagues;
@@ -275,6 +278,7 @@ class User extends BaseController{
       $colleagues = $this->teacherModel
       ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
       ->where("ID !=", $id)
+      ->where("ON_LEAVE", 0)
       ->findAll();
 
       foreach ($colleagues as $key => $colleague) {
@@ -413,6 +417,7 @@ class User extends BaseController{
     $totalPeers = $this->teacherModel
     ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
     ->where("ID !=", $id)
+    ->where("ON_LEAVE", 0)
     ->countAllResults();
 
     $TeacherstoRate = $totalPeers;
@@ -427,10 +432,12 @@ class User extends BaseController{
       ->countAllResults();
 
       $TeacherstoRate = $TeacherstoRate + $totalChairpersons + $totalExecoms;
-    }else if($isChairperson){
+    }
+    else if($isChairperson){
       $colleagues = $this->teacherModel
       ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
       ->where("ID !=", $id)
+      ->where("ON_LEAVE", 0)
       ->countAllResults();
 
       $TeacherstoRate = $TeacherstoRate + $colleagues;
@@ -503,12 +510,6 @@ class User extends BaseController{
       $myEvaluatorId = $evaluator['ID'];
     }
 
-    // get colleagues
-    $colleagues = $this->teacherModel
-    ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
-    ->where("ID !=", $id)
-    ->where("IS_LECTURER", 0)
-    ->findAll();
 
     $doneEvaluatedCounter = $this->evalInfoModel->where("EVALUATOR_ID", $myEvaluatorId)
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
@@ -518,6 +519,7 @@ class User extends BaseController{
     $totalPeers = $this->teacherModel
     ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
     ->where("ID !=", $id)
+    ->where("ON_LEAVE", 0)
     ->countAllResults();
 
     $TeacherstoRate = $totalPeers;
@@ -532,10 +534,12 @@ class User extends BaseController{
       ->countAllResults();
 
       $TeacherstoRate = $TeacherstoRate + $totalChairpersons + $totalExecoms;
-    }else if($isChairperson){
+    }
+    else if($isChairperson){
       $colleagues = $this->teacherModel
       ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
       ->where("ID !=", $id)
+      ->where("ON_LEAVE", 0)
       ->countAllResults();
 
       $TeacherstoRate = $TeacherstoRate + $colleagues;
@@ -627,6 +631,7 @@ class User extends BaseController{
     $totalPeers = $this->teacherModel
     ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
     ->where("ID !=", $id)
+    ->where("ON_LEAVE", 0)
     ->countAllResults();
 
     $TeacherstoRate = $totalPeers;
@@ -641,10 +646,12 @@ class User extends BaseController{
       ->countAllResults();
 
       $TeacherstoRate = $TeacherstoRate + $totalChairpersons + $totalExecoms;
-    }else if($isChairperson){
+    }
+    else if($isChairperson){
       $colleagues = $this->teacherModel
       ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
       ->where("ID !=", $id)
+      ->where("ON_LEAVE", 0)
       ->countAllResults();
 
       $TeacherstoRate = $TeacherstoRate + $colleagues;
@@ -713,6 +720,7 @@ class User extends BaseController{
     $totalPeers = $this->teacherModel
     ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
     ->where("ID !=", $id)
+    ->where("ON_LEAVE", 0)
     ->countAllResults();
 
     $TeacherstoRate = $totalPeers;
@@ -727,10 +735,12 @@ class User extends BaseController{
       ->countAllResults();
 
       $TeacherstoRate = $TeacherstoRate + $totalChairpersons + $totalExecoms;
-    }else if($isChairperson){
+    }
+    else if($isChairperson){
       $colleagues = $this->teacherModel
       ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
       ->where("ID !=", $id)
+      ->where("ON_LEAVE", 0)
       ->countAllResults();
 
       $TeacherstoRate = $TeacherstoRate + $colleagues;
@@ -811,6 +821,7 @@ class User extends BaseController{
     $totalPeers = $this->teacherModel
     ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
     ->where("ID !=", $id)
+    ->where("ON_LEAVE", 0)
     ->countAllResults();
 
     $TeacherstoRate = $totalPeers;
@@ -825,10 +836,12 @@ class User extends BaseController{
       ->countAllResults();
 
       $TeacherstoRate = $TeacherstoRate + $totalChairpersons + $totalExecoms;
-    }else if($isChairperson){
+    }
+    else if($isChairperson){
       $colleagues = $this->teacherModel
       ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
       ->where("ID !=", $id)
+      ->where("ON_LEAVE", 0)
       ->countAllResults();
 
       $TeacherstoRate = $TeacherstoRate + $colleagues;

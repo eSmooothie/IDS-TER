@@ -11,7 +11,7 @@
             <?php echo "{$teacherData['ID']}"; ?>
           </small>
       </span>
-      <span class="mb-2 text-white bg-primary border ps-2 pe-2 border-primary rounded-pill">
+      <span class="mb-2 text-white bg-primary border ps-2 pe-2 border-primary rounded-pill me-2">
         <a class="text-white text-decoration-none" href="<?php echo ($teacherData['DEPARTMENT'])? "$baseUrl/admin/department/view/{$teacherData['DEPARTMENT_ID']}":"#"; ?>">
           <small class="text-uppercase">
             <?php echo ($teacherData['DEPARTMENT'])?"{$teacherData['DEPARTMENT']}":"No Department"; ?>
@@ -19,6 +19,15 @@
           </small>
         </a>
       </span>
+      <?php
+      if($teacherData['ON_LEAVE']){
+        ?>
+        <span class="mb-2 text-white bg-danger border ps-2 pe-2 border-danger rounded-pill">
+          <small class="text-uppercase">ON LEAVE</small>
+        </span>
+        <?php
+      }
+       ?>
     </div>
   </div>
   <div class="border rounded p-3 bg-light bg-gradient mb-3">

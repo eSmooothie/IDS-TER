@@ -20,6 +20,7 @@
           <th scope="col">First Name</th>
           <th scope="col">Department</th>
           <th scope="col">Is Lecturuer</th>
+          <th scope="col">On Leave</th>
           <th scope="col" class="col-1">Actions</th>
         </tr>
       </thead>
@@ -30,14 +31,16 @@
             $ln = $value['LN'];
             $fn = $value['FN'];
             $isLecturer = $value['IS_LECTURER'];
+            $onLeave = $value['ON_LEAVE'];
             $department = $value['DEPARTMENT_NAME'];
             ?>
-            <tr>
+            <tr class="<?php echo ($onLeave)? "text-danger":""; ?>">
               <th scope="row"><?php echo "$id"; ?></th>
               <td><?php echo "$ln"; ?></td>
               <td><?php echo "$fn"; ?></td>
               <td><?php echo "$department"; ?></td>
               <td><?php echo ($isLecturer)? "Yes":"No"; ?></td>
+              <td><?php echo ($onLeave)? "ON LEAVE":""; ?></td>
               <td><a href="<?php echo "$baseUrl/admin/teacher/view/$id"; ?>">View</a></td>
             </tr>
             <?php

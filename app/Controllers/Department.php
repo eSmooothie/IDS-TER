@@ -71,7 +71,8 @@ class Department extends BaseController{
     ->select("
     `teacher`.`ID` AS `ID`,
     `teacher`.`FN` AS `FN`,
-    `teacher`.`LN` AS `LN`
+    `teacher`.`LN` AS `LN`,
+    `teacher`.`ON_LEAVE` AS `ON_LEAVE`
     ")
     ->join("teacher","`teacher`.`ID` = `dept_hist`.`TEACHER_ID`","INNER")
     ->where("`dept_hist`.`SCHOOL_YEAR_ID`", $sy)
