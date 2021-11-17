@@ -10,8 +10,8 @@
         <p class="mb-0">Department: <?php echo "{$myDept['NAME']}"; ?></p>
         <p class="mb-0">Is Lecturer: <?php echo ($myData['IS_LECTURER'])? "True":"False"; ?></p>
         <p class="mb-0">Is Supervisor: <?php echo ($isSupervisor)? "True" : "False"; ?></p>
-        <p class="mb-0">Total Evaluated: X</p>
-        <p class="mb-0">Status: Cleared</p>
+        <p class="mb-0">Total Evaluated: <?php echo $evaluatedCounter; ?></p>
+        <p class="mb-0">Status: <?php echo ($evaluatedCounter == count($peer))? "CLEARED":"NOT CLEARED"; ?></p>
         <p class="mb-0">Mode: Peer</p>
       </div>
       <div class="">
@@ -26,7 +26,6 @@
           <a href="<?php echo "$baseUrl/user/teacher/rate/supervisor"; ?>" class="btn btn-primary">As a <?php echo "$as"; ?></a>
           <?php
         } ?>
-
       </div>
     </div>
     <table class="table table-striped table-hover bg-light bg-gradient border rounded mb-3 p-3">
@@ -61,3 +60,14 @@
     </table>
   </div>
 </div>
+<script>
+// refresh the page when active
+  document.addEventListener("visibilitychange", function() {
+     if (document.hidden){
+         console.log("Browser tab is hidden")
+     } else {
+         console.log("Browser tab is visible")
+         location.reload();
+     }
+  });
+</script>

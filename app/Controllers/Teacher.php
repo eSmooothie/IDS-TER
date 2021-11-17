@@ -120,7 +120,7 @@ class Teacher extends BaseController{
     ->where("SCHOOL_YEAR_ID", $currSY['ID'])
     ->where("TEACHER_ID", $id)
     ->findAll();
-    
+
     $subjectSY = null;
 
     if(empty($currentSubjects)){

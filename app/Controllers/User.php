@@ -136,9 +136,13 @@ class User extends BaseController{
 
     $peer = [];
 
+    $doneEvaluatedCounter = 0;
+
+    // check if teacher X is a lecturer
     if($myData['IS_LECTURER'] == 0){
+
       foreach ($colleagues as $key => $colleague) {
-        // check if done rated
+        // check if X done rated Y
         $evaluator = $this->evaluatorModel
         ->where("TEACHER_ID", $id)
         ->first();
@@ -165,6 +169,8 @@ class User extends BaseController{
           'isDone' => ($isDone > 0)? true: false,
           'teacher' => $colleague,
         ];
+
+        $doneEvaluatedCounter = ($isDone > 0)? $doneEvaluatedCounter + 1: $doneEvaluatedCounter;
 
         array_push($peer, $d);
       }
@@ -196,6 +202,7 @@ class User extends BaseController{
       'myDept' => $myDept,
       'sy' => $sy,
       'peer' => $peer,
+      'evaluatedCounter' => $doneEvaluatedCounter,
       'isSupervisor' => $isSupervisor,
       'isChairperson' => $isChairperson ,
       'isPrincipal' => $isPrincipal ,
