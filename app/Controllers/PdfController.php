@@ -45,6 +45,7 @@ class PdfController extends BaseController{
     if(!$isLecturer){
       // check if teacher X is execom or supervisor
       $isExecom = $this->execomHistoryModel->where("TEACHER_ID", $id)
+      ->where("EXECOM_ID !=", 1)
       ->where("SCHOOL_YEAR_ID", $sy['ID'])
       ->countAllResults();
 
@@ -63,7 +64,9 @@ class PdfController extends BaseController{
         ->where("SCHOOL_YEAR_ID", $sy['ID'])
         ->first();
 
-        $supervisor = $this->teacherModel->find($chairperson['TEACHER_ID']);
+        if(!empty($chairperson)){
+          $supervisor = $this->teacherModel->find($chairperson['TEACHER_ID']);
+        }
       }
     }
 
@@ -79,6 +82,7 @@ class PdfController extends BaseController{
       'supervisor' => $supervisorRating,
       'overall' => $totalOverall,
     ];
+
 
     $this->generatePDF($rating, $department, $sy, $teacher, $supervisor, true);
   }
@@ -154,7 +158,10 @@ class PdfController extends BaseController{
     $pdf->Cell(((3 * $pageWidth) / 16), 7, "Supervisor",1,0,'C');
     $pdf->Cell(((3 * $pageWidth) / 16), 7, "$supervisorOverall",1,0,'C');
     $pdf->Cell(30);
-    $pdf->Cell((3 * $pageWidth) / 8, 7, "{$supervisor['FN']} {$supervisor['LN']}","B:1",1,'C');
+
+    $name = (!empty($supervisor))? "{$supervisor['FN']} {$supervisor['LN']}":"";
+
+    $pdf->Cell((3 * $pageWidth) / 8, 7, "$name","B:1",1,'C');
     // overall
     $pdf->Cell(((3 * $pageWidth) / 16), 7, "Overall",1,0,'C');
     $pdf->Cell(((3 * $pageWidth) / 16), 7, "$totalOverall",1,0,'C');
@@ -206,8 +213,8 @@ class PdfController extends BaseController{
 
     $pdf->SetFont('Arial','B',12);
     $pdf->SetAutoPageBreak(true);
-    $pdf->Image(FCPATH.'assets\img\iit.png',($pageWidth / 32) * 2,12,20,20);
-    $pdf->Image(FCPATH.'assets\img\ced.jpg',($pageWidth / 32) * 27 ,12,20,20);
+    $pdf->Image(FCPATH.'assets/img/iit.png',($pageWidth / 32) * 2,12,20,20);
+    $pdf->Image(FCPATH.'assets/img/ced.jpg',($pageWidth / 32) * 27 ,12,20,20);
     $pdf->Cell(0, 6, "MSU-IIT INTEGRATED DEVELOPMENTAL SCHOOL",0,2,'C');
     $pdf->SetFont('Arial','',12);
     $pdf->Cell(0, 6, "Teaching Efficiency Rating",0,2,'C');
