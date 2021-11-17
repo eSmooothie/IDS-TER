@@ -172,12 +172,28 @@ class Department extends BaseController{
 
     $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
 
-    $this->departmentHistoryModel
+    $isExist = $this->departmentHistoryModel
     ->where("DEPARTMENT_ID", $id)
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->set("TEACHER_ID", $chairperson)
-    ->update();
-    
+    ->first();
+
+    if(empty($isExist)){
+      $data = [
+        'DEPARTMENT_ID' => $id,
+        'TEACHER_ID' => $chairperson,
+        'SCHOOL_YEAR_ID' => $sy['ID'],
+      ];
+
+      $this->departmentHistoryModel->insert($data);
+    }else{
+      $this->departmentHistoryModel
+      ->where("DEPARTMENT_ID", $id)
+      ->where("SCHOOL_YEAR_ID", $sy['ID'])
+      ->set("TEACHER_ID", $chairperson)
+      ->update();
+    }
+
+
     // {end}
     $data = [
       'id' => $id,
