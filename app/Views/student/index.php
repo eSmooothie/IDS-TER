@@ -49,11 +49,8 @@
 <script>
 // refresh the page when active
   document.addEventListener("visibilitychange", function() {
-     if (document.hidden){
-         console.log("Browser tab is hidden")
-     } else {
-         console.log("Browser tab is visible")
-         location.reload();
+     if (!document.hidden){
+       location.reload();
      }
   });
 </script>
