@@ -149,6 +149,8 @@ class Teacher extends BaseController{
     // get all subject
     $subjects = $this->subjectModel->findAll();
 
+    $departments = $this->departmentModel->findAll();
+
     $data = [
       'id' => $this->session->get("adminID"),
       'pageTitle' => "ADMIN | TEACHER",
@@ -158,7 +160,9 @@ class Teacher extends BaseController{
       'currSY' => $currSY,
       'currSySubject' => $subjectSY,
       'subjects' => $subjects,
+      'departments' => $departments,
     ];
+
 
     if(!empty($this->session->getFlashData("update"))){
       $data['formMessage'] = $this->session->getFlashData("update");
@@ -370,6 +374,30 @@ class Teacher extends BaseController{
     ];
 
     $this->session->setFlashData("update2",$response);
+    return $this->setResponseFormat('json')->respond($response, 200);
+  }
+
+  public function editDepartment(){
+    header("Content-type:application/json");
+    // do something here
+    $newDeptId = $this->request->getPost("updateDepartment");
+    $id = $this->request->getPost("id");
+
+    $updateData = [
+      'DEPARTMENT_ID' => $newDeptId,
+    ];
+
+    $this->teacherModel->update($id, $updateData);
+
+    // {end}
+    $data = [
+      "newDept" => $newDeptId,
+      "id" => $id,
+    ];
+    $response = [
+      "message" => "OK",
+      "data" => $data,
+    ];
     return $this->setResponseFormat('json')->respond($response, 200);
   }
 

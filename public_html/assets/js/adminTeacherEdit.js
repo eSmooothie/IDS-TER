@@ -25,6 +25,17 @@ $(document).ready(function(){
   });
 });
 
+$("#updateDepartment").submit(function(e){
+  e.preventDefault();
+  var formData = $(this).serializeArray();
+
+  var path = "admin/teacher/editDepartment";
+  var done = function(data){
+      window.location.reload();
+  }
+  sendRequest(path,formData,done);
+});
+
 $("#profileInformation").submit(function(e){
   e.preventDefault();
   var formData = $(this).serializeArray();

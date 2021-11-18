@@ -84,6 +84,36 @@
   <p class="m-0"><?php echo "{$passwordFormMessage['message']}"; ?></p>
 </div>
 <div class="border rounded p-3 bg-light bg-gradient mb-3">
+  <p><i class="fas fa-users"></i> Change Department</p>
+  <!-- Change Department -->
+  <form id="updateDepartment">
+    <!-- ID -->
+    <input type="hidden" name="id" value="<?php echo "{$teacherData['ID']}"; ?>">
+    <!-- old pass -->
+    <div class="mb-3">
+      <label for="oldPassword" class="form-label">Department</label>
+      <select class="form-select" name="updateDepartment">
+        <?php
+          foreach ($departments as $key => $value) {
+            $deptId = $value['ID'];
+            $deptName = $value['NAME'];
+            ?>
+            <option value="<?php echo "$deptId"; ?>" <?php echo ($teacherData['DEPARTMENT_ID'] == $deptId)? "selected":""; ?>><?php echo "$deptName"; ?></option>
+            <?php
+          }
+         ?>
+      </select>
+    </div>
+    <div class="mb-3">
+      <input type="submit" name="submit" class="btn btn-primary" value="Submit">
+    </div>
+  </form>
+</div>
+<!-- password -->
+<div class="border rounded p-1 bg-info text-white bg-gradient mb-3 <?php echo (empty($passwordFormMessage))? "d-none":"d-block"; ?>">
+  <p class="m-0"><?php echo "{$passwordFormMessage['message']}"; ?></p>
+</div>
+<div class="border rounded p-3 bg-light bg-gradient mb-3">
   <p><i class="fas fa-key"></i> Change Password</p>
   <!-- Change Password -->
   <form id="changePassword">

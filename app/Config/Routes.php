@@ -62,6 +62,7 @@ $routes->post("/admin/teacher/editProfileInfo","Teacher::editProfileInfo");
 $routes->post("/admin/teacher/editPassword","Teacher::editPassword");
 $routes->post("/admin/teacher/addSubject","Teacher::addSubject");
 $routes->post("/admin/teacher/add","Teacher::add");
+$routes->post("/admin/teacher/editDepartment","Teacher::editDepartment");
 // admin:department
 $routes->get("/admin/department","Department::index");
 $routes->get("/admin/department/view/(:segment)","Department::view/$1");
