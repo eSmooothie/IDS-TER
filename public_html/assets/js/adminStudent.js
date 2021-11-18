@@ -26,7 +26,7 @@ $(document).ready(function(){
       formData,
       done=function(data){},
       fail=function(xhr,textStatus,errorMessage){
-        console.log(xhr);}){var baseUrl="http://dev-ter-ids:9094/";
+        console.log(xhr);}){var baseUrl=window.location.origin;
         var url=baseUrl+path;$.ajax({type:'post',url:url,data:formData,}).done(done).fail(fail);}
 
 $("#addNewStudents").submit(function(e){

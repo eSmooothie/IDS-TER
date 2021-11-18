@@ -1,5 +1,5 @@
 function sendPostRequest(path,formData,done=function(data){},fail=function(xhr,textStatus,errorMessage){})
-{var baseUrl="http://dev-ter-ids:9094/";var url=baseUrl+path;$.ajax({type:'post',url:url,data:formData,}).done(done).fail(fail);}
+{var baseUrl=window.location.origin;var url=baseUrl+path;$.ajax({type:'post',url:url,data:formData,}).done(done).fail(fail);}
 
 $("#adminLogin").submit(function(e){
   e.preventDefault();
@@ -8,7 +8,7 @@ $("#adminLogin").submit(function(e){
   done=function(data){
     console.log();
     var isSuc=data['data'];
-    if(isSuc){window.location.href="http://dev-ter-ids:9094/admin/dashboard";}
+    if(isSuc){window.location.href=window.location.origin+"admin/dashboard";}
     else{$("#adminLogin").get(0).reset()
     $("#errorMessage").removeClass("d-none");}
   };
@@ -31,9 +31,9 @@ $("#userLogin").submit(function(e){
     }else{
       // redirect
       if(i){
-        window.location.href = "http://dev-ter-ids:9094/user/teacher";
+        window.location.href = window.location.origin+"user/teacher";
       }else{
-        window.location.href = "http://dev-ter-ids:9094/user/student";
+        window.location.href = window.location.origin+"user/student";
       }
     }
   };

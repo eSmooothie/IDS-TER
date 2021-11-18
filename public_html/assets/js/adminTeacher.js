@@ -5,7 +5,7 @@ function sendRequest(
   done = function(data){},
   fail = function(xhr,textStatus,errorMessage){}
     ){
-    var baseUrl = "http://dev-ter-ids:9094/";
+    var baseUrl = window.location.origin;
     var url = baseUrl + path;
 
     $.ajax({
