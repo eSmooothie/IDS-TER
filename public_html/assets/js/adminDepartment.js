@@ -19,7 +19,7 @@ $("#changeName").submit(function(e){
   e.preventDefault();
   var formData = $(this).serializeArray();
 
-  var path = "admin/department/change/name";
+  var path = "/admin/department/change/name";
   var done = function(data){
     window.location.reload();
   };
@@ -32,7 +32,7 @@ $("#assignChairperson").submit(function(e){
   e.preventDefault();
   var formData = $(this).serializeArray();
 
-  var path = "admin/department/change/chairperson";
+  var path = "/admin/department/change/chairperson";
   var done = function(data){
     window.location.reload();
   };

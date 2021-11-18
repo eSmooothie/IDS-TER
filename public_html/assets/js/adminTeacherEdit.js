@@ -29,7 +29,7 @@ $("#updateDepartment").submit(function(e){
   e.preventDefault();
   var formData = $(this).serializeArray();
 
-  var path = "admin/teacher/editDepartment";
+  var path = "/admin/teacher/editDepartment";
   var done = function(data){
       window.location.reload();
   }
@@ -40,7 +40,7 @@ $("#profileInformation").submit(function(e){
   e.preventDefault();
   var formData = $(this).serializeArray();
 
-  var path = "admin/teacher/editProfileInfo";
+  var path = "/admin/teacher/editProfileInfo";
   var done = function(data){
       window.location.reload();
   }
@@ -51,7 +51,7 @@ $("#changePassword").submit(function(e){
   e.preventDefault();
   var formData = $(this).serializeArray();
 
-  var path = "admin/teacher/editPassword";
+  var path = "/admin/teacher/editPassword";
   var done = function(data){
       // console.log(data);
       window.location.reload();
@@ -82,7 +82,7 @@ $("#submitSubject").on("click", function(){
       'id': teacherId,
       'subjects[]' : subjectId,
     }
-    var path = "admin/teacher/addSubject";
+    var path = "/admin/teacher/addSubject";
     var done = function (data){
       window.location.reload();
     };

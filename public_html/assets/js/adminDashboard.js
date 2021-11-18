@@ -21,7 +21,7 @@ $("#newSchoolYear").submit(function(e){
 
   // console.log(formData);
 
-  var path = "admin/schoolyear/new";
+  var path = "/admin/schoolyear/new";
   var done = function(data){
     if(data['data'] == null){
       $("#errMessage").html(data['message']);

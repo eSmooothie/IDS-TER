@@ -19,7 +19,7 @@ $("#changeTeacher").submit(function(e){
   e.preventDefault();
   var formData = $(this).serializeArray();
 
-  var path = "admin/execom/update";
+  var path = "/admin/execom/update";
   var done = function(data){
     window.location.reload();
   };

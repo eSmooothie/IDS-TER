@@ -28,7 +28,7 @@ $('#addNewSubject').submit(function(e){
   e.preventDefault();
   var formData = $(this).serializeArray();
   // console.log(formData);
-  var path = "admin/subject/add";
+  var path = "/admin/subject/add";
   var done = function(data){
     window.location.reload();
   };

@@ -19,7 +19,7 @@ $(".evaluation").submit(function(e){
   e.preventDefault();
   var formData = $(this).serializeArray();
 
-  var path = "evaluate/submit";
+  var path = "/evaluate/submit";
   var done = function(data){
     window.location.reload();
   };
