@@ -187,6 +187,91 @@ class Teacher extends BaseController{
     echo view("admin/layout/footer");
   }
 
+  public function downloadEvaluation($id = false){
+    if(!$this->session->has("adminID")){
+      return redirect()->to("/admin");
+    }
+    if(!$id){
+      return redirect()->to("/admin/teacher/");
+    }
+    // do something
+    // get teacher data
+    $teacherData = $this->teacherModel
+    ->select("
+    `teacher`.`ID` AS `ID`,
+    `teacher`.`FN` AS `FN`,
+    `teacher`.`LN` AS `LN`,
+    `teacher`.`MOBILE_NO` AS `MOBILE_NO`,
+    `teacher`.`PROFILE_PICTURE` AS `PROFILE_PICTURE`,
+    `teacher`.`IS_LECTURER` AS `IS_LECTURER`,
+    `teacher`.`ON_LEAVE` AS `ON_LEAVE`,
+    `department`.`ID` AS `DEPARTMENT_ID`,
+    `department`.`NAME` AS `DEPARTMENT`
+    ")
+    ->join("`department`","`department`.`ID` = `teacher`.`DEPARTMENT_ID`","LEFT")
+    ->find($id);
+
+    // get current teacher subject
+    $currSY = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $currentSubjects = $this->teacherSubjectModel
+    ->select("
+    `subject`.`ID` AS `ID`,
+    `subject`.`DESCRIPTION` AS `DESCRIPTION`,
+    ")
+    ->join("`subject`","`subject`.`ID` = `tchr_subj_lst`.`SUBJECT_ID`","INNER")
+    ->where("SCHOOL_YEAR_ID", $currSY['ID'])
+    ->where("TEACHER_ID", $id)
+    ->findAll();
+
+    $subjectSY = null;
+
+    if(empty($currentSubjects)){
+      $schoolYear = $this->schoolyearModel->findAll();
+      foreach ($schoolYear as $key => $value) {
+        $sy_id = $value['ID'];
+        $currentSubjects = $this->teacherSubjectModel
+        ->select("
+        `subject`.`ID` AS `ID`,
+        `subject`.`DESCRIPTION` AS `DESCRIPTION`,
+        ")
+        ->join("`subject`","`subject`.`ID` = `tchr_subj_lst`.`SUBJECT_ID`","INNER")
+        ->where("SCHOOL_YEAR_ID", $sy_id)
+        ->where("TEACHER_ID", $id)
+        ->findAll();
+
+        if(!empty($currentSubjects)){
+          $subjectSY = $schoolYear[$key];
+          break;
+        }
+      }
+    }
+    // get all subject
+    $subjects = $this->subjectModel->findAll();
+
+    $departments = $this->departmentModel->findAll();
+
+    $sy = $this->schoolyearModel->orderBy("ID","DESC")->findAll();
+
+    $data = [
+      'id' => $this->session->get("adminID"),
+      'pageTitle' => "ADMIN | TEACHER",
+      'baseUrl' => base_url(),
+      'teacherData' => $teacherData,
+      'teacherSubjects' => $currentSubjects,
+      'currSY' => $currSY,
+      'currSySubject' => $subjectSY,
+      'subjects' => $subjects,
+      'departments' => $departments,
+      'sy' => $sy,
+    ];
+
+
+    echo view("admin/layout/header", $data);
+    echo view("admin/pages/nav",$data);
+    echo view("admin/pages/downloadTeacherEval", $data);
+    echo view("admin/layout/footer");
+  }
+
   public function add(){
     header("Content-type:application/json");
     // do something here

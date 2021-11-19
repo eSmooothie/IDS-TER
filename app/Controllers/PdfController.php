@@ -24,6 +24,68 @@ class PdfController extends BaseController{
     return view('evaluation/pdf/format', $data);
   }
 
+  function individualAdmin($schoolyear = false, $teacherId = false){
+    if(!$this->session->has("adminID")){
+      return redirect()->to("/admin");
+    }
+    if(!$schoolyear || !$teacherId){
+      return redirect()->to("/");
+    }
+
+    $id = $teacherId;
+    $sy = $this->schoolyearModel->find($schoolyear);
+    $teacher = $this->teacherModel->find($id);
+
+    $department = $this->departmentModel->find($teacher['DEPARTMENT_ID']);
+
+    $supervisor = null;
+    // check if supervisor / execom
+    $isLecturer = $teacher['IS_LECTURER'];
+    if(!$isLecturer){
+      // check if teacher X is execom or supervisor
+      $isExecom = $this->execomHistoryModel->where("TEACHER_ID", $id)
+      ->where("EXECOM_ID !=", 1)
+      ->where("SCHOOL_YEAR_ID", $sy['ID'])
+      ->countAllResults();
+
+      $isChairperson = $this->departmentHistoryModel->where("TEACHER_ID", $id)
+      ->where("SCHOOL_YEAR_ID", $sy['ID'])
+      ->countAllResults();
+
+      if($isExecom > 0 || $isChairperson > 0){
+        $principal = $this->execomHistoryModel->where("EXECOM_ID", 1)
+        ->where("SCHOOL_YEAR_ID", $sy['ID'])
+        ->first();
+
+        $supervisor = $this->teacherModel->find($principal['TEACHER_ID']);
+      }else{
+        $chairperson = $this->departmentHistoryModel->where("DEPARTMENT_ID", $department['ID'])
+        ->where("SCHOOL_YEAR_ID", $sy['ID'])
+        ->first();
+
+        if(!empty($chairperson)){
+          $supervisor = $this->teacherModel->find($chairperson['TEACHER_ID']);
+        }
+      }
+    }
+
+    $studentRating = $this->getRating($id, 1, $sy["ID"]);
+    $peerRating = $this->getRating($id, 2, $sy["ID"]);
+    $supervisorRating = $this->getRating($id, 3, $sy["ID"]);
+
+    $totalOverall = $this->getOverallRating($studentRating["OVERALL"], $peerRating["OVERALL"], $supervisorRating["OVERALL"]);
+
+    $rating = [
+      'student' => $studentRating,
+      'peer' => $peerRating,
+      'supervisor' => $supervisorRating,
+      'overall' => $totalOverall,
+    ];
+
+
+    $this->generatePDF($rating, $department, $sy, $teacher, $supervisor, true);
+  }
+
   function individual($schoolyear = false){
     if(!$this->session->has("userID")){
       return redirect()->to("/");

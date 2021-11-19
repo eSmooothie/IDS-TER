@@ -58,6 +58,8 @@ $routes->get("/admin/student/view/(:any)", "Student::viewStudent/$1");
 $routes->get("/admin/teacher","Teacher::index");
 $routes->get("/admin/teacher/view/(:segment)","Teacher::viewTeacher/$1");
 $routes->get("/admin/teacher/view/(:segment)/edit","Teacher::editTeacher/$1");
+$routes->get("/admin/teacher/view/(:segment)/downloads","Teacher::downloadEvaluation/$1");
+
 $routes->post("/admin/teacher/editProfileInfo","Teacher::editProfileInfo");
 $routes->post("/admin/teacher/editPassword","Teacher::editPassword");
 $routes->post("/admin/teacher/addSubject","Teacher::addSubject");
@@ -99,6 +101,7 @@ $routes->get("/evaluate/supervisor/(:segment)","Evaluation::supervisor/$1");
 $routes->post("/evaluate/submit","Evaluation::submit");
 // pdf
 $routes->get("/download/individual/(:segment)","PdfController::individual/$1");
+$routes->get("/download/individual/(:segment)/(:segment)","PdfController::individualAdmin/$1/$2");
 // $routes->get("/download/individual/(:segment)","PdfController::index/$1");
 
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))
