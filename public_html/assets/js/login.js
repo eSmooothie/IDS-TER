@@ -20,7 +20,7 @@ $("#userLogin").submit(function(e){
   var formData = $(this).serializeArray();
   // console.log(formData);
 
-  var path = "user/login";
+  var path = "/user/login";
   var done = function(data){
     console.log(data);
     var msg = data['message'];
