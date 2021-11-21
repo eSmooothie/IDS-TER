@@ -72,6 +72,18 @@
     </table>
   </div>
   <div class="border rounded p-3 bg-light bg-gradient mb-3">
-    <p>Recent Activities</p>
+    <p>Last 30 Days Activity</p>
+    <table class="table table-striped table-hover" style="font-size:small;">
+      <thead>
+        <tr class="text-center">
+          <th scope="col">Activity</th>
+          <th scope="col" class="">Date</th>
+        </tr>
+      </thead>
+      <tbody id="activities">
+      </tbody>
+    </table>
   </div>
 </div>
+
+<script src="<?php echo "$baseUrl/assets/js/adminViewTeacher.js"; ?>" charset="utf-8"></script>

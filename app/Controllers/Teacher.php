@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controllers;
-
+use CodeIgniter\I18n\Time;
 class Teacher extends BaseController{
   public function index(){
     if(!$this->session->has("adminID")){
@@ -479,6 +479,61 @@ class Teacher extends BaseController{
       "newDept" => $newDeptId,
       "id" => $id,
     ];
+    $response = [
+      "message" => "OK",
+      "data" => $data,
+    ];
+    return $this->setResponseFormat('json')->respond($response, 200);
+  }
+
+  public function recentActivity($id = false){
+    header("Content-type:application/json");
+    if(!$id){
+      $response = [
+        "message" => "Error",
+        "data" => "Bad Request",
+      ];
+      return $this->setResponseFormat('json')->respond($response, 400);
+    }
+
+    $interval = 30;
+
+    $evaluator = $this->evaluatorModel->where("TEACHER_ID", $id)->first();
+
+    if(empty($evaluator)){
+      $data = [
+        'TEACHER_ID' => $id
+      ];
+
+      $this->evaluatorModel->insert($data);
+      $evaluator_id = $this->evaluatorModel->insertID;
+    }else{
+      $evaluator_id = $evaluator['ID'];
+    }
+    $upperBound = $this->getCurrentDateTime();
+    $min = new Time("-30 days");
+    $lowerBound = $min->toDateTimeString();
+
+    $where = "EVALUATOR_ID LIKE '$evaluator_id' AND DATE_EVALUATED BETWEEN '$lowerBound' AND '$upperBound'";
+    $eval_info = $this->evalInfoModel
+    ->select("
+      `eval_info`.`ID` AS `EVAL_INFO_ID`,
+      `teacher`.`ID` AS `TEACHER_ID`,
+      `teacher`.`FN` AS `FN`,
+      `teacher`.`LN` AS `LN`,
+      `eval_info`.`DATE_EVALUATED` AS `DATE_EVALUATED`
+    ")
+    ->join("`teacher`","`teacher`.`ID` = `eval_info`.`EVALUATED_ID`","INNER")
+    ->where($where)
+    ->orderBy("`EVAL_INFO_ID`","DESC")
+    ->findAll();
+    // {end}
+    $data = [
+      'id' => $id,
+      'evaluator_id' => $evaluator_id,
+      'activities' => $eval_info,
+    ];
+
     $response = [
       "message" => "OK",
       "data" => $data,
