@@ -41,33 +41,33 @@ class PdfController extends BaseController{
     $supervisor = null;
     // check if supervisor / execom
     $isLecturer = $teacher['IS_LECTURER'];
-    if(!$isLecturer){
-      // check if teacher X is execom or supervisor
-      $isExecom = $this->execomHistoryModel->where("TEACHER_ID", $id)
-      ->where("EXECOM_ID !=", 1)
+
+    // check if teacher X is execom or supervisor
+    $isExecom = $this->execomHistoryModel->where("TEACHER_ID", $id)
+    ->where("EXECOM_ID !=", 1)
+    ->where("SCHOOL_YEAR_ID", $sy['ID'])
+    ->countAllResults();
+
+    $isChairperson = $this->departmentHistoryModel->where("TEACHER_ID", $id)
+    ->where("SCHOOL_YEAR_ID", $sy['ID'])
+    ->countAllResults();
+
+    if($isExecom > 0 || $isChairperson > 0){
+      $principal = $this->execomHistoryModel->where("EXECOM_ID", 1)
       ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->countAllResults();
+      ->first();
 
-      $isChairperson = $this->departmentHistoryModel->where("TEACHER_ID", $id)
+      $supervisor = $this->teacherModel->find($principal['TEACHER_ID']);
+    }else{
+      $chairperson = $this->departmentHistoryModel->where("DEPARTMENT_ID", $department['ID'])
       ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->countAllResults();
+      ->first();
 
-      if($isExecom > 0 || $isChairperson > 0){
-        $principal = $this->execomHistoryModel->where("EXECOM_ID", 1)
-        ->where("SCHOOL_YEAR_ID", $sy['ID'])
-        ->first();
-
-        $supervisor = $this->teacherModel->find($principal['TEACHER_ID']);
-      }else{
-        $chairperson = $this->departmentHistoryModel->where("DEPARTMENT_ID", $department['ID'])
-        ->where("SCHOOL_YEAR_ID", $sy['ID'])
-        ->first();
-
-        if(!empty($chairperson)){
-          $supervisor = $this->teacherModel->find($chairperson['TEACHER_ID']);
-        }
+      if(!empty($chairperson)){
+        $supervisor = $this->teacherModel->find($chairperson['TEACHER_ID']);
       }
     }
+
 
     $studentRating = $this->getRating($id, 1, $sy["ID"]);
     $peerRating = $this->getRating($id, 2, $sy["ID"]);
@@ -104,33 +104,33 @@ class PdfController extends BaseController{
     $supervisor = null;
     // check if supervisor / execom
     $isLecturer = $teacher['IS_LECTURER'];
-    if(!$isLecturer){
-      // check if teacher X is execom or supervisor
-      $isExecom = $this->execomHistoryModel->where("TEACHER_ID", $id)
-      ->where("EXECOM_ID !=", 1)
+
+    // check if teacher X is execom or supervisor
+    $isExecom = $this->execomHistoryModel->where("TEACHER_ID", $id)
+    ->where("EXECOM_ID !=", 1)
+    ->where("SCHOOL_YEAR_ID", $sy['ID'])
+    ->countAllResults();
+
+    $isChairperson = $this->departmentHistoryModel->where("TEACHER_ID", $id)
+    ->where("SCHOOL_YEAR_ID", $sy['ID'])
+    ->countAllResults();
+
+    if($isExecom > 0 || $isChairperson > 0){
+      $principal = $this->execomHistoryModel->where("EXECOM_ID", 1)
       ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->countAllResults();
+      ->first();
 
-      $isChairperson = $this->departmentHistoryModel->where("TEACHER_ID", $id)
+      $supervisor = $this->teacherModel->find($principal['TEACHER_ID']);
+    }else{
+      $chairperson = $this->departmentHistoryModel->where("DEPARTMENT_ID", $department['ID'])
       ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->countAllResults();
+      ->first();
 
-      if($isExecom > 0 || $isChairperson > 0){
-        $principal = $this->execomHistoryModel->where("EXECOM_ID", 1)
-        ->where("SCHOOL_YEAR_ID", $sy['ID'])
-        ->first();
-
-        $supervisor = $this->teacherModel->find($principal['TEACHER_ID']);
-      }else{
-        $chairperson = $this->departmentHistoryModel->where("DEPARTMENT_ID", $department['ID'])
-        ->where("SCHOOL_YEAR_ID", $sy['ID'])
-        ->first();
-
-        if(!empty($chairperson)){
-          $supervisor = $this->teacherModel->find($chairperson['TEACHER_ID']);
-        }
+      if(!empty($chairperson)){
+        $supervisor = $this->teacherModel->find($chairperson['TEACHER_ID']);
       }
     }
+
 
     $studentRating = $this->getRating($id, 1, $sy["ID"]);
     $peerRating = $this->getRating($id, 2, $sy["ID"]);
