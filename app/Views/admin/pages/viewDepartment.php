@@ -5,7 +5,7 @@
     <p class="fw-bold fs-5"><?php echo "{$department['NAME']}"; ?></p>
     <div class="">
       <a href="<?php echo "$baseUrl/admin/department/view/{$department['ID']}/edit"; ?>" class="me-2"><i class="fas fa-edit"></i> Edit</a>
-      <a href="#"><i class="fas fa-download"></i> Download</a>
+      <a href="<?php echo "$baseUrl/admin/department/view/{$department['ID']}/download"; ?>"><i class="fas fa-download"></i> Download</a>
     </div>
   </div>
   <div class="bg-light bg-gradient rounded border p-3 mb-3">

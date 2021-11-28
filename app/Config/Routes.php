@@ -70,8 +70,10 @@ $routes->post("/admin/teacher/recentActivity/(:segment)","Teacher::recentActivit
 $routes->get("/admin/department","Department::index");
 $routes->get("/admin/department/view/(:segment)","Department::view/$1");
 $routes->get("/admin/department/view/(:segment)/edit","Department::edit/$1");
+$routes->get("/admin/department/view/(:segment)/download","Department::download/$1");
 $routes->post("/admin/department/change/name","Department::changeName");
 $routes->post("/admin/department/change/chairperson", "Department::changeChairperson");
+
 // admin::subject
 $routes->get("/admin/subject","Subject::index");
 $routes->post("/admin/subject/add","Subject::add");
@@ -102,7 +104,9 @@ $routes->get("/evaluate/supervisor/(:segment)","Evaluation::supervisor/$1");
 $routes->post("/evaluate/submit","Evaluation::submit");
 // pdf
 $routes->get("/download/individual/(:segment)","PdfController::individual/$1");
-$routes->get("/download/individual/(:segment)/(:segment)","PdfController::individualAdmin/$1/$2");
+$routes->get("/download/individual/(:segment)/(:segment)/(:any)","PdfController::individualAdmin/$1/$2");
+$routes->get("/download/department/(:segment)/(:segment)/(:any)","PdfController::department/$1/$2");
+
 // $routes->get("/download/individual/(:segment)","PdfController::index/$1");
 
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))

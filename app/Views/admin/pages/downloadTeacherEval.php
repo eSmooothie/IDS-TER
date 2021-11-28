@@ -57,10 +57,12 @@
             $id = $value['ID'];
             $sy = $value['SY'];
             $sem = $value['SEMESTER'];
+
+            $pdfName = "{$sy}_{$sem}_{$teacherData['ID']}_{$teacherData['LN']}";
             ?>
             <tr>
               <th scope="row"><?php echo "$sy:$sem"; ?></th>
-              <td><a target="_blank" href="<?php echo "$baseUrl/download/individual/{$id}/{$teacherData['ID']}"; ?>">Download</a></td>
+              <td><a target="_blank" href="<?php echo "$baseUrl/download/individual/{$id}/{$teacherData['ID']}/$pdfName"; ?>">Download</a></td>
             </tr>
             <?php
           }

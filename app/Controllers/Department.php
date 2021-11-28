@@ -207,6 +207,31 @@ class Department extends BaseController{
     return $this->setResponseFormat('json')->respond($response, 200);
   }
 
+  public function download($id = false){
+    if(!$this->session->has("adminID")){
+      return redirect()->to("/admin");
+    }
+    if(!$id){
+      return redirect()->to("/admin/department");
+    }
+
+    $school_year = $this->schoolyearModel->orderBy("ID","DESC")->findAll();
+    $department = $this->departmentModel->find($id);
+
+    $data = [
+      'id' => $this->session->get("adminID"),
+      'pageTitle' => "ADMIN | DEPARTMENT",
+      'baseUrl' => base_url(),
+      'department' => $department,
+      'school_year' => $school_year,
+    ];
+
+    echo view("admin/layout/header",$data);
+    echo view("admin/pages/nav",$data);
+    echo view("admin/pages/downloadDepartmentEvaluation",$data);
+    echo view("admin/layout/footer");
+  }
+
   public function func_name(){
     header("Content-type:application/json");
     // do something here
