@@ -105,6 +105,21 @@ class BaseController extends Controller
 
 	}
 
+	public function mapPageParameters($sessionId, string $pageTitle, array $others = []){
+		$map = [
+			'sessionId' => $sessionId,
+			'pageTitle' => $pageTitle,
+			'baseUrl' => base_url(),
+		];
+
+		foreach($others as $key => $value){
+			// do something
+			$map[$key] = $value;
+		}
+
+		return $map;
+	}
+
 	public function getCurrentDateTime(){
 		return $this->time->now()->toDateTimeString();
 	}
