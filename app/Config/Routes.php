@@ -52,8 +52,10 @@ $routes->post("/admin/section/update","Section::updateSection");
 $routes->post("/admin/section/remove","Section::removeSection");
 // admin:students
 $routes->get("/admin/student","Student::index");
-$routes->post("/admin/student/add/csv","Student::addNewStudentCSV");
+$routes->get("/admin/student/add","Student::addStudent");
 $routes->get("/admin/student/view/(:any)", "Student::viewStudent/$1");
+
+$routes->post("/admin/student/add/csv","Student::addNewStudentCSV");
 // admin:teacher
 $routes->get("/admin/teacher","Teacher::index");
 $routes->get("/admin/teacher/view/(:segment)","Teacher::viewTeacher/$1");

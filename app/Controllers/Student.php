@@ -57,12 +57,17 @@ class Student extends BaseController
 		}
 
 
-		$data = [
-			'id' => $this->session->get("adminID"),
-			'pageTitle' => "ADMIN | STUDENT",
-			'baseUrl' => base_url(),
+		$sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | STUDENT";
+		$args = [
 			'students' => $students,
 		];
+
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
 
 		$data['uploadStudentMsg'] = (!empty($this->session->getFlashData("uploadStudentMsg")))?
 		 			$this->session->getFlashData("uploadStudentMsg"): null;
@@ -95,14 +100,19 @@ class Student extends BaseController
 
 		// TODO: get student evaluation data
 
-		$data = [
-			'id' => $this->session->get("adminID"),
-			'pageTitle' => "ADMIN | STUDENT",
-			'baseUrl' => base_url(),
+		$sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | STUDENT";
+		$args = [
 			'studentData' => $studentData,
 			'sections' => $sections,
 			'status' => $status,
 		];
+
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
 
 		echo view("admin/layout/header", $data);
 		echo view("admin/pages/nav",$data);
@@ -110,140 +120,161 @@ class Student extends BaseController
 		echo view("admin/layout/footer");
 	}
 
+	public function addStudent(){
+		if(!$this->session->has("adminID")){
+			return redirect()->to("/admin");
+		}
+
+		$sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | STUDENT";
+		$args = [
+			// add something here.
+		];
+
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
+
+		echo view("admin/layout/header", $data);
+		echo view("admin/pages/nav",$data);
+		echo view("admin/pages/addStudent", $data);
+		echo view("admin/layout/footer");
+	}
+
 	public function addNewStudentCSV(){
-		  header("Content-type:application/json");
-			$upload_file = $this->request->getFile("bulkEnroll");
+		header("Content-type:application/json");
+		$upload_file = $this->request->getFile("bulkEnroll");
 
-			$uploadPath = WRITEPATH.'uploads\\docs\\';
+		// upload file
+		$fileName = $this->uploadFile($upload_file);
+		
+		if($fileName == null){
+			$response = [
+				'message' => "Upload failed.",
+				'data' => null,
+			];
+			$this->session->setFlashData("uploadStudentMsg", $response);
+			return $this->setResponseFormat('json')->respond($response, 200);
+		}
+	    
 
-			// upload file
-	    if($upload_file->isValid() && !$upload_file->hasMoved() && $upload_file->getClientMimeType() == "application/vnd.ms-excel"){
-	      $fileName = $upload_file->getRandomName(); // generate randomName
-	      $upload_file->move($uploadPath, $fileName); // move the tmp file to the folder
-	    }else{
-	      $response = [
-	        'message' => "Invalid CSV file" ,
-					'data' => null,
-	      ];
-				$this->session->setFlashData("uploadStudentMsg", $response);
-	      return $this->setResponseFormat('json')->respond($response, 200);
-	    }
+		// read file
+	    $content = $this->readCSV($fileName);
+	    $data = explode("\r\n",$content); // get each line	
+		
+		$studentList = [
+			'success' => [],
+			'fail' => [],
+		];
+		
+		for ($i=0; $i < sizeof($data); $i++) { 
+			$student = $data[$i];
 
-			// read file
-	    $mode = "r";
-	    $filePath = $uploadPath.$fileName;
-	    $file = fopen($filePath, $mode);
-	    $content = fread($file, filesize($filePath));
-	    $file_data = explode("\r\n",$content); // get each line
+			// split
+			$info = explode(",", $student);
 
-			// TODO: loop through $data, remove quotation and separate each string base on comma.
-	    $validLines = [];
-	    foreach ($file_data as $key => $value) {
-				if(empty($value)){
-					break;
-				}
+			// -------- validation ----------
+			$isValid = $this->validateStudent($info);
 
-	      $line = explode(",", $value);
-	      // check if line is valid, return error w/ line if not
-				if(count($line) == 4 && !empty($line[0])
-				&& !empty($line[1])
-				&& !empty($line[2])
-				&& !empty($line[3])
-			){
-					array_push($validLines, $line);
-				}else{
-					$response = [
-		        'message' => "Invalid line",
-						'data' => $line,
-		      ];
-					$this->session->setFlashData("uploadStudentMsg", $response);
-		      return $this->setResponseFormat('json')->respond($response, 200);
-				}
-	    }
-		  // validate enrollee id, if exist return err w/ the error id
-			$newStudents = [];
-			foreach ($validLines as $key => $value) {
-				$studentId = $value[0];
-				$studentFn = $value[2];
-				$studentLn = $value[1];
-				$studentSection = $value[3];
-
-				$isExist = $this->studentModel->find($studentId);
-
-				if(empty($isExist)){
-					$studentData = [
-						'ID' => $studentId,
-						'LN' => $studentLn,
-						'FN' => $studentFn,
-						'Section' => $studentSection,
-					];
-
-					array_push($newStudents, $studentData);
-				}else{
-					$response = [
-		        'message' => "Duplicate student id",
-						'data' => $value,
-		      ];
-					$this->session->setFlashData("uploadStudentMsg", $response);
-		      return $this->setResponseFormat('json')->respond($response, 200);
-				}
+			if($isValid){
+				array_push($studentList['success'], $student);
+			}else{
+				array_push($studentList['fail'], $student);
 			}
+		}
 
-			$sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+		$toEnroll = $studentList['success'];
 
-			// start adding
-			foreach ($newStudents as $key => $value) {
-				$sectionData = $this->sectionModel->where("NAME", $value['Section'])->first();
-				if(empty($sectionData)){
-					$response = [
-		        'message' => "Section does not exist.",
-						'data' => $value,
-		      ];
-					$this->session->setFlashData("uploadStudentMsg", $response);
-		      return $this->setResponseFormat('json')->respond($response, 200);
-				}
+		$this->enrollStudent($toEnroll);
 
+		$response = [
+			'studentList' => $studentList,
+		];
+		
 
-				$studentData = [
-					'ID' => $value['ID'],
-					'FN' => $value['FN'],
-					'LN' => $value['LN'],
-					'PASSWORD' => $value['Section'],
-				];
-				// insert student
-				$this->studentModel->insert($studentData);
+		return $this->setResponseFormat('json')->respond($response, 200);
+	}
 
-				$studentSection = [
-					'STUDENT_ID' => $value['ID'],
-					'SECTION_ID' => $sectionData['ID'],
-					'SCHOOL_YEAR_ID' => $sy['ID'],
-					'CREATED_AT' => $this->getCurrentDateTime(),
-				];
+	private function enrollStudent($studentList){
+		for ($i=0; $i < sizeof($studentList); $i++) { 
+			$student = $studentList[$i];
 
-				$this->studentSectionModel->insert($studentSection);
+			// split
+			$info = explode(",", $student);
 
-				$studentStatus = [
-					'SCHOOL_YEAR_ID' => $sy['ID'],
-					'STUDENT_ID' => $value['ID'],
-					'DATE' => $this->getCurrentDateTime(),
-				];
+			$id = trim($info[0]);
+			$ln = trim($info[1]);
+			$fn = trim($info[2]);
+			$section = trim($info[3]);
 
-				$this->studentStatusModel->insert($studentStatus);
-			}
-
-			$data = [
-				'fileName' => $fileName,
-				'path' => $filePath,
-				'content' => $file_data,
-				'valid_lines' => $validLines,
-				'newStudents' => $newStudents,
+			// insert new student
+			$studentData = [
+				'ID' => $id,
+				'FN' => $fn,
+				'LN' => $ln,
+				'PASSWORD' => $section,
 			];
 
-		  $response = [
-		    "message" => count($newStudents)." Student Enrolled",
-		    "data" => "Done",
-		  ];
-			$this->session->setFlashData("uploadStudentMsg", $response);
-		  return $this->setResponseFormat('json')->respond($response, 200);
+			$this->studentModel->insert($studentData);
+
+			// add student to X section
+			$sectionData = $this->sectionModel->where("NAME", $section)->first();
+			$studentSection = [
+				'STUDENT_ID' => $id,
+				'SECTION_ID' => $sectionData['ID'],
+				'SCHOOL_YEAR_ID' => $this->getCurrentSchoolYear()['ID'],
+				'CREATED_AT' => $this->getCurrentDateTime(),
+			];
+
+			$this->studentSectionModel->insert($studentSection);
+
+			// add student status
+			$studentStatus = [
+				'STUDENT_ID' => $id,
+				'SCHOOL_YEAR_ID' => $this->getCurrentSchoolYear()['ID'],
+				'DATE' => $this->getCurrentDateTime(),	
+			];
+
+			$this->studentStatusModel->insert($studentStatus);
+		}
+	}
+
+	private function validateStudent($student){
+		// check len
+		if(sizeof($student) != 4){
+			return false;
+		}
+		// check if index is not empty
+		$isEmpty = false;
+		for ($j=0; $j < sizeof($student); $j++) { 
+			if(empty($student[$j])){
+				$isEmpty = true;
+				break;
+			}
+		}
+
+		if($isEmpty){
+			return false;
+		}
+
+		// check studentid if exist
+		$studentId = trim($student[0]);
+		$isExist = $this->studentModel->find($studentId);
+
+		if(!empty($isExist)){
+			return false;
+		}
+
+		// check if section exist
+		$section = trim($student[3]);
+		$isExist = $this->sectionModel->where("NAME", $section)->first();
+
+		if(empty($isExist)){
+			return false;
+		}
+
+		return true;
 	}
 }

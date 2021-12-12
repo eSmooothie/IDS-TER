@@ -6,11 +6,15 @@
         <i class="fas fa-arrow-left"></i> Back</a>
     </div>
   </div>
+  <!-- Server message -->
+  <div id="server_message">
+  </div>
   <!-- Bulk -->
   <div class="border rounded p-3 bg-light bg-gradient mb-3">
     <p>Add BULK</p>
     <form class="" id="bulk" method="post">
-
+      <input class="form-control mb-3" type="file" accept=".csv" id="formFile" name="bulkEnroll" required>
+      <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>
 
@@ -22,3 +26,4 @@
     </form>
   </div>
 </div>
+<script src="<?php echo "$baseUrl/assets/js/adminStudent.js"; ?>" charset="utf-8"></script>

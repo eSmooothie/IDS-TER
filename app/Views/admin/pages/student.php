@@ -21,8 +21,8 @@
   <div class="">
     <button type="button" name="button" class="btn btn-primary" id="filterBtn">
       <i id="filterIcon" class="fas fa-chevron-right"></i> Filter</button>
-    <button type="button" name="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
-      <i class="fas fa-plus"></i> Add students</button>
+    <a href="<?php echo "$baseUrl/admin/student/add"; ?>" class="btn btn-primary">
+      <i class="fas fa-plus"></i> Add students</a>
   </div>
   <div class="">
     <input type="text" name="" value="" class="form-control searchStudent" placeholder="Search">

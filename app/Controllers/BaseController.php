@@ -105,6 +105,11 @@ class BaseController extends Controller
 
 	}
 
+	public function getCurrentSchoolYear(): array{
+		$sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+		return $sy;
+	}
+
 	public function mapPageParameters($sessionId, string $pageTitle, array $others = []){
 		$map = [
 			'sessionId' => $sessionId,
@@ -124,6 +129,29 @@ class BaseController extends Controller
 		return $this->time->now()->toDateTimeString();
 	}
 
+	public function uploadFile($file){
+		$uploadPath = WRITEPATH.'uploads\\docs\\';
+
+		// upload file
+	    if($file->isValid() && !$file->hasMoved()){
+			$fileName = $file->getRandomName(); // generate randomName
+			$file->move($uploadPath, $fileName); // move the tmp file to the folder
+		}else{
+			return null;
+		}
+
+		return $fileName;
+	}
+
+	public function readCSV(string $fileName){
+		$mode = "r";
+		$uploadPath = WRITEPATH.'uploads\\docs\\';
+	    $filePath = $uploadPath.$fileName;
+	    $file = fopen($filePath, $mode);
+	    $content = fread($file, filesize($filePath));
+
+		return $content;
+	}
 	/**
 	 * Compute the rating of teacher X
 	 *
@@ -207,7 +235,7 @@ class BaseController extends Controller
 		return ["RATING" => $rating, "OVERALL" => $overall];
 	}
 
-	function getOverallRating($studentOverall, $peerOverall, $supervisorOverall){
+	public function getOverallRating($studentOverall, $peerOverall, $supervisorOverall){
 		return ($studentOverall * .5) + ($peerOverall * .2) + ($supervisorOverall * .3);
 	}
 }
