@@ -105,11 +105,25 @@ class BaseController extends Controller
 
 	}
 
-	public function getCurrentSchoolYear(): array{
+	/**
+	 * return the latest school year
+	 * 
+	 * @return Array $sy
+	 */
+	public function getCurrentSchoolYear(): array {
 		$sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
 		return $sy;
 	}
 
+	/**
+	 * map the data to be passed in the view
+	 * 
+	 * @param Object $sessionId, 
+	 * @param String $pageTitle,
+	 * @param Array $others = [],
+	 * 
+	 * @return Array $map
+	 */
 	public function mapPageParameters($sessionId, string $pageTitle, array $others = []){
 		$map = [
 			'sessionId' => $sessionId,
@@ -125,10 +139,21 @@ class BaseController extends Controller
 		return $map;
 	}
 
+	/**
+	 * return the system current time.
+	 */
 	public function getCurrentDateTime(){
 		return $this->time->now()->toDateTimeString();
 	}
 
+	/**
+	 * Generate a random name and
+	 * upload the file into the writable folder.
+	 * 
+	 * @param Object $file
+	 * 
+	 * @return String filename
+	 */
 	public function uploadFile($file){
 		$uploadPath = WRITEPATH.'uploads\\docs\\';
 
@@ -143,6 +168,13 @@ class BaseController extends Controller
 		return $fileName;
 	}
 
+	/**
+	 * Read the csv file in the writable folder.
+	 * 
+	 * @param String $fileName
+	 * 
+	 * @return Object $content
+	 */
 	public function readCSV(string $fileName){
 		$mode = "r";
 		$uploadPath = WRITEPATH.'uploads\\docs\\';
@@ -152,14 +184,15 @@ class BaseController extends Controller
 
 		return $content;
 	}
+
 	/**
 	 * Compute the rating of teacher X
 	 *
-	 * @param $teacherId
-	 * @param $evalTypeId
-	 * @param $schoolyearId
+	 * @param Object $teacherId
+	 * @param Object $evalTypeId
+	 * @param Object $schoolyearId
 	 *
-	 * @return {"rating":[],"overall":}
+	 * @return Array {"rating":[],"overall":}
 	 */
 	public function getRating($teacherId, $evalTypeId, $schoolyearId){
 		// equation
@@ -235,7 +268,16 @@ class BaseController extends Controller
 		return ["RATING" => $rating, "OVERALL" => $overall];
 	}
 
-	public function getOverallRating($studentOverall, $peerOverall, $supervisorOverall){
+	/**
+	 * Compute the overall rating of the teacher
+	 * 
+	 * @param Float $studentOverall
+	 * @param Float $peerOverall
+	 * @param Float $supervisorOverall
+	 * 
+	 * @return Float overall rating
+	 */
+	public function getOverallRating(float $studentOverall,float $peerOverall,float $supervisorOverall){
 		return ($studentOverall * .5) + ($peerOverall * .2) + ($supervisorOverall * .3);
 	}
 }

@@ -143,6 +143,10 @@ class Student extends BaseController
 		echo view("admin/layout/footer");
 	}
 
+	public function addNewStudentIndividual(){
+		// process individual enrollment
+	}
+
 	public function addNewStudentCSV(){
 		header("Content-type:application/json");
 		$upload_file = $this->request->getFile("bulkEnroll");

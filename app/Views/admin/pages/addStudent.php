@@ -22,7 +22,41 @@
   <div class="border rounded p-3 bg-light bg-gradient mb-3">
     <p>Add Individual</p>
     <form class="" id="individual" method="post">
-
+      <!-- Student ID -->
+      <div class="mb-3 row">
+        <label for="inputStudentId" class="col-sm-2 col-form-label">Student ID</label>
+        <div class="col-sm-10">
+          <input name="id" type="text" class="form-control" id="inputStudentId" 
+          placeholder="ex. 2018-1234" pattern="/^\d{4}(-)(\d{1,}|\d{4})$/" required>
+        </div>
+      </div>
+      <!-- Student LN -->
+      <div class="mb-3 row">
+        <label for="inputStudentLn" class="col-sm-2 col-form-label">Last name</label>
+        <div class="col-sm-10">
+          <input name="ln" type="text" class="form-control" id="inputStudentLn" 
+          placeholder="" required>
+        </div>
+      </div>
+      <!-- Student FN -->
+      <div class="mb-3 row">
+        <label for="inputStudentFn" class="col-sm-2 col-form-label">First name</label>
+        <div class="col-sm-10">
+          <input name="fn" type="text" class="form-control" id="inputStudentFn" 
+          placeholder="" required>
+        </div>
+      </div>
+      <!-- Section -->
+      <div class="mb-3 row">
+        <label for="inputStudentFn" class="col-sm-2 col-form-label">Section</label>
+        <div class="col-sm-10">
+          <select name="section" class="form-select" aria-label="" required>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+        </div>
+      </div>
     </form>
   </div>
 </div>
