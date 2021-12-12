@@ -12,4 +12,4 @@ On other hand, teachers can also rate their colleagues. In addition, they can al
 ### 🤝 Open for collaborator 
 Just drop a message
   - 📫 [sherwin.sandoval0401@g.msuiit.edu.com](mailto:sherwin.sandoval0401@g.msuiit.edu.com)
-  - 🔗 [LinkedIn](https://www.linkedin.com/in/sherwin-sandoval-bab61819b/)
+  - 🔗 [Sherwin Sandoval](https://www.linkedin.com/in/sherwin-sandoval-bab61819b/)
