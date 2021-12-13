@@ -27,7 +27,7 @@
         <label for="inputStudentId" class="col-sm-2 col-form-label">Student ID</label>
         <div class="col-sm-10">
           <input name="id" type="text" class="form-control" id="inputStudentId" 
-          placeholder="ex. 2018-1234" pattern="/^\d{4}(-)(\d{1,}|\d{4})$/" required>
+          placeholder="ex. 2018-1234" pattern="^\d{4}(-)(\d{1,4})$" required>
         </div>
       </div>
       <!-- Student LN -->
@@ -51,11 +51,22 @@
         <label for="inputStudentFn" class="col-sm-2 col-form-label">Section</label>
         <div class="col-sm-10">
           <select name="section" class="form-select" aria-label="" required>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+            <option selected value="">Select Section</option>
+            <?php
+              foreach($sections as $key => $value){
+                $id = $value['ID'];
+                $gradeLv = $value['GRADE_LV'];
+                $name = $value['NAME'];
+                ?>
+                <option value="<?php echo "$name";?>"><?php echo $name?></option>
+                <?php
+              }
+            ?>
           </select>
         </div>
+      </div>
+      <div class="mb-3">
+        <input type="submit" value="Submit" class="btn btn-primary">
       </div>
     </form>
   </div>

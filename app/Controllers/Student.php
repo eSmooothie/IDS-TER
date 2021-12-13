@@ -125,10 +125,14 @@ class Student extends BaseController
 			return redirect()->to("/admin");
 		}
 
+		$sections = $this->sectionModel->where('IS_ACTIVE',1)
+		->orderBy("NAME","ASC")
+		->findAll();
+
 		$sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | STUDENT";
 		$args = [
-			// add something here.
+			'sections' => $sections,
 		];
 
 		$data = $this->mapPageParameters(
@@ -145,6 +149,26 @@ class Student extends BaseController
 
 	public function addNewStudentIndividual(){
 		// process individual enrollment
+		header("Content-type:application/json");
+		$studentId = $this->request->getPost("id");
+		$studentFN = $this->request->getPost("fn");
+		$studentLN = $this->request->getPost("ln");
+		$studentSection = $this->request->getPost("section");
+		$enroll = $studentId.", ". 
+				$studentLN.", ". 
+				$studentFN.", ".
+				$studentSection;
+		// validate
+		$isExist = $this->isIDExist($studentId);
+		if(!$isExist){
+			$this->enrollStudent([$enroll]);
+		}
+
+		$response = [
+			'message' => (!$isExist)? "SUCCESS":"FAILED",
+			'data' => $enroll,
+		];
+		return $this->setResponseFormat('json')->respond($response, 200);
 	}
 
 	public function addNewStudentCSV(){
@@ -163,7 +187,6 @@ class Student extends BaseController
 			return $this->setResponseFormat('json')->respond($response, 200);
 		}
 	    
-
 		// read file
 	    $content = $this->readCSV($fileName);
 	    $data = explode("\r\n",$content); // get each line	
@@ -218,7 +241,7 @@ class Student extends BaseController
 				'ID' => $id,
 				'FN' => $fn,
 				'LN' => $ln,
-				'PASSWORD' => $section,
+				'PASSWORD' => strtoupper($section),
 			];
 
 			$this->studentModel->insert($studentData);
@@ -243,6 +266,16 @@ class Student extends BaseController
 
 			$this->studentStatusModel->insert($studentStatus);
 		}
+	}
+
+	private function isIDExist($studentId){
+		$isExist = $this->studentModel->find($studentId);
+
+		if(empty($isExist)){
+			return false;
+		}
+
+		return true;
 	}
 
 	private function validateStudent($student){

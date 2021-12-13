@@ -52,7 +52,7 @@ $("#bulk").submit(function(e){
 
     var done=function(data){
         // window.location.reload();
-        console.log(data);
+        // console.log(data);
 
         const container = document.getElementById("server_message");
 
@@ -88,7 +88,6 @@ $("#bulk").submit(function(e){
         console.log(xhr);
     };
     
-    console.log(url);
     $.ajax({
         type:'post',
         url:url,
@@ -97,6 +96,40 @@ $("#bulk").submit(function(e){
         contentType:false,
         processData:false,
     }).done(done).fail(fail);
+});
+
+$("#individual").submit(function(e){
+    e.preventDefault();
+
+    let formData = $(this).serializeArray();
+
+    console.log(formData);
+
+    var path = "/admin/student/add/individual";
+    var done = function(data){
+        // window.location.reload();
+        console.log(data);
+
+        const container = document.getElementById("server_message");
+        const form = document.getElementById("individual");
+
+        let message = data['message'];
+        let studentData = data['data'];
+
+        const nod = document.createElement('div');
+        nod.classList.add("border", "rounded", "p-2", "bg-gradient","mb-1");
+    
+        if(message === "SUCCESS"){
+            nod.classList.add("bg-success","text-white");
+            nod.innerHTML = "(Success) " + studentData;
+        }else{
+            nod.classList.add("bg-danger","text-white");
+            nod.innerHTML = "(Failed) " + studentData;
+        }
+        container.prepend(nod);
+        form.reset();
+    };
+    sendPostRequest(path, formData, done);
 });
 
 $(document).ready(function(){

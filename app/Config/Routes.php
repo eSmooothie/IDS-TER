@@ -56,6 +56,7 @@ $routes->get("/admin/student/add","Student::addStudent");
 $routes->get("/admin/student/view/(:any)", "Student::viewStudent/$1");
 
 $routes->post("/admin/student/add/csv","Student::addNewStudentCSV");
+$routes->post("/admin/student/add/individual","Student::addNewStudentIndividual");
 // admin:teacher
 $routes->get("/admin/teacher","Teacher::index");
 $routes->get("/admin/teacher/view/(:segment)","Teacher::viewTeacher/$1");
