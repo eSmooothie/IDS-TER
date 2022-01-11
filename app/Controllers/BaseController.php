@@ -213,9 +213,24 @@ class BaseController extends Controller
 		->where("EVAL_TYPE_ID", $evalTypeId)
 		->findAll();
 
-		$evaluationQuestionaire = $this->evalQuestionModel->where("EVAL_TYPE_ID", $evalTypeId)
-		->orderBy("ID","ASC")
-		->findAll();
+		if(empty($evaluationInfo)){
+			$evaluationQuestionaire = $this->evalQuestionModel
+			->where("EVAL_TYPE_ID", $evalTypeId)
+			->where("IS_REMOVE", 0)
+			->orderBy("ID","ASC")
+			->findAll();
+
+		}else{
+			$sample = $evaluationInfo[0];
+
+			$evaluationQuestionaire = $this->ratingModel
+			->select("DISTINCT(EVAL_QUESTION_ID) AS ID")
+			->where("EVAL_INFO_ID", $sample['ID'])
+			->orderBy("ID","ASC")
+			->findAll();
+		}
+
+		
 
 		$rating = [];
 

@@ -1,60 +1,34 @@
 <!-- content -->
-<div class="col ps-3">
-<!-- content -->
-  <div class="bg-light bg-gradient rounded border p-3 mb-3">
-    <p class="fw-bold fs-5"><?php echo "{$department['NAME']}"; ?></p>
-    <div class="">
-      <a href="<?php echo "$baseUrl/admin/department/view/{$department['ID']}/edit"; ?>" class="me-2"><i class="fas fa-edit"></i> Edit</a>
-      <a href="<?php echo "$baseUrl/admin/department/view/{$department['ID']}/download"; ?>"><i class="fas fa-download"></i> Download</a>
+<div class="w-full p-2">
+  <!-- NAVIGATION -->
+  <div class="p-3 bg-gray-100 rounded-md mb-3">
+    <p class=" font-bold text-lg uppercase mb-3"><?php echo "{$department['NAME']}"; ?></p>
+    <div class="grid grid-cols-9">
+    <a class=" text-center text-blue-600 hover:text-blue-700" href="<?php echo "$baseUrl/admin/department/view/{$department['ID']}"; ?>"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
+      <a class=" text-center text-blue-600 hover:text-blue-700" href="<?php echo "$baseUrl/admin/department/view/{$department['ID']}/edit"; ?>"><i class="fas fa-edit"></i> Edit</a>
+      <a class=" text-center text-blue-600 hover:text-blue-700" href="<?php echo "$baseUrl/admin/department/view/{$department['ID']}/download"; ?>"><i class="fas fa-download"></i> Download</a>
+      <!-- TODO: ADD DEPT HISTORY -->
+      <a class=" text-center text-gray-600" href="<?php echo "#"; ?>"><i class="fa fa-history" aria-hidden="true"></i> History</a>
     </div>
   </div>
-  <div class="bg-light bg-gradient rounded border p-3 mb-3">
-    <div class="">
-      <select class="form-select" name="">
-        <?php
-        foreach ($school_year as $key => $value) {
-          $id = $value['ID'];
-          $sy = $value['SY'];
-          $sem = $value['SEMESTER'];
-
-          ?>
-          <option value="<?php echo "$id"; ?>"><?php echo "$sy:$sem"; ?></option>
-          <?php
-        }
-         ?>
-      </select>
-    </div>
+  <!-- LIST OF ALL CHAIRPERSONS -->
+  <div class="p-3 bg-gray-100 rounded-md mb-3">
+    <p class=" font-bold text-lg uppercase mb-3">Current Chairperson</p>
+    <p class=" uppercase <?php echo (empty($chairperson))? "text-gray-600" : "text-blue-600";?>">
+      <a href="<?php echo (empty($chairperson))? "":"$baseUrl/admin/teacher/view/{$chairperson['ID']}"; ?>">
+        <?php echo (empty($chairperson))? "NO CHAIRPERSON":"{$chairperson['LN']}, {$chairperson['FN']}"; ?>
+      </a>
+    </p>
   </div>
-  <div class="bg-light bg-gradient rounded border p-3 mb-3">
-    <p>Chairperson</p>
-    <table class="table table-striped table-hover border">
-      <thead>
-        <th scope="col" class="col-1">ID</th>
-        <th scope="col">Last Name</th>
-        <th scope="col">First Name</th>
-        <th scope="col" class="col-1">
-        </th>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row"><?php echo "{$chairperson['ID']}"; ?></th>
-          <td><?php echo "{$chairperson['LN']}"; ?></td>
-          <td><?php echo "{$chairperson['FN']}"; ?></td>
-          <td><a href="<?php echo "$baseUrl/admin/teacher/view/{$chairperson['ID']}"; ?>">View</a></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="bg-light bg-gradient rounded border p-3 mb-3">
-    <p>Teachers</p>
-    <table class="table table-striped table-hover border">
-      <thead>
-        <th scope="col" class="col-1">ID</th>
-        <th scope="col">Last Name</th>
-        <th scope="col">First Name</th>
-        <th scope="col"></th>
-        <th scope="col" class="col-1">
-        </th>
+  <!-- LIST OF TEACHERS IN THE DEPARTMENT -->
+  <div class="p-3 bg-gray-100 rounded-md mb-10">
+    <table class="mb-3 min-w-full">
+      <thead class="border bg-gray-300">
+        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">ID</th>
+        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Last Name</th>
+        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">First Name</th>
+        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">status</th>
+        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase">action</th>
       </thead>
       <tbody>
         <?php
@@ -64,12 +38,14 @@
           $ln = $value['LN'];
           $onLeave = $value['ON_LEAVE'];
           ?>
-          <tr class="<?php echo ($onLeave)? "text-danger":""; ?>">
-            <th scope="row"><?php echo "$id"; ?></th>
-            <td><?php echo "$ln"; ?></td>
-            <td><?php echo "$fn"; ?></td>
-            <td><?php echo ($onLeave)? "ON LEAVE":""; ?></td>
-            <td><a href="<?php echo "$baseUrl/admin/teacher/view/$id"; ?>">View</a></td>
+          <tr class="bg-white border-b hover:bg-gray-200 <?php echo ($onLeave)? "text-red-600":""; ?>">
+            <th scope="row" class="py-4 px-6 text-sm text-left font-medium text-gray-900 whitespace-nowrap"><?php echo "$id"; ?></th>
+            <td class="py-4 px-6 text-sm  whitespace-nowrap"><?php echo "$ln"; ?></td>
+            <td class="py-4 px-6 text-sm  whitespace-nowrap"><?php echo "$fn"; ?></td>
+            <td class="py-4 px-6 text-sm  whitespace-nowrap"><?php echo ($onLeave)? "ON LEAVE":""; ?></td>
+            <td class="py-4 px-6 text-sm  whitespace-nowrap text-blue-600 text-center">
+              <a href="<?php echo "$baseUrl/admin/teacher/view/$id"; ?>">View</a>
+            </td>
           </tr>
           <?php
         }

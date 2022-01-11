@@ -79,9 +79,9 @@ class Database extends Config
 	public $dev = [
 		'DSN'      => '',
 		'hostname' => 'localhost',
-		'username' => 'Sherwin',
-		'password' => 'sher@I.O_026',
-		'database' => 'ter-ids',
+		'username' => 'eSmooothiee',
+		'password' => '',
+		'database' => 'ter-ids-db',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
 		'pConnect' => false,

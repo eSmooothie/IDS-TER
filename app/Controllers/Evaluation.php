@@ -21,7 +21,7 @@ class Evaluation extends BaseController{
       $create = [
         'TEACHER_ID' => $id,
       ];
-      $this->evaluatorModel->insert($created);
+      $this->evaluatorModel->insert($create);
       $evaluator_id = $this->evaluatorModel->insertID;
     }else{
       $evaluator_id = $evaluator['ID'];
@@ -39,6 +39,7 @@ class Evaluation extends BaseController{
 
     $questions = $this->evalQuestionModel
     ->where("EVAL_TYPE_ID", 2)
+    ->where("IS_REMOVE", 0)
     ->orderBy("ID","ASC")
     ->findAll();
 
@@ -77,7 +78,7 @@ class Evaluation extends BaseController{
       $create = [
         'STUDENT_ID' => $id,
       ];
-      $this->evaluatorModel->insert($created);
+      $this->evaluatorModel->insert($create);
       $evaluator_id = $this->evaluatorModel->insertID;
     }else{
       $evaluator_id = $evaluator['ID'];
@@ -97,6 +98,7 @@ class Evaluation extends BaseController{
 
     $questions = $this->evalQuestionModel
     ->where("EVAL_TYPE_ID", 1)
+    ->where("IS_REMOVE", 0)
     ->orderBy("ID","ASC")
     ->findAll();
 
@@ -136,7 +138,7 @@ class Evaluation extends BaseController{
       $create = [
         'TEACHER_ID' => $id,
       ];
-      $this->evaluatorModel->insert($created);
+      $this->evaluatorModel->insert($create);
       $evaluator_id = $this->evaluatorModel->insertID;
     }else{
       $evaluator_id = $evaluator['ID'];
@@ -154,6 +156,7 @@ class Evaluation extends BaseController{
 
     $questions = $this->evalQuestionModel
     ->where("EVAL_TYPE_ID", 3)
+    ->where("IS_REMOVE", 0)
     ->orderBy("ID","ASC")
     ->findAll();
 

@@ -1,51 +1,53 @@
 <!-- content -->
-<div class="col ps-3">
-  <!-- content -->
-  <div class="border rounded p-3 bg-light bg-gradient mb-3">
-    <div class="mb-2">
-      <span class="fs-4"><?php echo "{$teacherData['LN']}, {$teacherData['FN']}"; ?></span>
+<div class="w-full p-2">
+  <!-- USER INFO -->
+  <div class="p-3 bg-gray-100 rounded-md mb-3">
+    <div class="mb-5">
+      <span class=" text-xl font-bold uppercase"><?php echo "{$teacherData['LN']}, {$teacherData['FN']}"; ?></span>
     </div>
-    <div class="" style="width:50vw;">
-      <span class="me-2 mb-2 text-white bg-primary border ps-2 pe-2 border-primary rounded-pill">
-          <small class="text-uppercase">
-            <?php echo "{$teacherData['ID']}"; ?>
-          </small>
+    <div class="grid grid-cols-3 text-center gap-x-4">
+      <span class="rounded-full border py-2 px-3 text-xs flex items-center justify-center border-gray-400 bg-gray-300">
+        <?php echo "{$teacherData['ID']}"; ?>
       </span>
-      <span class="mb-2 text-white bg-primary border ps-2 pe-2 border-primary rounded-pill me-2">
-        <a class="text-white text-decoration-none" href="<?php echo ($teacherData['DEPARTMENT'])? "$baseUrl/admin/department/view/{$teacherData['DEPARTMENT_ID']}":"#"; ?>">
-          <small class="text-uppercase">
+      <span class="uppercase rounded-full border py-2 px-3 text-xs flex items-center justify-center border-blue-400 bg-blue-300 hover:bg-blue-200 hover:cursor-pointer">
+        <a class="" href="<?php echo ($teacherData['DEPARTMENT'])? "$baseUrl/admin/department/view/{$teacherData['DEPARTMENT_ID']}":"#"; ?>">
             <?php echo ($teacherData['DEPARTMENT'])?"{$teacherData['DEPARTMENT']}":"No Department"; ?>
-             department
-          </small>
         </a>
       </span>
       <?php
       if($teacherData['ON_LEAVE']){
         ?>
-        <span class="mb-2 text-white bg-danger border ps-2 pe-2 border-danger rounded-pill">
-          <small class="text-uppercase">ON LEAVE</small>
+        <span class="rounded-full border py-2 px-3 text-xs flex items-center justify-center uppercase border-red-400 bg-red-300">
+          On leave
         </span>
         <?php
       }
        ?>
     </div>
   </div>
-  <div class="border rounded p-3 bg-light bg-gradient mb-3">
-    <div class="">
-      <a href="<?php echo "$baseUrl/admin/teacher/view/{$teacherData['ID']}/edit"; ?>" class="text-decoration-none"><i class="fas fa-cog"></i> Edit</a>
-      <a href="<?php echo "$baseUrl/admin/teacher/view/{$teacherData['ID']}/downloads"; ?>" class="ms-3 text-decoration-none"><i class="fas fa-download"></i> Download Evaluation PDF</a>
+  <!-- NAV BAR -->
+  <div class="p-3 bg-gray-100 rounded-md mb-3">
+    <div class="grid grid-cols-9">
+      <a href="<?php echo "$baseUrl/admin/teacher/view/{$teacherData['ID']}"; ?>" class=" text-blue-700">
+        <i class="fa fa-eye" aria-hidden="true"></i> View</a>
+      <a href="<?php echo "$baseUrl/admin/teacher/view/{$teacherData['ID']}/edit"; ?>" class=" text-blue-700">
+        <i class="fas fa-cog"></i> Edit</a>
+      <a href="<?php echo "$baseUrl/admin/teacher/view/{$teacherData['ID']}/downloads"; ?>" class=" text-blue-700">
+        <i class="fas fa-download"></i> Downloads</a>
     </div>
   </div>
-  <div class="border rounded p-3 bg-light bg-gradient mb-3">
-    <p>GRAPH</p>
+  <!-- GRAPH -->
+  <div class="p-3 bg-gray-100 rounded-md mb-3">
+    <p class="text-xs">GRAPH HERE (soon)</p>
   </div>
-  <div class="border rounded p-3 bg-light bg-gradient mb-3">
-    <p>Subject Handles</p>
-    <table class="table table-striped table-hover border">
-      <thead>
+  <!-- HANDLE SUBJECTS -->
+  <div class="p-3 bg-gray-100 rounded-md mb-3">
+    <p class="font-bold text-xl mb-2">Handled subjects</p>
+    <table class="mb-3 min-w-full">
+      <thead class="border bg-gray-300">
         <tr>
-          <th scope="col">School Year</th>
-          <th scope="col">Subject</th>
+          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">School Year (Semester)</th>
+          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Subject</th>
         </tr>
       </thead>
       <tbody>
@@ -55,32 +57,17 @@
             $year = $subject['YEAR'];
             $semester = $subject['SEMESTER'];
             ?>
-            <tr>
-              <td><?php
-              echo "$year : $semester";
-              ?></td>
-              <td>
-                <?php
-                echo "$subjectName";
-                ?>
+            <tr class="hover:bg-gray-200 text-left">
+              <td class="py-4 px-6 text-sm  whitespace-nowrap">
+                <?php echo "$year ($semester)";?>
+              </td>
+              <td class="py-4 px-6 text-sm  whitespace-nowrap">
+                <?php echo "$subjectName";?>
               </td>
             </tr>
             <?php
           }
             ?>
-      </tbody>
-    </table>
-  </div>
-  <div class="border rounded p-3 bg-light bg-gradient mb-3">
-    <p>Last 30 Days Activity</p>
-    <table class="table table-striped table-hover" style="font-size:small;">
-      <thead>
-        <tr class="text-center">
-          <th scope="col">Activity</th>
-          <th scope="col" class="">Date</th>
-        </tr>
-      </thead>
-      <tbody id="activities">
       </tbody>
     </table>
   </div>

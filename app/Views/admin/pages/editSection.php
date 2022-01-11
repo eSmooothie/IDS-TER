@@ -1,40 +1,55 @@
 <!-- content -->
-<div class="col-lg-10 ps-3">
-  <div class="mb-3">
-    <div class="border rounded p-3 bg-light bg-gradient">
+<div class="w-full p-2">
+  <!-- NAV -->
+  <div class="p-3 bg-gray-100 rounded-md mb-3">
+    <div class="">
       <div class="">
-        <p class="m-0 fs-3 fw-bold"><?php echo "${sectionData['NAME']}"; ?>
-          <small style="font-size:small;"><?php echo "(${schoolyear['SY']}:${schoolyear['SEMESTER']})"; ?>
-          </small>
-        </p>
-        <span class="d-flex align-items-center">
-          <span class="text-muted">Grade <?php echo $sectionData['GRADE_LV']; ?></span>
-          <span class="ms-2 me-2" style="font-size:5px;"><i class="fas fa-circle"></i></span>
-          <span class="text-success"><?php echo count($students); ?> Students</span>
-          <span class="ms-2 me-2" style="font-size:5px;"><i class="fas fa-circle"></i></span>
-          <span class=""><a href="<?php echo "$baseUrl/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}"; ?>"><span class="me-1"><i class="fas fa-arrow-circle-left"></i></span>Back</a></span>
-          <span class="ms-2 me-2" style="font-size:5px;"><i class="fas fa-circle"></i></span>
-          <span class=""><a href="#"><span class="me-1"><i class="fas fa-history"></i></span>History</a></span>
+        <p class=" text-2xl font-bold"><?php echo "${sectionData['NAME']}"; ?></p>
+        <p class=" text-xs"><?php echo "(${schoolyear['SY']}:${schoolyear['SEMESTER']})"; ?></p>
+        <span class=" grid grid-cols-8 gap-x-7 mt-5">
+          <span class=" bg-gray-400 rounded-full text-center py-1">Grade <?php echo $sectionData['GRADE_LV']; ?></span>
+          <span class=" bg-gray-400 rounded-full text-center py-1"><?php echo count($students); ?> Students</span>
+          <span class=" bg-gray-400 rounded-full text-center py-1"><?php echo count($sectionSubjects); ?> Subjects</span>
+          <span class=" bg-blue-400 rounded-full text-center py-1">
+            <a href="<?php echo "$baseUrl/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}"; ?>">
+              <i class="fa fa-eye mr-2" aria-hidden="true"></i></i>View
+            </a>
+          </span>
+          <span class=" bg-blue-400 rounded-full text-center py-1">
+            <a href="<?php echo "$baseUrl/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}/edit"; ?>">
+              <i class="fas fa-cog mr-2"></i>Option
+            </a>
+          </span>
+          <!-- TODO: ADD HISTORY PAGE -->
+          <span class=" bg-gray-400 rounded-full text-center py-1">
+            <a href="#">
+              <i class="fas fa-history mr-2"></i>History
+            </a>
+        </span>
         </span>
       </div>
     </div>
   </div>
-  <div class="contaier-fluid">
-    <div class="d-flex">
-      <button type="button" name="button" class="btn btn-primary me-3" onclick="changeEditContainer(1);">Enroll Students</button>
-      <button type="button" name="button" class="btn btn-primary me-3" onclick="changeEditContainer(2);">Edit Subjects</button>
-      <button type="button" name="button" class="btn btn-primary me-3" onclick="changeEditContainer(3);">Edit Section</button>
+  <!-- Options -->
+  <div class="p-3 bg-gray-100 rounded-md mb-3">
+    <div class="grid grid-cols-6 gap-5">
+      <button type="button" name="button" class="hover:bg-blue-400 pt-2 pb-2 
+        pl-9 pr-9 rounded-md bg-blue-300" onclick="changeEditContainer(1);">Students</button>
+      <button type="button" name="button" class=" hover:bg-blue-400 pt-2 pb-2 
+        pl-9 pr-9 rounded-md bg-blue-300" onclick="changeEditContainer(2);">Subjects</button>
+      <button type="button" name="button" class=" hover:bg-blue-400 pt-2 pb-2 
+        pl-9 pr-9 rounded-md bg-blue-300" onclick="changeEditContainer(3);">Profile</button>
     </div>
     <!-- Display Err and Succ Messages -->
-    <div class="">
-      <div class="d-none text-dark w-100 border border-success p-2 rounded" style="background-color:#a2ff83;">
-        <p class="m-0">Succ Message</p>
+    <div class="hidden">
+      <div class="border border-black bg-green-300 p-3 rounded-md">
+        <p class=""></p>
       </div>
-      <div class="d-none text-dark w-100 border border-danger p-2 rounded" style="background-color:#f67f7b;">
-        <p class="m-0">Error Message</p>
+      <div class="border border-black bg-red-300 p-3 rounded-md">
+        <p class=""></p>
       </div>
-      <div id="ServerErrContainer" class="d-none mb-3 w-100 border border-danger p-2 rounded" style="background-color:#f67f7b;">
-        <p class="m-0" id="ServerErrMessage"></p>
+      <div id="ServerErrContainer" class="border border-black bg-gray-300 p-3 rounded-md">
+        <p class="" id="ServerErrMessage"></p>
       </div>
     <?php
         if($enrolledStudent){
@@ -152,197 +167,222 @@
     } ?>
     </div>
     <!-- Enroll new  student -->
-    <div class="" id="enrollStudentContainer">
-      <p class="fs-3">Enroll students</p>
-      <div class="border rounded p-3 bg-light bg-gradient mb-3">
+    <div class=" pt-5 mb-10" id="enrollStudentContainer">
+      <p class=" text-lg font-bold mb-3 uppercase">Enroll students</p>
+      <div class="">
         <!-- Bulk -->
-        <form id="bulkEnroll" >
+        <form id="bulkEnroll" class="border border-gray-400 p-3 rounded-md mb-3">
           <div class="">
-            <label for="" class="form-label fs-5">Bulk</label>
+            <label for="" class="font-bold">Bulk</label>
           </div>
           <div class="mb-3">
-            <span class="fw-bold d-block">Note: CSV format comma separated</span>
-            <span class="fw-bold d-block">Example: 2018-000,LN,FN</span>
+            <span class="mb-4 block text-xs">Note: CSV format comma separated. Example: 2018-000,LN,FN</span>
             <input type="hidden" name="sectionId" value="<?php echo "{$sectionData['ID']}"; ?>">
-            <input name="csvFile" class="form-control form-control-sm mb-3" type="file" accept=".csv" style="width:20rem;">
-            <button type="submit" name="button" class="btn btn-primary">Submit</button>
+            <label class="block mb-4">
+              <span class="sr-only">Upload CSV file</span>
+              <input type="file" class="block w-1/5 text-sm rounded-full text-black bg-gray-300
+                file:mr-4 file:py-2 file:px-4 file:text-black
+                file:rounded-full file:border-0
+                file:text-sm file:font-semibold
+                file:bg-blue-300 file:cursor-pointer
+                hover:file:bg-blue-100" 
+                accept=".csv" id="formFile" name="csvFile"/>
+            </label>
+            <button type="submit" name="button" class="hover:bg-blue-400 rounded-full px-5 bg-blue-300 p-2">Submit</button>
           </div>
         </form>
-        <!-- Indi -->
-        <div class="">
-          <label for="" class="form-label fs-5">Individual</label>
-        </div>
-        <div id="individual" class="d-flex flex-row border rounded p-2">
-          <!-- List of student -->
-          <div class="col-6 me-1">
-            <div class="d-flex justify-content-between">
-              <p class="fs-5">List of Students</p>
-              <div class="">
-                <input type="text" name="" value="" class="form-control searchStudent" placeholder="Search">
+        <!-- INDIVIDUAL -->
+        <div class="border border-gray-300 p-3 rounded-md">
+          <div class="">
+            <label for="" class="font-bold">Individual</label>
+          </div>
+          <div id="individual" class="grid grid-cols-2 gap-4">
+            <!-- List of student -->
+            <div class="border border-gray-300 p-3 rounded-md">
+              <div class="flex justify-between items-center h-16">
+                <p class=""></p>
+                <div class="">
+                  <input type="text" name="" value="" class="form-control searchStudent" placeholder="Search">
+                </div>
+              </div>
+              <div class=" overflow-auto h-80">
+                <table class="mb-3 min-w-full">
+                  <thead class="border bg-gray-300">
+                    <tr>
+                      <th scope="col" class="py-3 px-4 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">ID</th>
+                      <th scope="col" class="py-3 px-4 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">LAST NAME</th>
+                      <th scope="col" class="py-3 px-4 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">FIRST NAME</th>
+                      <th scope="col" class="py-3 px-4 text-xs font-medium tracking-wider text-center text-gray-700 uppercase">ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbodyStudentsE" class="tbodyStudents">
+                    <?php
+                      foreach ($allStudents as $key => $student) {
+                        $id = $student['ID'];
+                        $ln = $student['LN'];
+                        $fn = $student['FN'];
+                        ?>
+                        <tr id="<?php echo "$id"; ?>" class="hover:bg-gray-200 text-left">
+                          <th scope="row" class="py-4 px-4 text-sm font-medium text-gray-900 whitespace-nowrap"><?php echo "$id"; ?></th>
+                          <td class="py-4 px-4 text-sm  whitespace-nowrap"><?php echo "$ln"; ?></td>
+                          <td class="py-4 px-4 text-sm  whitespace-nowrap"><?php echo "$fn"; ?></td>
+                          <td class="flex justify-center">
+                            <button onclick="add(this);" class="bg-blue-300 px-4 py-3 rounded-md studentDataE" type="button" name="button" value="<?php echo "$id"; ?>">
+                              <i class="fas fa-plus"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <?php
+                        }
+                    ?>
+                  </tbody>
+                </table>
               </div>
             </div>
-            <div class="overflow-auto"  style="max-height:50vh;">
-              <table class="table table-striped table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">LAST NAME</th>
-                    <th scope="col">FIRST NAME</th>
-                    <th scope="col" class="col-1"></th>
-                  </tr>
-                </thead>
-                <tbody id="tbodyStudentsE" class="tbodyStudents">
-                  <?php
-                    foreach ($allStudents as $key => $student) {
-                      $id = $student['ID'];
-                      $ln = $student['LN'];
-                      $fn = $student['FN'];
-                      ?>
-                      <tr id="<?php echo "$id"; ?>">
-                        <th scope="row"><?php echo "$id"; ?></th>
-                        <td><?php echo "$ln"; ?></td>
-                        <td><?php echo "$fn"; ?></td>
-                        <td>
-                          <button onclick="add(this);" class="btn btn-primary studentDataE" type="button" name="button" value="<?php echo "$id"; ?>">
-                            <i class="fas fa-plus"></i>
-                          </button>
-                        </td>
-                      </tr>
-                      <?php
-                      }
-                   ?>
-                </tbody>
-              </table>
+            <!-- To Enroll -->
+            <div class="border border-gray-300 p-3 rounded-md">
+              <p class=" font-bold h-16 flex items-center justify-center">To Enroll</p>
+              <div class="overflow-auto"  style="max-height:50vh;">
+                <table class="mb-3 min-w-full">
+                  <thead class="border bg-gray-300">
+                    <tr>
+                      <th scope="col" class="py-3 px-4 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">ID</th>
+                      <th scope="col" class="py-3 px-4 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">LAST NAME</th>
+                      <th scope="col" class="py-3 px-4 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">FIRST NAME</th>
+                      <th scope="col" class="py-3 px-4 text-xs font-medium tracking-wider text-center text-gray-700 uppercase">ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbodyEnrollee">
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-          <!-- To Enroll -->
-          <div class="col-6 ms-1">
-            <p class="fs-5">To Enroll</p>
-            <div class="overflow-auto"  style="max-height:50vh;">
-              <table class="table table-striped table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">LAST NAME</th>
-                    <th scope="col">FIRST NAME</th>
-                    <th scope="col" class="col-1"></th>
-                  </tr>
-                </thead>
-                <tbody id="tbodyEnrollee">
-                </tbody>
-              </table>
-            </div>
+          <div class="flex justify-end mt-5">
+            <button type="button" class="hover:bg-blue-400 rounded-full px-5 bg-blue-300 p-2" name="button" id="enroll" value="<?php echo "${sectionData['ID']}"; ?>">Enroll</button>
           </div>
-        </div>
-        <div class="d-flex justify-content-end">
-          <button type="button" class="btn btn-primary mt-3 mb-3" name="button" id="enroll" value="<?php echo "${sectionData['ID']}"; ?>">Enroll</button>
         </div>
       </div>
     </div>
 
     <!-- Edit subject -->
-    <div class="d-none" id="editSubjectContainer">
-      <p class="fs-3 mb-3">Edit subjects</p>
-      <div class="border rounded p-3 bg-light bg-gradient mb-3">
-        <div class="">
-          <div class="d-flex justify-content-start mb-3 align-items-end">
-            <p class="fs-5 mb-0">Current Subjects</p>
-          </div>
-          <table class="table table-striped mb-3 border rounded table-hover" style="max-height: 40vh;">
-            <thead>
-              <tr>
-                <th scope="col">Subject</th>
-                <th scope="col">Teacher</th>
-                <th scope="col" class="col-1"></th>
-              </tr>
-            </thead>
-            <tbody id="sectionSubjectTbody">
-              <?php
-              foreach ($sectionSubjects as $key => $data) {
-                $teacher = $data['teacherData'];
-                $subject = $data['subjectData'];
-                ?>
-                <tr id="<?php echo $teacher['ID']; ?>">
-                  <th scope="row"><?php echo $subject['DESCRIPTION']; ?></th>
-                  <td><?php echo $teacher['LN'].", ".$teacher['FN']; ?></td>
-                  <td>
-                    <button id="<?php echo $subject['ID']; ?>" type="button" name="button" class="btn btn-danger"
-                      onclick="removeSubject(this);">
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </td>
-                </tr>
-                <?php
-              }
-               ?>
-            </tbody>
-          </table>
-          <div class="d-flex justify-content-between">
-            <p class="mb-0 text-info" id="SystemMessageSubject"></p>
-            <button id="updateSectionSubject" type="button" name="button" class="btn btn-primary" value="<?php echo "${sectionData['ID']}"; ?>">Update</button>
-          </div>
-          <hr>
-          <div class="d-flex justify-content-between mb-3">
-            <p class="fs-5">Add Subjects</p>
-            <div class="">
-              <input type="text" name="" value="" class="form-control searchSubject" placeholder="Search" style="width:20vw;">
+    <div class="hidden pt-5 mb-10" id="editSubjectContainer">
+      <p class=" text-lg font-bold mb-3 uppercase">Setup subjects</p>
+      <div class="">
+        
+        <div class="grid grid-cols-2 gap-5">
+          <!-- CURRENT SUBJECT -->
+          <div class="">
+            <div class="text-center py-3 h-16">
+              <p class="font-bold">Current Subjects</p>
             </div>
-          </div>
-          <table class="table table-striped mb-3 border rounded table-hover" style="max-height:40vh;">
-            <thead>
-              <tr>
-                <th scope="col">Subject</th>
-                <th scope="col">Teacher</th>
-                <th scope="col" class="col-1"></th>
-              </tr>
-            </thead>
-            <tbody class="tbodySubjects" id="listOfSubjectsTbody">
-              <?php
-                foreach ($teachers as $key => $teacherData) {
-                  $teacherId = $teacherData['ID'];
-                  $teacherFn = $teacherData['FN'];
-                  $teacherLn = $teacherData['LN'];
-                  $subjects = $teacherData['subjects'];
-                  foreach ($subjects as $key => $subjectData) {
-                    $subjectId = $subjectData['ID'];
-                    $subjectName = $subjectData['DESCRIPTION'];
+            <div class=" overflow-auto max-h-80">
+              <table class="mb-3 min-w-full border border-gray-300">
+                <thead class="border bg-gray-300">
+                  <tr>
+                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Subject</th>
+                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Teacher</th>
+                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="sectionSubjectTbody">
+                  <?php
+                  foreach ($sectionSubjects as $key => $data) {
+                    $teacherID = $data['TEACHER_ID'];
+                    $teacherFN = $data['TEACHER_FN'];
+                    $teacherLN = $data['TEACHER_LN'];
+                    $subjectID = $data['SUBJECT_ID'];
+                    $subjectDESC = $data['SUBJECT_DESCRIPTION'];
                     ?>
-                    <tr id="<?php echo "$teacherId"; ?>" class="teacherRow">
-                      <th scope="row"><?php echo "$subjectName"; ?></th>
-                      <td><?php echo "$teacherLn, $teacherFn"; ?></td>
-                      <td>
-                        <button id="<?php echo "$subjectId"; ?>" type="button" name="button" class="btn btn-primary"
-                          onclick="appendSubject(this);">
-                          <i class="fas fa-plus"></i>
+                    <tr id="<?php echo $teacherID; ?>" class="bg-white border-b hover:bg-gray-200 ">
+                      <th scope="row" class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap"><?php echo $subjectDESC; ?></th>
+                      <td class="py-4 px-6 text-sm  whitespace-nowrap"><?php echo $teacherLN.", ".$teacherFN; ?></td>
+                      <td class="flex justify-center">
+                        <button id="<?php echo $subjectID; ?>" type="button" name="button" class="bg-red-300 px-4 py-3 rounded-md"
+                          onclick="removeSubject(this);">
+                          <i class="fas fa-times"></i>
                         </button>
                       </td>
                     </tr>
                     <?php
                   }
-                }
-               ?>
-            </tbody>
-          </table>
-
+                  ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- ADD SUBJECT -->
+          <div class="">
+            <div class="flex justify-between items-center h-16">
+              <p></p>
+              <p class="font-bold">Add Subjects</p>
+              <div class="">
+                <input type="text" name="" value="" class="searchSubject" placeholder="Search">
+              </div>
+            </div>
+            <div class=" overflow-auto max-h-80">
+              <table class="mb-3 min-w-full border border-gray-300">
+                <thead class="border bg-gray-300">
+                  <tr>
+                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Subject</th>
+                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Teacher</th>
+                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="tbodySubjects" id="listOfSubjectsTbody">
+                  <?php
+                    foreach ($teachers as $key => $teacherData) {
+                      $teacherId = $teacherData['TEACHER_ID'];
+                      $teacherFn = $teacherData['TEACHER_FN'];
+                      $teacherLn = $teacherData['TEACHER_LN'];
+                      $subjectID = $teacherData['SUBJECT_ID'];
+                      $subjectDESC = $teacherData['SUBJECT_DESCRIPTION'];
+                      ?>
+                      <tr id="<?php echo "$teacherId"; ?>" class="bg-white border-b hover:bg-gray-200 teacherRow">
+                          <th scope="row" class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap"><?php echo "$subjectDESC"; ?></th>
+                          <td class="py-4 px-6 text-sm  whitespace-nowrap"><?php echo "$teacherLn, $teacherFn"; ?></td>
+                          <td class="flex justify-center">
+                            <button id="<?php echo "$subjectID"; ?>" type="button" name="button" class="bg-blue-300 px-4 py-3 rounded-md"
+                              onclick="appendSubject(this);">
+                              <i class="fas fa-plus"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      <?php
+                    }
+                  ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
+        <!-- BUTTON -->
+        <div class="">
+            <p class="bg-teal-200 rounded-full px-2 py-1 w-1/5 text-center hidden mb-3" id="SystemMessageSubject"></p>
+            <button id="updateSectionSubject" 
+            type="button" name="button" class="hover:bg-blue-400 py-2 px-9 rounded-md bg-blue-300" 
+            value="<?php echo "${sectionData['ID']}"; ?>">Update</button>
+          </div>
       </div>
     </div>
 
     <!-- Edit Section -->
-    <div class="d-none" id="editSectionContainer">
-      <p class="fs-3 mb-3">Edit Section</p>
-      <div class="border rounded p-3 bg-light bg-gradient mb-3">
-        <form class="" id="editSectionForm">
+    <div class="hidden pt-5 mb-10" id="editSectionContainer">
+      <p class=" text-lg font-bold mb-3 uppercase">Edit profile</p>
+      <!-- MODIFY PROFILE -->
+      <div class="border border-gray-400 rounded-md p-3 w-1/2 mb-3">
+        <form class="w-full" id="editSectionForm">
           <input type="hidden" name="sectionId" value="<?php echo $sectionData['ID']; ?>">
           <!-- name -->
-          <div class="mb-3">
-            <label for="sectionName" class="form-label">Change Name</label>
-            <input name="sectionName" type="text" class="form-control" id="sectionName" placeholder="<?php echo $sectionData['NAME']; ?>">
+          <div class="grid grid-cols-3 mb-3">
+            <label for="sectionName" class="">Change Name</label>
+            <input name="sectionName" type="text" class="col-span-2" 
+            id="sectionName" placeholder="<?php echo $sectionData['NAME']; ?>">
           </div>
           <!-- grade lv -->
-          <div class="mb-3">
-            <label for="gradeLevel" class="form-label">Change Grade Level</label>
-            <select class="form-select" aria-label="Grade Level" name="gradeLevel">
+          <div class="grid grid-cols-3 mb-3">
+            <label for="gradeLevel" class="">Change Grade Level</label>
+            <select class="col-span-2 min-w-full" aria-label="Grade Level" name="gradeLevel">
               <option value="" selected>Select Grade Level</option>
               <option value="7">7</option>
               <option value="8">8</option>
@@ -353,13 +393,32 @@
             </select>
           </div>
           <!-- has rni -->
-          <div class="form-check form-switch mb-3">
-            <label class="form-check-label" for="hasRNI">Has research and immersion</label>
-            <input name="hasRNI" class="form-check-input" type="checkbox" id="hasRNI" <?php echo ($sectionData['HAS_RNI'])? "checked":"";  ?>>
+          <div class="grid grid-cols-3 mb-3">
+            <label class="" for="hasRNI">Has research and immersion</label>
+            <input name="hasRNI" class="col-span-2" type="checkbox" id="hasRNI" <?php echo ($sectionData['HAS_RNI'])? "checked":"";  ?>>
           </div>
-          <div class="d-flex justify-content-between">
-            <button type="button" name="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#removeSection">Remove</button>
-            <button type="submit" name="button" class="btn btn-primary">Update</button>
+          <div class="mt-2">
+            <button type="submit" name="button" class="hover:bg-blue-400 pt-2 pb-2 
+            pl-9 pr-9 rounded-md bg-blue-300">Update</button>
+          </div>
+        </form>
+      </div>
+      <!-- DELETE SECTION -->
+      <div class="border border-gray-400 rounded-md p-3 w-1/2">
+        <p class=" font-bold">Delete Section</p>
+        <p class="text-red-500 mb-3"><span class=" font-bold text-black">Warning: </span> This will deactivate the section which no longer can be seen or interact with.</p>
+        <p>Please type <span class="text-red-500 font-bold text-lg"><?php echo $sectionData['NAME']; ?></span> to confirm</p>
+        <form  class="" id="removeSectionForm">
+          <div class="mb-4">
+            <input type="hidden" name="sectionID" value="<?php echo $sectionData['ID']; ?>">
+            <input required name="removeSectionName" type="text" class="rounded-md w-full invalid:border-red-500" id="removeSectionName" aria-describedby="sectionName">
+            <span id="feedback" class="text-xs text-red-600 hidden">
+              Does not match.
+            </span>
+          </div>
+          <div class="">
+            <button type="submit" class="hover:bg-red-400 pt-2 pb-2 
+            pl-9 pr-9 rounded-md bg-red-300">Delete</button>
           </div>
         </form>
       </div>
@@ -367,35 +426,4 @@
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="removeSection" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-<div class="modal-dialog">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <form class="" id="removeSectionForm">
-      <div class="modal-body">
-        <p><span class="fw-bold">Note: </span> This will inactive the section which no longer be seen or interact with.</p>
-        <p>Please type <span class="fw-bold text-danger"><?php echo $sectionData['NAME']; ?></span> to confirm</p>
-        <div class="">
-          <input type="hidden" name="sectionID" value="<?php echo $sectionData['ID']; ?>">
-          <input name="removeSectionName" type="text" class="form-control" id="removeSectionName" aria-describedby="sectionName">
-          <div class="invalid-feedback">
-            Does not match.
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-danger">Delete</button>
-      </div>
-    </form>
-
-  </div>
-</div>
-</div>
-<div class="" style="height:10vh;">
-</div>
 <script src="<?php echo "$baseUrl/assets/js/adminSection.js"; ?>" charset="utf-8"></script>

@@ -6,6 +6,6 @@ class EvalQuestion extends Model{
   protected $table = 'eval_question';
 
   protected $primaryKey = 'ID';
-  protected $allowedFields = ['QUESTION','EVAL_TYPE_ID'];
+  protected $allowedFields = ['QUESTION','EVAL_TYPE_ID','IS_REMOVE'];
 }
  ?>

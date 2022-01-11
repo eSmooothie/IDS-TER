@@ -25,8 +25,8 @@ $(document).ready(function(){
 
   $(".resetAddTeacherForm").on('click',function(){
     $("#addNewTeacher")[0].reset();
-    if(!$("#errContainer").hasClass("d-none")){
-      $("#errContainer").addClass("d-none");
+    if(!$("#errContainer").hasClass("hidden")){
+      $("#errContainer").addClass("hidden");
     }
   });
 
@@ -41,11 +41,11 @@ $(document).ready(function(){
       if(statusCode == 202){
         var response = xhr.responseJSON;
         var message = response['message'];
-        $("#errContainer").removeClass("d-none");
+        $("#errContainer").removeClass("hidden");
         $("#errMessage").html(message);
       }else{
-        if(!$("#errContainer").hasClass("d-none")){
-          $("#errContainer").addClass("d-none");
+        if(!$("#errContainer").hasClass("hidden")){
+          $("#errContainer").addClass("hidden");
         }
         window.location.reload();
       }

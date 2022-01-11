@@ -1,51 +1,68 @@
-<div class="container-fluid d-flex flex-row">
-  <div class="col-xl-2 col-lg-3 col-md-4"></div>
-  <!-- working area -->
-  <div class="col pt-2">
-    <!-- working area -->
-    <div class="bg-light bg-gradient border rounded p-3 mb-3">
-      <div class="mb-3" style="font-size:x-small;">
-        <p class="mb-0">School Year: <?php echo "{$sy['SY']}:{$sy['SEMESTER']}"; ?></p>
-        <p class="mb-0">Section: <?php echo "{$mySection['NAME']}"; ?></p>
-        <p class="mb-0">Has Research and Immersion: <?php echo ($mySection['HAS_RNI'])? "Yes":"No"; ?></p>
-        <p class="mb-0">Total Evaluated: <?php echo "$ttlEvaluated"; ?></p>
-        <p class="mb-0">Status: <?php echo ($isCleared)? "True":"False"; ?></p>
-        <p class="mb-0">Mode: Student</p>
-      </div>
-    </div>
-    <div class="bg-light bg-gradient border rounded p-3 mb-3">
-      <table class="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th scope="col" class="col-2">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Subject</th>
-            <th scope="" class="col-1">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php
-            foreach ($subjects as $key => $value) {
-              $isDone = $value['isDone'];
-              $subject = $value['subject'];
-              $teacher = $value['teacher'];
+<div class="w-full p-2">
+  <!-- INFO -->
+  <div class="p-3 bg-gray-100 rounded-md mb-3">
+    <p class=" text-lg font-bold">System Information</p>
+    <div class=" grid grid-cols-4 text-xs uppercase">
+      <p class="">School Year: </p>
+      <p class=" col-span-3"><?php echo "{$sy['SY']}"; ?></p>
 
-              $path = ($isDone)?"#":"$baseUrl/evaluate/student/{$teacher['ID']}/{$subject['ID']}";
-              ?>
-              <tr>
-                <th scope="row"><?php echo "{$teacher['ID']}"; ?></th>
-                <td><?php echo "{$teacher['LN']}, {$teacher['FN']}"; ?></td>
-                <td><?php echo "{$subject['DESCRIPTION']}"; ?></td>
-                <td><a <?php echo ($isDone)?"":"target=\"_blank\""; ?> href="<?php echo "$path"; ?>" class="btn <?php echo ($isDone)?"btn-success":"btn-primary"; ?>"><?php echo ($isDone)?"Done":"Evaluate"; ?></a></td>
-              </tr>
-              <?php
-            }
-           ?>
-        </tbody>
-      </table>
+      <p class="">Semester: </p>
+      <p class=" col-span-3"><?php echo "{$sy['SEMESTER']}"; ?></p>
+
+      <p class="">Section: </p>
+      <p class=" col-span-3"><?php echo "{$mySection['NAME']}"; ?></p>
+
+      <p class="">Has Research and Immersion: </p>
+      <p class=" col-span-3"><?php echo ($mySection['HAS_RNI'])? "Yes":"No"; ?></p>
+
+      <p class="">Total Evaluated: </p>
+      <p class=" col-span-3"><?php echo "$ttlEvaluated"; ?></p>
+
+      <p class="">Status: </p>
+      <p class=" col-span-3"><?php echo ($isCleared)? "Cleared":"Not Cleared"; ?></p>
+
+      <p class="">Mode: </p>
+      <p class=" col-span-3">student</p>
     </div>
   </div>
+  <!-- EVALUATION -->
+  <div class="p-3 bg-gray-100 rounded-md mb-3">
+    <table class="mb-3 min-w-full">
+      <thead class="border bg-gray-300">
+        <tr>
+          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">ID</th>
+          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Name</th>
+          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Subject</th>
+          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+          foreach ($subjects as $key => $value) {
+            $isDone = $value['isDone'];
+            $subject = $value['subject'];
+            $teacher = $value['teacher'];
+
+            $path = ($isDone)?"#":"$baseUrl/evaluate/student/{$teacher['ID']}/{$subject['ID']}";
+            ?>
+            <tr>
+              <th scope="row" class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap"><?php echo "{$teacher['ID']}"; ?></th>
+              <td class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap"><?php echo "{$teacher['LN']}, {$teacher['FN']}"; ?></td>
+              <td class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap"><?php echo "{$subject['DESCRIPTION']}"; ?></td>
+              <td class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap text-center">
+                <a <?php echo ($isDone)?"":"target=\"_blank\""; ?> href="<?php echo "$path"; ?>" 
+                class="<?php echo ($isDone)?"text-green-500":"text-blue-600"; ?>"><?php echo ($isDone)?"Done":"Evaluate"; ?></a></td>
+            </tr>
+            <?php
+          }
+          ?>
+      </tbody>
+    </table>
+  </div>
 </div>
+
+
+
 <script>
 // refresh the page when active
   document.addEventListener("visibilitychange", function() {

@@ -14,29 +14,35 @@ namespace App\Controllers;
 class Section extends BaseController{
 
   public function index(){
-    if($this->session->has("adminID")){
-      $gradeLevel = [];
-
-      for ($i=7; $i <= 12 ; $i++) {
-        $sections = $this->sectionModel->where("GRADE_LV", $i)
-                                      ->where("IS_ACTIVE", "1")
-                                      ->findAll();
-        $gradeLevel[$i] = $sections;
-      }
-
-      $data = [
-        'id' => $this->session->get("adminID"),
-        'pageTitle' => "ADMIN | SECTION",
-        'baseUrl' => base_url(),
-        'gradeLevel' => $gradeLevel,
-      ];
-      echo view("admin/layout/header", $data);
-      echo view("admin/pages/nav",$data);
-      echo view("admin/pages/section", $data);
-      echo view("admin/layout/footer");
-    }else{
+    if(!$this->session->has("adminID")){
       return redirect()->to("/admin");
     }
+
+    $gradeLevel = [];
+
+    for ($i=7; $i <= 12 ; $i++) {
+      $sections = $this->sectionModel->where("GRADE_LV", $i)
+                                    ->where("IS_ACTIVE", 1)
+                                    ->findAll();
+      $gradeLevel[$i] = $sections;
+    }
+    
+    $sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | STUDENT";
+		$args = [
+      'gradeLevel' => $gradeLevel,
+		];
+
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
+
+    echo view("admin/layout/header", $data);
+    echo view("admin/pages/nav",$data);
+    echo view("admin/pages/section", $data);
+    echo view("admin/layout/footer");
   }
 
   public function viewSection($gradeLv = false, $sectionId = false){
@@ -50,74 +56,49 @@ class Section extends BaseController{
     $sy = $this->schoolyearModel->orderBy("ID","DESC")->first(); // get current school year
     $sectionData = $this->sectionModel->where("ID", $sectionId)->first();
 
-    $sectionSubject = $this->sectionSubjectModel->where("SECTION_ID", $sectionId)
-                                          ->where("SCHOOL_YEAR_ID", $sy['ID'])
-                                          ->findAll();
+    $sectionSubject = $this->sectionSubjectModel
+    ->select("
+      `subject`.`ID` AS `SUBJECT_ID`,
+      `subject`.`DESCRIPTION` AS `SUBJECT_DESC`,
+      `teacher`.`ID` AS `TEACHER_ID`,
+      `teacher`.`LN` AS `TEACHER_LN`,
+      `teacher`.`FN` AS `TEACHER_FN`
+    ")
+    ->join("`subject`","`subject`.`ID` = `sec_subj_lst`.`SUBJECT_ID`","INNER")
+    ->join("`teacher`","`teacher`.`ID` = `sec_subj_lst`.`TEACHER_ID`","INNER")
+    ->where("SECTION_ID", $sectionId)
+    ->where("SCHOOL_YEAR_ID", $sy['ID'])
+    ->findAll();
 
-    $studentsInSec = $this->studentSectionModel->where("SECTION_ID", $sectionId)
-                                          ->where("SCHOOL_YEAR_ID",$sy['ID'])
-                                          ->findAll();
+    $studentsInSec = $this->studentSectionModel
+    ->select("
+      `student`.`ID` AS `STUDENT_ID`,
+      `student`.`LN` AS `STUDENT_LN`,
+      `student`.`FN` AS `STUDENT_FN`,
+      `student`.`IS_ACTIVE` AS `IS_ACTIVE`,
+      `stud_status`.`STATUS` AS `STATUS`
+    ")
+    ->join("`student`","`student`.`ID` = `student_section`.`STUDENT_ID`","INNER")
+    ->join("`stud_status`","`student`.`ID` = `stud_status`.`STUDENT_ID`","INNER")
+    ->where("`student_section`.`SECTION_ID`", $sectionId)
+    ->where("`student_section`.`SCHOOL_YEAR_ID`", $sy['ID'])
+    ->where("`stud_status`.`SCHOOL_YEAR_ID`", $sy['ID'])
+    ->findAll();
 
-    $subjects = [];
-    foreach ($sectionSubject as $key => $row) {
-      $subjectId = $row['SUBJECT_ID'];
-      $teacherId = $row['TEACHER_ID'];
-      $subjectData = $this->subjectModel->find($subjectId);
-      $teacherData = $this->teacherModel->find($teacherId);
-
-      $secSub = [
-        'subject' => $subjectData,
-        'teacher' => $teacherData,
-      ];
-
-      array_push($subjects, $secSub);
-    }
-    $students = [];
-    foreach ($studentsInSec as $key => $student) {
-      $studentID = $student['STUDENT_ID'];
-
-      // check if there is a record for current school year
-      $studStatus = $this->studentStatusModel->where("STUDENT_ID", $studentID)
-                                            ->where("SCHOOL_YEAR_ID", $sy['ID'])
-                                            ->first();
-      if(empty($studStatus)){
-        // if none, create one
-        $updateStatus = [
-          'SCHOOL_YEAR_ID' => $sy['ID'],
-          'STUDENT_ID' => $studentID,
-          'DATE' => $this->getCurrentDateTime(),
-        ];
-        $this->studentStatusModel->insert($updateStatus);
-      }
-      $studentData = $this->studentModel->select(
-                                          "`student`.`ID` AS `ID`,
-                                           `student`.`FN` AS `FN`,
-                                           `student`.`LN` AS `LN`,
-                                           `student`.`IS_ACTIVE` AS `IS_ACTIVE`,
-                                           `stud_status`.`STATUS` AS `STATUS`,
-                                           `stud_status`.`SCHOOL_YEAR_ID` AS `SCHOOL_YEAR_ID`,
-                                           `stud_status`.`DATE` AS `DATE`
-                                          "
-                                        )
-                                        ->join("`stud_status`",
-                                               "`stud_status`.`STUDENT_ID` = `student`.`ID`",
-                                               "LEFT")
-                                        // ->where("`stud_status`.`SCHOOL_YEAR_ID`",$sy['ID'])
-                                        ->orderBy("`stud_status`.`STATUS`","DESC")
-                                        ->find($studentID);
-
-      array_push($students, $studentData);
-    }
-
-    $data = [
-      'id' => $this->session->get("adminID"),
-      'pageTitle' => "ADMIN | SECTION",
-      'baseUrl' => base_url(),
+    $sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | STUDENT";
+		$args = [
       'sectionData' => $sectionData,
-      'subjects' => $subjects,
-      'students' => $students,
+      'subjects' => $sectionSubject,
+      'students' => $studentsInSec,
       'schoolyear' => $sy,
-    ];
+		];
+
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
 
     echo view("admin/layout/header", $data);
     echo view("admin/pages/nav",$data);
@@ -133,69 +114,63 @@ class Section extends BaseController{
     if(!$gradeLv || !$sectionId){
       return redirect()->to("/admin/section");
     }
+    
     $sy = $this->schoolyearModel->orderBy("ID","DESC")->first(); // get current school year
     $sectionData = $this->sectionModel->where("ID", $sectionId)->first();
-    $studentsInSec = $this->studentSectionModel->where("SECTION_ID", $sectionId)
-                                          ->where("SCHOOL_YEAR_ID",$sy['ID'])
-                                          ->findAll();
+    
+    $studentsInSec = $this->studentSectionModel
+    ->where("SECTION_ID", $sectionId)
+    ->where("SCHOOL_YEAR_ID", $sy['ID'])
+    ->findAll();
+
     $allStudents = $this->studentModel->findAll();
     // get teacher and its subject teaches
-    $allTeachers = [];
-    $teachers = $this->teacherModel->findAll();
-    foreach ($teachers as $key => $value) {
-      $id = $value['ID'];
-      $fn = $value['FN'];
-      $ln = $value['LN'];
-      $subjects = $this->teacherSubjectModel->where("TEACHER_ID", $id)
-                                          ->findAll();
-      $subjectTeaches = [];
-      foreach ($subjects as $key => $val) {
-        $subjectId = $val['SUBJECT_ID'];
-        $subjectData = $this->subjectModel->find($subjectId);
+    $allTeachers = $this->teacherSubjectModel
+    ->select("
+      `tchr_subj_lst`.`ID` AS `TCHR_SUBJ_LIST`,
+      `teacher`.`ID` AS `TEACHER_ID`,
+      `teacher`.`LN` AS `TEACHER_LN`,
+      `teacher`.`FN` AS `TEACHER_FN`,
+      `subject`.`ID` AS `SUBJECT_ID`,
+      `subject`.`DESCRIPTION` AS `SUBJECT_DESCRIPTION`
+    ")
+    ->join("`teacher`","`teacher`.`ID` = `tchr_subj_lst`.`TEACHER_ID`","INNER")
+    ->join("`subject`","`subject`.`ID` = `tchr_subj_lst`.`SUBJECT_ID`","INNER")
+    ->where("`tchr_subj_lst`.`SCHOOL_YEAR_ID`", $sy['ID'])
+    ->findAll();
 
-        array_push($subjectTeaches, $subjectData);
-      }
-      $teacherData = [
-        'ID' => $id,
-        'FN' => $fn,
-        'LN' => $ln,
-        'subjects' => $subjectTeaches,
-      ];
+    $sectionSubjects = $this->sectionSubjectModel
+    ->select("
+      `sec_subj_lst`.`ID` AS `ID`,
+      `teacher`.`ID` AS `TEACHER_ID`,
+      `teacher`.`LN` AS `TEACHER_LN`,
+      `teacher`.`FN` AS `TEACHER_FN`,
+      `subject`.`ID` AS `SUBJECT_ID`,
+      `subject`.`DESCRIPTION` AS `SUBJECT_DESCRIPTION`
+    ")
+    ->join("`teacher`","`teacher`.`ID` = `sec_subj_lst`.`TEACHER_ID`","INNER")
+    ->join("`subject`","`subject`.`ID` = `sec_subj_lst`.`SUBJECT_ID`","INNER")
+    ->where("SECTION_ID", $sectionId)
+    ->where("SCHOOL_YEAR_ID", $sy['ID'])
+    ->findAll();
 
-      array_push($allTeachers, $teacherData);
-    }
-
-
-    $sectionSubjects = [];
-    $sectionSubjectsTeacher = $this->sectionSubjectModel->where("SECTION_ID", $sectionId)
-                                                      ->where("SCHOOL_YEAR_ID", $sy['ID'])
-                                                      ->findAll();
-    foreach ($sectionSubjectsTeacher as $key => $rawData) {
-      $subjectId = $rawData['SUBJECT_ID'];
-      $teacherId = $rawData['TEACHER_ID'];
-
-      $subjectData = $this->subjectModel->find($subjectId);
-      $teacherData = $this->teacherModel->find($teacherId);
-
-      $sectionSubject = [
-        'teacherData' => $teacherData,
-        'subjectData' => $subjectData,
-      ];
-
-      array_push($sectionSubjects, $sectionSubject);
-    }
-
-    $data = [
-      'id' => $this->session->get("adminID"),
-      'pageTitle' => "ADMIN | SECTION",
-      'baseUrl' => base_url(),
+    $sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | STUDENT";
+		$args = [
       'sectionData' => $sectionData,
       'schoolyear' => $sy,
       'students' => $studentsInSec,
       'allStudents' => $allStudents,
       'teachers' => $allTeachers,
       'sectionSubjects' => $sectionSubjects,
-    ];
+
+		];
+
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
 
     // status
     if(!empty($this->session->getFlashData('enroll'))){

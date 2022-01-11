@@ -1,54 +1,49 @@
 <!-- content -->
-<div class="col ps-3">
-  <!-- content -->
-  <div class="border rounded p-3 bg-light bg-gradient mb-3">
-    <div class="mb-2">
-      <span class="fs-4"><?php echo "{$teacherData['LN']}, {$teacherData['FN']}"; ?></span>
+<div class="w-full p-2">
+  <!-- USER INFO -->
+  <div class="p-3 bg-gray-100 rounded-md mb-3">
+    <div class="mb-5">
+      <span class=" text-xl font-bold uppercase"><?php echo "{$teacherData['LN']}, {$teacherData['FN']}"; ?></span>
     </div>
-    <div class="" style="width:50vw;">
-      <span class="me-2 mb-2 text-white bg-primary border ps-2 pe-2 border-primary rounded-pill">
-          <small class="text-uppercase">
-            <?php echo "{$teacherData['ID']}"; ?>
-          </small>
+    <div class="grid grid-cols-3 text-center gap-x-4">
+      <span class="rounded-full border py-2 px-3 text-xs flex items-center justify-center border-gray-400 bg-gray-300">
+        <?php echo "{$teacherData['ID']}"; ?>
       </span>
-      <span class="mb-2 text-white bg-primary border ps-2 pe-2 border-primary rounded-pill me-2">
-        <a class="text-white text-decoration-none" href="<?php echo "$baseUrl/admin/department/view/{$teacherData['DEPARTMENT_ID']}"; ?>">
-          <small class="text-uppercase">
-            <?php echo ($teacherData['DEPARTMENT'])?"{$teacherData['DEPARTMENT']}":"No Department"; ?>
-             department
-          </small>
+      <span class="uppercase rounded-full border py-2 px-3 text-xs flex items-center justify-center border-blue-400 bg-blue-300 hover:bg-blue-200 hover:cursor-pointer">
+        <a class="" href="<?php echo "$baseUrl/admin/department/view/{$teacherData['DEPARTMENT_ID']}"; ?>">
+          <?php echo ($teacherData['DEPARTMENT'])?"{$teacherData['DEPARTMENT']}":"No Department"; ?>
         </a>
       </span>
       <?php
       if($teacherData['ON_LEAVE']){
         ?>
-        <span class="mb-2 text-white bg-danger border ps-2 pe-2 border-danger rounded-pill">
-          <small class="text-uppercase">ON LEAVE</small>
+        <span class="rounded-full border py-2 px-3 text-xs flex items-center justify-center uppercase border-red-400 bg-red-300">
+          ON LEAVE
         </span>
         <?php
       }
-       ?>
+      ?>
     </div>
   </div>
-  <div class="border rounded p-3 bg-light bg-gradient mb-3">
-    <div class="">
-      <a href="<?php echo "$baseUrl/admin/teacher/view/{$teacherData['ID']}/edit"; ?>" class="text-decoration-none">
-        <i class="fas fa-cog"></i>
-        Edit
-      </a>
-      <a href="<?php echo "$baseUrl/admin/teacher/view/{$teacherData['ID']}"; ?>" class="ms-3 text-decoration-none">
-        <i class="fas fa-arrow-circle-left"></i>
-        Back
-      </a>
+  <!-- NAV BAR -->
+  <div class="p-3 bg-gray-100 rounded-md mb-3">
+    <div class="grid grid-cols-9">
+    <a href="<?php echo "$baseUrl/admin/teacher/view/{$teacherData['ID']}"; ?>" class=" text-blue-700">
+        <i class="fa fa-eye" aria-hidden="true"></i> View</a>
+      <a href="<?php echo "$baseUrl/admin/teacher/view/{$teacherData['ID']}/edit"; ?>" class=" text-blue-700">
+        <i class="fas fa-cog"></i> Edit</a>
+      <a href="<?php echo "$baseUrl/admin/teacher/view/{$teacherData['ID']}/downloads"; ?>" class=" text-blue-700">
+        <i class="fas fa-download"></i> Downloads</a>
     </div>
   </div>
-  <div class="border rounded p-3 bg-light bg-gradient mb-3">
-    <p>Downloads</p>
-    <table class="border table table-striped table-hover">
-      <thead>
+  <!-- DOWNLOAD -->
+  <div class="p-3 bg-gray-100 rounded-md mb-10">
+    <p class="font-bold text-xl mb-4">Downloads</p>
+    <table class="mb-3 min-w-full"">
+      <thead class="border bg-gray-300">
         <tr>
-          <th scope="col">School Year</th>
-          <th scope="col" class="col-1">Link</th>
+          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">School Year</th>
+          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Link</th>
         </tr>
       </thead>
       <tbody>
@@ -60,9 +55,12 @@
 
             $pdfName = "{$sy}_{$sem}_{$teacherData['ID']}_{$teacherData['LN']}";
             ?>
-            <tr>
-              <th scope="row"><?php echo "$sy:$sem"; ?></th>
-              <td><a target="_blank" href="<?php echo "$baseUrl/download/individual/{$id}/{$teacherData['ID']}/$pdfName"; ?>">Download</a></td>
+            <tr class="hover:bg-gray-200 text-left">
+              <th scope="row" class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap"><?php echo "$sy:$sem"; ?></th>
+              <td>
+                <a target="_blank" class="text-blue-600 hover:text-blue-900"
+                href="<?php echo "$baseUrl/download/individual/{$id}/{$teacherData['ID']}/$pdfName"; ?>">Download</a>
+              </td>
             </tr>
             <?php
           }

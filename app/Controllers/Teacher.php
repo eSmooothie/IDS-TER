@@ -3,6 +3,7 @@
 namespace App\Controllers;
 use CodeIgniter\I18n\Time;
 class Teacher extends BaseController{
+  
   public function index(){
     if(!$this->session->has("adminID")){
       return redirect()->to("/admin");
@@ -23,13 +24,18 @@ class Teacher extends BaseController{
 
     $department = $this->departmentModel->findAll();
 
-    $data = [
-			'id' => $this->session->get("adminID"),
-			'pageTitle' => "ADMIN | TEACHER",
-			'baseUrl' => base_url(),
+    $sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | TEACHER";
+		$args = [
       'teacherData' => $teacherData,
       'departmentData' => $department,
 		];
+
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
 
     echo view("admin/layout/header", $data);
     echo view("admin/pages/nav",$data);
@@ -75,13 +81,19 @@ class Teacher extends BaseController{
     ->orderBy("`ID`","DESC")
     ->findAll();
 
-    $data = [
-      'id' => $this->session->get("adminID"),
-      'pageTitle' => "ADMIN | TEACHER",
-      'baseUrl' => base_url(),
+    $sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | TEACHER";
+		$args = [
       'teacherData' => $teacherData,
       'subjectHandles' => $subjectHandles,
-    ];
+		];
+
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
+
     echo view("admin/layout/header", $data);
     echo view("admin/pages/nav",$data);
     echo view("admin/pages/viewTeacher", $data);
@@ -95,7 +107,6 @@ class Teacher extends BaseController{
     if(!$id){
       return redirect()->to("/admin/teacher/");
     }
-    // do something
     // get teacher data
     $teacherData = $this->teacherModel
     ->select("
@@ -117,7 +128,7 @@ class Teacher extends BaseController{
     $currentSubjects = $this->teacherSubjectModel
     ->select("
     `subject`.`ID` AS `ID`,
-    `subject`.`DESCRIPTION` AS `DESCRIPTION`,
+    `subject`.`DESCRIPTION` AS `DESCRIPTION`
     ")
     ->join("`subject`","`subject`.`ID` = `tchr_subj_lst`.`SUBJECT_ID`","INNER")
     ->where("SCHOOL_YEAR_ID", $currSY['ID'])
@@ -145,24 +156,31 @@ class Teacher extends BaseController{
           break;
         }
       }
+    }else{
+      $subjectSY = $currSY;
     }
+  
     // get all subject
     $subjects = $this->subjectModel->findAll();
 
     $departments = $this->departmentModel->findAll();
 
-    $data = [
-      'id' => $this->session->get("adminID"),
-      'pageTitle' => "ADMIN | TEACHER",
-      'baseUrl' => base_url(),
+    $sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | TEACHER";
+		$args = [
       'teacherData' => $teacherData,
       'teacherSubjects' => $currentSubjects,
       'currSY' => $currSY,
       'currSySubject' => $subjectSY,
       'subjects' => $subjects,
       'departments' => $departments,
-    ];
+		];
 
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
 
     if(!empty($this->session->getFlashData("update"))){
       $data['formMessage'] = $this->session->getFlashData("update");
@@ -252,10 +270,9 @@ class Teacher extends BaseController{
 
     $sy = $this->schoolyearModel->orderBy("ID","DESC")->findAll();
 
-    $data = [
-      'id' => $this->session->get("adminID"),
-      'pageTitle' => "ADMIN | TEACHER",
-      'baseUrl' => base_url(),
+    $sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | TEACHER";
+		$args = [
       'teacherData' => $teacherData,
       'teacherSubjects' => $currentSubjects,
       'currSY' => $currSY,
@@ -263,8 +280,13 @@ class Teacher extends BaseController{
       'subjects' => $subjects,
       'departments' => $departments,
       'sy' => $sy,
-    ];
+		];
 
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
 
     echo view("admin/layout/header", $data);
     echo view("admin/pages/nav",$data);

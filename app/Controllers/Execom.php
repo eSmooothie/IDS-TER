@@ -7,42 +7,43 @@ class Execom extends BaseController{
     if(!$this->session->has("adminID")){
       return redirect()->to("/admin");
     }
-    // do something here
 
-    $currSy = $this->schoolyearModel->orderBy("ID","DESC")->first();
-    $rawData = $this->execomModel->findAll();
+    $subquery = "(SELECT 
+    `execom_hist`.`EXECOM_ID` AS `EXECOM_ID`,
+    `execom_hist`.`SCHOOL_YEAR_ID` AS `SY_ID`,
+    `execom_hist`.`TEACHER_ID` AS `TEACHER_ID`,
+    `teacher`.`LN` AS `TEACHER_LN`,
+    `teacher`.`FN` AS `TEACHER_FN`
+    FROM 
+    `execom_hist`
+    INNER JOIN `teacher` ON `teacher`.`ID` = `execom_hist`.`TEACHER_ID`
+    WHERE 
+    `execom_hist`.`SCHOOL_YEAR_ID` = '3'
+    ) AS `b`";
 
-    $execom = [];
+    $execom = $this->execomModel
+    ->select("
+    `execom`.`ID` AS `ID`,
+    `execom`.`NAME` AS `POSITION`,
+    `b`.`TEACHER_ID` AS `TEACHER_ID`,
+    `b`.`TEACHER_LN` AS `TEACHER_LN`,
+    `b`.`TEACHER_FN` AS `TEACHER_FN`
+    ")
+    ->join($subquery, "`execom`.`ID` = `b`.`EXECOM_ID`", "LEFT")
+    ->findAll();
 
-    foreach ($rawData as $key => $value) {
-
-      $teacher = $this->execomHistoryModel
-      ->select("
-      `teacher`.`ID` AS `ID`,
-      `teacher`.`FN` AS `FN`,
-      `teacher`.`LN` AS `LN`
-      ")
-      ->join("`teacher`","`teacher`.`ID` = `execom_hist`.`TEACHER_ID`","INNER")
-      ->where("`execom_hist`.`EXECOM_ID`", $value['ID'])
-      ->where("`execom_hist`.`SCHOOL_YEAR_ID`", $currSy['ID'])
-      ->first();
-
-      $d = [
-        'ID' => $value['ID'],
-        'POSITION' => $value['NAME'],
-        'ASSIGN' => $teacher,
-      ];
-
-      array_push($execom, $d);
-    }
-
-    $data = [
-			'id' => $this->session->get("adminID"),
-			'pageTitle' => "ADMIN | EXECOM",
-			'baseUrl' => base_url(),
-      // add some variables here
+    $sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | TEACHER";
+		$args = [
       'execom' => $execom,
 		];
+
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
+
     echo view("admin/layout/header", $data);
 		echo view("admin/pages/nav",$data);
 		echo view("admin/pages/execom", $data);
@@ -59,24 +60,45 @@ class Execom extends BaseController{
     }
     // do something here
     $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+
     $execom = $this->execomModel->find($id);
+
     $currentAssign = $this->execomHistoryModel
     ->where("EXECOM_ID", $id)
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->first();
 
+    $formerAssign = $this->execomHistoryModel
+    ->select("
+    `execom_hist`.`EXECOM_ID` AS `EXECOM_ID`,
+    `execom_hist`.`SCHOOL_YEAR_ID` AS `SY_ID`,
+    `execom_hist`.`TEACHER_ID` AS `TEACHER_ID`,
+    `teacher`.`LN` AS `TEACHER_LN`,
+    `teacher`.`FN` AS `TEACHER_FN`
+    ")
+    ->join("`teacher`","`teacher`.`ID` = `execom_hist`.`TEACHER_ID`","INNER")
+    ->where("`execom_hist`.`EXECOM_ID`", $id)
+    ->orderby("`execom_hist`.`SCHOOL_YEAR_ID`","DESC")
+    ->findAll();
+
     $teachers = $this->teacherModel->orderBy("LN","ASC")->findAll();
 
-    $data = [
-      'id' => $this->session->get("adminID"),
-      'pageTitle' => "ADMIN | EXECOM",
-      'baseUrl' => base_url(),
-      // add some variables here
+    $sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | TEACHER";
+		$args = [
       'teachers' => $teachers,
       'execom' => $execom,
       'currentAssign' => $currentAssign,
       'school_year' => $sy,
-    ];
+      'formerAssign' => $formerAssign,
+		];
+
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
+
     echo view("admin/layout/header", $data);
     echo view("admin/pages/nav",$data);
     echo view("admin/pages/editExecom", $data);

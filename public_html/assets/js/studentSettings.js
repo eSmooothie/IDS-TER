@@ -20,8 +20,11 @@ $("#changePassword").submit(function(e){
   var newPassword = formData[1]['value'];
   var confirmPassword = formData[2]['value'];
   var path = "/user/student/update/password";
+  $("#errMessage").removeClass("hidden");
   if(newPassword.localeCompare(confirmPassword) != 0){
     // display error
+    $("#errMessage").removeClass("bg-green-300");
+    $("#errMessage").addClass("bg-red-500");
     $("#errMessage").html("Confirm password not match.");
     $("#confirmPassword").val("");
   }else{
@@ -29,15 +32,15 @@ $("#changePassword").submit(function(e){
     var done = function(data){
       var d = data['data'];
       if(d == null){
-        $("#errMessage").removeClass("text-success");
-        $("#errMessage").addClass("text-danger");
+        $("#errMessage").removeClass("bg-green-300");
+        $("#errMessage").addClass("bg-red-500");
         $("#errMessage").html(data['message']);
         $("#confirmPassword").val("");
         $("#newPassword").val("");
         $("#oldPassword").val("");
       }else{
-        $("#errMessage").removeClass("text-danger");
-        $("#errMessage").addClass("text-success");
+        $("#errMessage").removeClass("bg-red-500");
+        $("#errMessage").addClass("bg-green-300");
         $("#errMessage").html(data['message']);
         $("#confirmPassword").val("");
         $("#newPassword").val("");

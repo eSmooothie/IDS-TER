@@ -4,40 +4,43 @@ namespace App\Controllers;
 
 class Admin extends BaseController
 {
-	public function index()
-	{
-    $data = [
-      'pageTitle' => "IDS | TER",
-    ];
-		echo view("admin/layout/header",$data);
-    echo view("admin/index");
-    echo view("admin/layout/footer");
+	public function index(){
+		$data = [
+		'pageTitle' => "IDS | TER",
+		];
+			echo view("admin/layout/header",$data);
+		echo view("admin/index");
+		echo view("admin/layout/footer");
 	}
 
-  public function dashboard(){
-    if($this->session->has("adminID")){
-			$school_year = $this->schoolyearModel->orderBy("ID","DESC")->first();
+	public function dashboard(){
+		if(!$this->session->has("adminID")){
+			return redirect()->to("/admin");
+		}
+		$school_year = $this->schoolyearModel->orderBy("ID","DESC")->first();
 
-			$countStudents = $this->studentModel->countAll();
-			$countTeacher = $this->teacherModel->countAll();
+		$countStudents = $this->studentModel->countAll();
+		$countTeacher = $this->teacherModel->countAll();
 
+		
+		$sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | DASHBOARD";
+		$args = [
+			'school_year' => $school_year,
+			'countStudent' => $countStudents,
+			'countTeacher' => $countTeacher,
+		];
 
-      $data = [
-        'id' => $this->session->get("adminID"),
-        'pageTitle' => "ADMIN | DASHBOARD",
-				'baseUrl' => base_url(),
-				'school_year' => $school_year,
-				'countStudent' => $countStudents,
-				'countTeacher' => $countTeacher,
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
 
-      ];
-      echo view("admin/layout/header", $data);
-      echo view("admin/pages/dashboard", $data);
-      echo view("admin/layout/footer");
-    }else{
-      return redirect()->to("/admin");
-    }
-  }
+		echo view("admin/layout/header", $data);
+		echo view("admin/pages/dashboard", $data);
+		echo view("admin/layout/footer");
+	}
 
 	public function addSchoolYear(){
 		header("Content-type:application/json");
@@ -96,24 +99,24 @@ class Admin extends BaseController
 		return $this->setResponseFormat('json')->respond($response, 200);
 	}
 
-  public function verifyCredentials(){
-    header("Content-type:application/json");
-    $username = $this->request->getPost("username");
-    $password = $this->request->getPost("password");
-    $admin = $this->adminModel->where("username", $username)
-                              ->where("password", $password)
-                              ->first();
+	public function verifyCredentials(){
+		header("Content-type:application/json");
+		$username = $this->request->getPost("username");
+		$password = $this->request->getPost("password");
+		$admin = $this->adminModel->where("username", $username)
+								->where("password", $password)
+								->first();
 
-    $data = (!empty($admin))? true:false;
-    if(!empty($admin)){
-      $this->session->set("adminID",$admin['ID']);
-    }
-    $response = [
-      "message" => "OK",
-      "data" => $data,
-    ];
-    return $this->setResponseFormat('json')->respond($response, 200);
-  }
+		$data = (!empty($admin))? true:false;
+		if(!empty($admin)){
+		$this->session->set("adminID",$admin['ID']);
+		}
+		$response = [
+		"message" => "OK",
+		"data" => $data,
+		];
+		return $this->setResponseFormat('json')->respond($response, 200);
+	}
 }
 
 

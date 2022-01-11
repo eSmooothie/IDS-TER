@@ -9,8 +9,10 @@ $("#adminLogin").submit(function(e){
     console.log();
     var isSuc=data['data'];
     if(isSuc){window.location.href= window.location.origin + "/" + "admin/dashboard";}
-    else{$("#adminLogin").get(0).reset()
-    $("#errorMessage").removeClass("d-none");}
+    else{
+        $("#errorMessage").html("Invalid Password or Username.");
+        $("#adminLogin").get(0).reset();
+     }
   };
   sendPostRequest(path,formData,done);
 });
@@ -22,7 +24,6 @@ $("#userLogin").submit(function(e){
 
   var path = "/user/login";
   var done = function(data){
-    console.log(data);
     var msg = data['message'];
     var i = data['data'];
     if(i == null){

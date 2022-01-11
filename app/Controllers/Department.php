@@ -33,7 +33,7 @@ class Department extends BaseController{
         'NAME' => $deptName,
         'CHAIRPERSON' => $currChairperson,
       ];
-
+    
       array_push($department, $deptInfo);
     }
 

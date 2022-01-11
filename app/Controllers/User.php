@@ -2,6 +2,10 @@
 
 namespace App\Controllers;
 
+/**
+ * TODO: FIX CLEARED STATUS FOR TEACHER
+ * 
+ *  */ 
 class User extends BaseController{
   public function index_temp(){
     if(!$this->session->has("userID")){
@@ -104,6 +108,7 @@ class User extends BaseController{
   }
 
   // teacher
+  
   public function teacher(){
     if(!$this->session->has("userID")){
       return redirect()->to("/");
@@ -443,12 +448,10 @@ class User extends BaseController{
       $TeacherstoRate = $TeacherstoRate + $colleagues;
     }
 
-    $data = [
-      'id' => $this->session->get("userID"),
-      'pageTitle' => "TEACHER | DASHBOARD",
-      'baseUrl' => base_url(),
+    $sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | TEACHER";
+		$args = [
       'isCleared' => $doneEvaluatedCounter == $TeacherstoRate,
-      // add some variables here
       'myData' => $myData,
       'myDept' => $myDept,
       'sy' => $sy,
@@ -457,13 +460,20 @@ class User extends BaseController{
       'isSupervisor' => $isSupervisor,
       'isChairperson' => $isChairperson ,
       'isPrincipal' => $isPrincipal ,
-    ];
+		];
+
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
 
     echo view("teacher/layout/header", $data);
     echo view("teacher/pages/supervisor", $data);
     echo view("teacher/layout/footer");
   }
 
+  // TODO: Optimize
   public function analyticsRating(){
     if(!$this->session->has("userID")){
       return redirect()->to("/");
@@ -523,6 +533,7 @@ class User extends BaseController{
     ->countAllResults();
 
     $TeacherstoRate = $totalPeers;
+
     if($isPrincipal){
       $totalChairpersons = $this->departmentHistoryModel
       ->where("SCHOOL_YEAR_ID", $sy['ID'])
@@ -534,8 +545,7 @@ class User extends BaseController{
       ->countAllResults();
 
       $TeacherstoRate = $TeacherstoRate + $totalChairpersons + $totalExecoms;
-    }
-    else if($isChairperson){
+    }else if($isChairperson){
       $colleagues = $this->teacherModel
       ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
       ->where("ID !=", $id)
@@ -545,12 +555,10 @@ class User extends BaseController{
       $TeacherstoRate = $TeacherstoRate + $colleagues;
     }
 
-    $data = [
-      'id' => $this->session->get("userID"),
-      'pageTitle' => "TEACHER | DASHBOARD",
-      'baseUrl' => base_url(),
+    $sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | TEACHER";
+		$args = [
       'isCleared' => $doneEvaluatedCounter == $TeacherstoRate,
-      // add some variables here
       'myData' => $myData,
       'myDept' => $myDept,
       'sy' => $sy,
@@ -560,6 +568,13 @@ class User extends BaseController{
       'supervisorRating' => $supervisorRating,
       'totalOverall' => $totalOverall,
 		];
+
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
+    
     echo view("teacher/layout/header", $data);
     echo view("teacher/pages/analyticsRating", $data);
     echo view("teacher/layout/footer");
@@ -746,16 +761,21 @@ class User extends BaseController{
       $TeacherstoRate = $TeacherstoRate + $colleagues;
     }
 
-    $data = [
-      'id' => $this->session->get("userID"),
-      'pageTitle' => "TEACHER | DASHBOARD",
-      'baseUrl' => base_url(),
+    $sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | TEACHER";
+		$args = [
       'isCleared' => $doneEvaluatedCounter == $TeacherstoRate,
-      // add some variables here
       'myData' => $myData,
       'myDept' => $myDept,
       'sy' => $sy,
-    ];
+		];
+
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
+
     echo view("teacher/layout/header", $data);
     echo view("teacher/pages/analyticsDownload", $data);
     echo view("teacher/layout/footer");
@@ -847,17 +867,21 @@ class User extends BaseController{
       $TeacherstoRate = $TeacherstoRate + $colleagues;
     }
 
-    $data = [
-      'id' => $this->session->get("userID"),
-      'pageTitle' => "TEACHER | DASHBOARD",
-      'baseUrl' => base_url(),
+    $sessionId = $this->session->get("adminID");
+		$pageTitle = "ADMIN | TEACHER";
+		$args = [
       'isCleared' => $doneEvaluatedCounter == $TeacherstoRate,
-      // add some variables here
       'myData' => $myData,
-      'mySubject' => $mySubjects,
       'myDept' => $myDept,
       'sy' => $sy,
-    ];
+		];
+
+		$data = $this->mapPageParameters(
+			$sessionId,
+			$pageTitle,
+			$args
+		);
+
     echo view("teacher/layout/header", $data);
     echo view("teacher/pages/settings", $data);
     echo view("teacher/layout/footer");

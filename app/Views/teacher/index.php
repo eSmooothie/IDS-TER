@@ -1,39 +1,73 @@
-<div class="container-fluid d-flex flex-row">
-  <div class="col-xl-2 col-lg-3 col-md-4"></div>
+<div class="w-full p-2">
   <!-- working area -->
-  <div class="col pt-2">
-    <!-- working area -->
-
-    <div class="bg-light bg-gradient border rounded mb-3 p-3">
-      <div class="mb-3" style="font-size:x-small;">
-        <p class="mb-0">School Year: <?php echo "{$sy['SY']}:{$sy['SEMESTER']}"; ?></p>
-        <p class="mb-0">Department: <?php echo "{$myDept['NAME']}"; ?></p>
-        <p class="mb-0">Is Lecturer: <?php echo ($myData['IS_LECTURER'])? "True":"False"; ?></p>
-        <p class="mb-0">Is Supervisor: <?php echo ($isSupervisor)? "True" : "False"; ?></p>
-        <p class="mb-0">Total Evaluated: <?php echo $evaluatedCounter; ?></p>
-        <p class="mb-0">Status: <?php echo ($isCleared)? "CLEARED":"NOT CLEARED"; ?></p>
-        <p class="mb-0">Mode: Peer</p>
-      </div>
-      <div class="">
-        <?php if($isSupervisor){
-          $as = "";
-          if($isChairperson){
-            $as = "chairperson";
-          }else if($isPrincipal){
-            $as = "principal";
-          }
-          ?>
-          <a href="<?php echo "$baseUrl/user/teacher/rate/supervisor"; ?>" class="btn btn-primary">As a <?php echo "$as"; ?></a>
-          <?php
-        } ?>
-      </div>
+  <div class="p-3 bg-gray-100 rounded-md mb-3">
+    <div class="mb-8">
+      <table class="mb-3 min-w-full">
+        <thead class="">
+          <tr class="">
+            <th class=""></th>
+            <th class=""></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">School Year</td>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$sy['SY']}"; ?></td>
+          </tr>
+          <tr>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Semester</td>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$sy['SEMESTER']}";?></td>
+          </tr>
+          <tr>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Department</td>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$myDept['NAME']}"; ?></td>
+          </tr>
+          <tr>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">is Lecturer</td>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo ($myData['IS_LECTURER'])? "Yes":"No"; ?></td>
+          </tr>
+          <tr>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">is Supervisor</td>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo ($isSupervisor)? "Yes" : "No"; ?></td>
+          </tr>
+          <tr>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Total Evaluated</td>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo $evaluatedCounter; ?></td>
+          </tr>
+          <tr>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Status</td>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo ($isCleared)? "CLEARED":"NOT CLEARED"; ?></td>
+          </tr>
+          <tr>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Mode</td>
+            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Peer</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <table class="table table-striped table-hover bg-light bg-gradient border rounded mb-3 p-3">
-      <thead>
+    <div class="mb-3">
+      <?php if($isSupervisor){
+        $as = "";
+        if($isChairperson){
+          $as = "chairperson";
+        }else if($isPrincipal){
+          $as = "principal";
+        }
+        ?>
+        <a href="<?php echo "$baseUrl/user/teacher/rate/supervisor"; ?>" class="hover:bg-blue-400 rounded-full px-5 bg-blue-300 p-2">RATE AS A SUPERVISOR</a>
+        <?php
+      } ?>
+    </div>
+  </div>
+  
+  <!-- EVALUATION -->
+  <div class="p-3 bg-gray-100 rounded-md mb-3">
+    <table class="mb-3 min-w-full">
+      <thead class="border bg-gray-300">
         <tr>
-          <th scope="col" class="col-2">ID</th>
-          <th scope="col">Name</th>
-          <th scope="" class="col-1">Action</th>
+          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">ID</th>
+          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Name</th>
+          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -48,9 +82,13 @@
             $path = ($isDone)?"#":"$baseUrl/evaluate/peer/{$teacher['ID']}";
             ?>
             <tr class="">
-              <th scope="row"><?php echo "{$teacher['ID']}"; ?></th>
-              <td class=""><?php echo "{$teacher['LN']}, {$teacher['FN']}"; ?></td>
-              <td><a <?php echo ($isDone)?"":"target=\"_blank\""; ?> href="<?php echo "$path"; ?>" class="btn <?php echo ($isDone)?"btn-success":"btn-primary"; ?>"><?php echo ($isDone)?"Done":"Evaluate"; ?></a></td>
+              <th scope="row" class="py-1 px-6 text-sm font-medium whitespace-nowrap text-left"><?php echo "{$teacher['ID']}"; ?></th>
+              <td class="py-1 px-6 text-sm font-medium whitespace-nowrap"><?php echo "{$teacher['LN']}, {$teacher['FN']}"; ?></td>
+              <td class="py-1 px-6 text-sm font-medium whitespace-nowrap text-center">
+                <a <?php echo ($isDone)?"":"target=\"_blank\""; ?> href="<?php echo "$path"; ?>" 
+                class="py-1 px-2 rounded-lg <?php echo ($isDone)? "bg-green-300": "bg-blue-300"; ?>">
+                <?php echo ($isDone)?"Done":"Evaluate"; ?>
+              </a></td>
             </tr>
             <?php
           }
@@ -60,6 +98,8 @@
     </table>
   </div>
 </div>
+
+
 <script>
 // refresh the page when active
   document.addEventListener("visibilitychange", function() {

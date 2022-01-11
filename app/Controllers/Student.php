@@ -17,50 +17,10 @@ class Student extends BaseController
 			return redirect()->to("/admin");
 		}
 
-
-
-		$sy = $this->schoolyearModel->orderBy("ID","DESC")->first(); // get current school year
-
-
-		$rawStudent = $this->studentModel
-		->orderBy("`LN`","ASC")
-		->findAll();
-
-		$students = [];
-
-		foreach ($rawStudent as $key => $value) {
-			$studentInfo = [
-				'ID' => $value['ID'],
-				'LN' => $value['LN'],
-				'FN' => $value['FN'],
-			];
-
-			$studentSection = $this->studentSectionModel
-			->where("STUDENT_ID", $value['ID'])
-			->where("SCHOOL_YEAR_ID", $sy['ID'])
-			->first();
-
-		  $section = $this->sectionModel
-			->where("ID", $studentSection['SECTION_ID'])
-			->first();
-
-			$studentInfo['section'] = (empty($section))? "NOT ENROLLED":$section['NAME'];
-
-			// current status
-			$studentStatus = $this->studentStatusModel->where("STUDENT_ID", $value['ID'])
-																								->where("SCHOOL_YEAR_ID", $sy['ID'])
-																								->first();
-
-			$studentInfo['status'] = $studentStatus['STATUS'];
-
-			array_push($students, $studentInfo);
-		}
-
-
 		$sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | STUDENT";
 		$args = [
-			'students' => $students,
+			
 		];
 
 		$data = $this->mapPageParameters(
@@ -69,13 +29,56 @@ class Student extends BaseController
 			$args
 		);
 
-		$data['uploadStudentMsg'] = (!empty($this->session->getFlashData("uploadStudentMsg")))?
-		 			$this->session->getFlashData("uploadStudentMsg"): null;
-
 		echo view("admin/layout/header", $data);
 		echo view("admin/pages/nav",$data);
 		echo view("admin/pages/student", $data);
 		echo view("admin/layout/footer");
+	}
+
+	public function getStudents(){
+		header("Content-type:application/json");
+		
+		$pageNumber = $this->request->getGet("pageNumber");
+		$keyword = $this->request->getGet("keyword");
+
+		$sy = $this->schoolyearModel->orderBy("ID","DESC")->first(); // get current school year
+
+		if(!empty($keyword)){
+			$searchExpression = "`STUDENT`.`ID` LIKE '%$keyword%' OR ".
+			"`STUDENT`.`FN` LIKE '%$keyword%' OR ".
+			"`STUDENT`.`LN` LIKE '%$keyword%' OR ".
+			"`SECTION`.`NAME` LIKE '%$keyword%' AND ".
+			"";
+		}else{
+			$searchExpression = "`STUD_STATUS`.`SCHOOL_YEAR_ID` = '{$sy['ID']}'";
+		}
+
+		$student_section = "(SELECT * FROM `STUDENT_SECTION` WHERE `STUDENT_SECTION`.`SCHOOL_YEAR_ID` = '".$sy['ID']."') AS `STUDENT_SECTION`";
+		$student_status = "(SELECT `STUDENT_ID`, `STATUS` FROM `STUD_STATUS` WHERE `STUD_STATUS`.`SCHOOL_YEAR_ID` = '".$sy['ID']."') AS `STUDENT_STATUS`";
+		$students = $this->studentModel
+		->select("
+			`STUDENT`.`ID` AS `STUDENT_ID`,
+			`STUDENT`.`LN` AS `STUDENT_LN`,
+			`STUDENT`.`FN` AS `STUDENT_FN`,
+			`SECTION`.`NAME` AS `SECTION_NAME`,
+			`STUDENT_STATUS`.`STATUS` AS `STATUS`
+		")
+		->join($student_section,"`STUDENT_SECTION`.`STUDENT_ID` = `STUDENT`.`ID`","LEFT")
+		->join("`SECTION`","`STUDENT_SECTION`.`SECTION_ID` = `SECTION`.`ID`","LEFT")
+		->join($student_status,"`STUDENT_STATUS`.`STUDENT_ID` = `STUDENT`.`ID`","LEFT")
+		// ->where($searchExpression)
+		->orderBy("`STUDENT`.`LN`","ASC")
+		->findAll(20,$pageNumber * 20);
+
+		$data = $students;
+
+		$response = [
+			"pageNumber" => $pageNumber,
+			"keyword" => $keyword,
+			"message" => "OK",
+			"data" => $data,
+		];
+		return $this->setResponseFormat('json')->respond($response, 200);
 	}
 
 	public function viewStudent($id = false){
@@ -88,21 +91,32 @@ class Student extends BaseController
 
 		$studentData = $this->studentModel->find($id);
 
-		$sections = $this->studentSectionModel->join("`section`","`section`.`ID` = `student_section`.`SECTION_ID`")
-																					->join("`school_year`","`school_year`.`ID` = `student_section`.`SCHOOL_YEAR_ID`")
-																					->where("STUDENT_ID",$id)
-																					->orderBy("SCHOOL_YEAR_ID","DESC")
-																					->findAll();
+		$sections = $this->studentSectionModel
+		->select("
+			`student_section`.`ID` AS `STUDENT_SECTION_ID`,
+			`section`.`ID` AS `SECTION_ID`,
+			`section`.`NAME` AS `SECTION_NAME`,
+			`section`.`GRADE_LV` AS `SECTION_GRADE_LV`,
+			`school_year`.`ID` AS `SCHOOL_YEAR_ID`,
+			`school_year`.`SY` AS `SY`,
+			`school_year`.`SEMESTER` AS `SEMESTER`,
+			`stud_status`.`STATUS` AS `STATUS`
+		")
+		->join("`stud_status`","`stud_status`.`STUDENT_ID` = `student_section`.`STUDENT_ID` AND `stud_status`.`SCHOOL_YEAR_ID` = `student_section`.`SCHOOL_YEAR_ID`")
+		->join("`section`","`section`.`ID` = `student_section`.`SECTION_ID`")
+		->join("`school_year`","`school_year`.`ID` = `student_section`.`SCHOOL_YEAR_ID`")
+		->where("`student_section`.`STUDENT_ID`",$id)
+		->orderBy("`student_section`.`SCHOOL_YEAR_ID`","DESC")
+		->findAll();
 
 		$status = $this->studentStatusModel->where("STUDENT_ID", $id)
-																			->orderBy("SCHOOL_YEAR_ID","DESC")
-																			->findAll();
-
-		// TODO: get student evaluation data
+		->orderBy("SCHOOL_YEAR_ID","DESC")
+		->findAll();
 
 		$sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | STUDENT";
 		$args = [
+			'base_url' => base_url(),
 			'studentData' => $studentData,
 			'sections' => $sections,
 			'status' => $status,
@@ -188,8 +202,8 @@ class Student extends BaseController
 		}
 	    
 		// read file
-	    $content = $this->readCSV($fileName);
-	    $data = explode("\r\n",$content); // get each line	
+	    $content = (string)$this->readCSV($fileName);
+	    $data = explode("\r\n", $content); // get each line	
 		
 		$studentList = [
 			'success' => [],
@@ -246,7 +260,7 @@ class Student extends BaseController
 
 			$this->studentModel->insert($studentData);
 
-			// add student to X section
+			// add Y student to X section
 			$sectionData = $this->sectionModel->where("NAME", $section)->first();
 			$studentSection = [
 				'STUDENT_ID' => $id,
@@ -257,7 +271,7 @@ class Student extends BaseController
 
 			$this->studentSectionModel->insert($studentSection);
 
-			// add student status
+			// add Y student status
 			$studentStatus = [
 				'STUDENT_ID' => $id,
 				'SCHOOL_YEAR_ID' => $this->getCurrentSchoolYear()['ID'],
@@ -268,7 +282,7 @@ class Student extends BaseController
 		}
 	}
 
-	private function isIDExist($studentId){
+	private function isIDExist(string $studentId){
 		$isExist = $this->studentModel->find($studentId);
 
 		if(empty($isExist)){
@@ -278,7 +292,7 @@ class Student extends BaseController
 		return true;
 	}
 
-	private function validateStudent($student){
+	private function validateStudent(array $student){
 		// check len
 		if(sizeof($student) != 4){
 			return false;

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 use FPDF;
 
+// TODO: Optimize 
 class PdfController extends BaseController{
   public function index($sy = false){
     if(!$this->session->has("userID")){
