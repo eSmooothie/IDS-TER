@@ -26,7 +26,7 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
       <img src="<?php echo "$baseUrl";?>/assets/img/hornet_400x400.jpg" alt="" class="border border-pink-700 rounded-full w-32"></a>
     </div>
     <p class=" whitespace-nowrap" ><?php echo "{$myData['FN']} {$myData['LN']}"; ?></p>
-    <p class=" text-xs"><small><?php echo "{$myData['ID']}"; ?></small></p>
+    <p class=" text-base"><small><?php echo "{$myData['ID']}"; ?></small></p>
   </div>
   <!-- NAVIGATION -->
   <div class=" flex-col flex">

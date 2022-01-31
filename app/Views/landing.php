@@ -25,14 +25,14 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
           </div>
           <div class="text-center">
             <span class="block text-4xl">IDS - TER</span>
-            <span class="block text-xxs">INTEGRATED DEVELOPMENTAL SCHOOL <br />TEACHER EFFICIENCY RATING</span>
+            <span class="block text-xs">INTEGRATED DEVELOPMENTAL SCHOOL <br />TEACHER EFFICIENCY RATING</span>
           </div>
         </div>
         <div class="mt-3">
           <form id="userLogin">
             <!-- Log in as -->
             <div>
-              <p class="text-xs" style="font-size:x-small;">You are?</p>
+              <p class=" text-base" style="">You are?</p>
               <div class="flex justify-between mb-8">
                 <div class="">
                   <input type="radio" class="sr-only peer" id="btn-check-student" name="logInAs" value="student" required>

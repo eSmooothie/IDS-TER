@@ -163,4 +163,5 @@
         </div>
     </div>
 </div>
+
 <script src="<?php echo "$baseUrl/assets/js/adminTeacher.js"; ?>" charset="utf-8"></script>
