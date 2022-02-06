@@ -1380,6 +1380,11 @@ input:checked + .toggle-bg {
   padding-right: 1.25rem;
 }
 
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -1398,11 +1403,6 @@ input:checked + .toggle-bg {
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
-}
-
-.py-2 {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
 }
 
 .py-2\.5 {
@@ -1488,12 +1488,16 @@ input:checked + .toggle-bg {
   font-size: x-small;
 }
 
-.text-lg {
-  font-size: 1.125rem;
+.text-base {
+  font-size: 1rem;
 }
 
 .text-xxs {
   font-size: xx-small;
+}
+
+.text-lg {
+  font-size: 1.125rem;
 }
 
 .text-sm {
@@ -1502,10 +1506,6 @@ input:checked + .toggle-bg {
 
 .text-xl {
   font-size: 1.25rem;
-}
-
-.text-base {
-  font-size: 1rem;
 }
 
 .text-2xl {

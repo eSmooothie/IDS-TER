@@ -41,57 +41,25 @@
         <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Peer</th>
         <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Supervisor</th>
       </thead>
-      <tbody>
-        <?php
-          $ratings = [];
-          $n = 1; // question number
-          foreach ($studentRating["RATING"] as $key => $value) {
-            // code...
-            $ratings[$n]["STUDENT"] = round($value["avg"] * 10, 2);
-            $n += 1;
-          }
-          $n = 1;
-          foreach ($peerRating["RATING"] as $key => $value) {
-            // code...
-            $ratings[$n]["PEER"] = round($value["avg"] * 10, 2);
-            $n += 1;
-          }
-          $n = 1;
-          foreach ($supervisorRating["RATING"] as $key => $value) {
-            // code...
-            $ratings[$n]["SUPERVISOR"] = round($value["avg"] * 10, 2);
-            $n += 1;
-          }
-
-          for ($i = 1 ; $i < $n ; $i++) {
-            ?>
-            <tr class="text-gray-600">
-              <th scope="row" class="py-1 px-6 text-sm font-medium whitespace-nowrap text-left"><?php echo "$i"; ?></th>
-              <td class="py-1 px-6 text-sm font-medium whitespace-nowrap"><?php echo (!empty($ratings[$i]["STUDENT"]))? "{$ratings[$i]["STUDENT"]}":"0"; ?></td>
-              <td class="py-1 px-6 text-sm font-medium whitespace-nowrap"><?php echo "{$ratings[$i]["PEER"]}"; ?></td>
-              <td class="py-1 px-6 text-sm font-medium whitespace-nowrap"><?php echo "{$ratings[$i]["SUPERVISOR"]}"; ?></td>
-            </tr>
-            <?php
-          }
-          ?>
+      <tbody id="teacherRating">
+        <tr class="text-gray-600" id="rating_loading">
+          <th colspan="4" class="py-1 px-6 text-sm font-bold whitespace-nowrap" id="rating_loading_msg">Computing.</th>
+        </tr>
       </tbody>
-      <tfoot>
-        <?php
-          $studentOverall = round($studentRating["OVERALL"] * 10, 2);
-          $peerOverall = round($peerRating["OVERALL"] * 10, 2);
-          $supervisorOverall = round($supervisorRating["OVERALL"] * 10, 2);
-          ?>
+      <tfoot id="teacherOverall" class="hidden">
         <tr class=" font-bold uppercase">
           <th scope="row" class="py-1 px-6 text-sm font-bold whitespace-nowrap text-left">Overall</th>
-          <td class="py-1 px-6 text-sm font-bold whitespace-nowrap text-left"><?php echo "$studentOverall"; ?></td>
-          <td class="py-1 px-6 text-sm font-bold whitespace-nowrap text-left"><?php echo "$peerOverall"; ?></td>
-          <td class="py-1 px-6 text-sm font-bold whitespace-nowrap text-left"><?php echo "$supervisorOverall"; ?></td>
+          <td id="studentOverall" class="py-1 px-6 text-sm font-bold whitespace-nowrap text-left"></td>
+          <td id="peerOverall" class="py-1 px-6 text-sm font-bold whitespace-nowrap text-left"></td>
+          <td id="supervisorOverall" class="py-1 px-6 text-sm font-bold whitespace-nowrap text-left"></td>
         </tr>
         <tr>
           <th colspan="3" class=" uppercase text-left py-1 px-6 text-sm font-bold whitespace-nowrap">rating</th>
-          <th class="py-1 px-6 text-sm font-bold whitespace-nowrap text-left"><?php echo round($totalOverall * 10, 2);  ?></th>
+          <th id="Overall" class="py-1 px-6 text-sm font-bold whitespace-nowrap text-left"></th>
         </tr>
       </tfoot>
     </table>
   </div>
 </div>
+
+<script src="<?php echo "$baseUrl/assets/js/tchrRating.js";?>"></script>

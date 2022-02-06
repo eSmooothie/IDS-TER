@@ -26,3 +26,5 @@ $(".evaluation").submit(function(e){
 
   sendRequest(path, formData, done);
 });
+
+// TODO: Fixed when evaluation is already on the process of submitting submit.

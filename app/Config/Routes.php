@@ -107,6 +107,7 @@ $routes->get("/user/teacher/analytics/rating", "User::analyticsRating");
 $routes->get("/user/teacher/analytics/comment", "User::analyticsComment");
 $routes->get("/user/teacher/analytics/download", "User::analyticsDownload");
 
+$routes->get("/teacher/rating/breakdown/(:num)", "User::getTeacherRating/$1");
 $routes->post("/user/teacher/update/password", "User::updateTeacherPassword");
 // user::student
 $routes->get("/user/student", "User::student");

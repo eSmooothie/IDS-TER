@@ -2,10 +2,6 @@
 
 namespace App\Controllers;
 
-/**
- * TODO: FIX CLEARED STATUS FOR TEACHER
- * 
- *  */ 
 class User extends BaseController{
   public function index_temp(){
     if(!$this->session->has("userID")){
@@ -108,7 +104,6 @@ class User extends BaseController{
   }
 
   // teacher
-  
   public function teacher(){
     if(!$this->session->has("userID")){
       return redirect()->to("/");
@@ -473,23 +468,16 @@ class User extends BaseController{
     echo view("teacher/layout/footer");
   }
 
-  // TODO: Optimize
   public function analyticsRating(){
+    // check if session exist
     if(!$this->session->has("userID")){
       return redirect()->to("/");
     }
-    $id = $this->session->get("userID");
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
-    $myData = $this->teacherModel->find($id);
-    $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
-    $schoolyears = $this->schoolyearModel->orderBy("ID","DESC")->findAll();
-
-    // rating
-    $studentRating = $this->getRating($id, 1, $schoolyears[0]["ID"]);
-    $peerRating = $this->getRating($id, 2, $schoolyears[0]["ID"]);
-    $supervisorRating = $this->getRating($id, 3, $schoolyears[0]["ID"]);
-
-    $totalOverall = $this->getOverallRating($studentRating["OVERALL"], $peerRating["OVERALL"], $supervisorRating["OVERALL"]);
+    $id = $this->session->get("userID"); // get session
+    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first(); // get latest school year
+    $myData = $this->teacherModel->find($id); // get user data
+    $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']); // get department
+    $schoolyears = $this->schoolyearModel->orderBy("ID","DESC")->findAll(); // get all school year
 
     // check if a supervisor
     $isChairperson = $this->departmentHistoryModel
@@ -556,17 +544,13 @@ class User extends BaseController{
     }
 
     $sessionId = $this->session->get("adminID");
-		$pageTitle = "ADMIN | TEACHER";
+		$pageTitle = "TEACHER | RATING";
 		$args = [
       'isCleared' => $doneEvaluatedCounter == $TeacherstoRate,
       'myData' => $myData,
       'myDept' => $myDept,
       'sy' => $sy,
       'schoolyears' => $schoolyears,
-      'studentRating' => $studentRating,
-      'peerRating' => $peerRating,
-      'supervisorRating' => $supervisorRating,
-      'totalOverall' => $totalOverall,
 		];
 
 		$data = $this->mapPageParameters(
@@ -578,6 +562,37 @@ class User extends BaseController{
     echo view("teacher/layout/header", $data);
     echo view("teacher/pages/analyticsRating", $data);
     echo view("teacher/layout/footer");
+  }
+
+  public function getTeacherRating(String $schoolyear){
+    header("Content-type:application/json");
+    $response = [];
+    // check if session exist
+    if(!$this->session->has("userID")){
+      $response = ['ERROR' => "No session set"];
+      return $this->setResponseFormat('json')->respond($response, 200);
+    }
+    $teacherId = $this->session->get("userID");
+
+    // rating 
+    $studentRating = $this->getRating($teacherId, 1, $schoolyear);
+    $peerRating = $this->getRating($teacherId, 2, $schoolyear);
+    $supervisorRating = $this->getRating($teacherId, 3, $schoolyear);
+
+    $totalOverall = $this->getOverallRating($studentRating["OVERALL"], $peerRating["OVERALL"], $supervisorRating["OVERALL"]);
+
+    $schoolyearInfo = $this->schoolyearModel->find($schoolyear);
+
+    $response = [
+      'teacher_id' => $teacherId,
+      'school_year' => $schoolyearInfo,
+      'student_rating' => $studentRating,
+      'peer_rating' => $peerRating,
+      'supervisor_rating' => $supervisorRating,
+      'overall' => $totalOverall,
+    ];
+
+    return $this->setResponseFormat('json')->respond($response, 200);
   }
 
   public function analyticsComment(){
@@ -674,7 +689,7 @@ class User extends BaseController{
 
     $data = [
       'id' => $this->session->get("userID"),
-      'pageTitle' => "TEACHER | DASHBOARD",
+      'pageTitle' => "TEACHER | COMMENTS",
       'baseUrl' => base_url(),
       'isCleared' => $doneEvaluatedCounter == $TeacherstoRate,
       // add some variables here
@@ -762,7 +777,7 @@ class User extends BaseController{
     }
 
     $sessionId = $this->session->get("adminID");
-		$pageTitle = "ADMIN | TEACHER";
+		$pageTitle = "TEACHER | DOWNLOADS";
 		$args = [
       'isCleared' => $doneEvaluatedCounter == $TeacherstoRate,
       'myData' => $myData,
@@ -932,6 +947,7 @@ class User extends BaseController{
 
   // student
   public function student(){
+    // check if their is a session
     if(!$this->session->has("userID")){
       return redirect()->to("/");
     }
