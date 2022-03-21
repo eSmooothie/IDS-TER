@@ -11,8 +11,26 @@
   <!-- Bootstrap -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>/bootstrap-5.0.2/css/bootstrap.min.css">
   <script src="<?php echo base_url(); ?>/bootstrap-5.0.2/js/bootstrap.min.js" charset="utf-8"></script>
+  <!-- TinyMCE -->
+  <script src="https://cdn.tiny.cloud/1/715z15p0goo0jibbxy5gev7voi0rekzepfc8fxl97vz2wrpo/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
   <title><?php echo "$pageTitle"; ?></title>
+
+
+  <script>
+    tinymce.init({
+      selector: '#comment',
+      menubar: '',
+      toolbar: "emoticons",
+      plugins: ['emoticons'],
+      emoticons_database: 'emojis',
+      setup: function (editor) {
+        editor.on('change', function () {
+            editor.save();
+        });
+      }
+    });
+  </script>
 </head>
 <body style="
 background-color: #420516;

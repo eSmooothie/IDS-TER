@@ -9,38 +9,38 @@
             <th class=""></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class=" text-sm">
           <tr>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">School Year</td>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$sy['SY']}"; ?></td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">School Year</td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$sy['SY']}"; ?></td>
           </tr>
           <tr>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Semester</td>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$sy['SEMESTER']}";?></td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">Semester</td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$sy['SEMESTER']}";?></td>
           </tr>
           <tr>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Department</td>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$myDept['NAME']}"; ?></td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">Department</td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$myDept['NAME']}"; ?></td>
           </tr>
           <tr>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">is Lecturer</td>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo ($myData['IS_LECTURER'])? "Yes":"No"; ?></td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">is Lecturer</td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo ($myData['IS_LECTURER'])? "Yes":"No"; ?></td>
           </tr>
           <tr>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">is Supervisor</td>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo ($isSupervisor)? "Yes" : "No"; ?></td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">is Supervisor</td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo ($isSupervisor)? "Yes" : "No"; ?></td>
           </tr>
           <tr>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Total Evaluated</td>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo $evaluatedCounter; ?></td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">Total Evaluated</td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo $evaluatedCounter; ?></td>
           </tr>
           <tr>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Status</td>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo ($isCleared)? "CLEARED":"NOT CLEARED"; ?></td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">Status</td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo ($isCleared)? "CLEARED":"NOT CLEARED"; ?></td>
           </tr>
           <tr>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Mode</td>
-            <td class="py-1 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Peer</td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">Mode</td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">Peer</td>
           </tr>
         </tbody>
       </table>

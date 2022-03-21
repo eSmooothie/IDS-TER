@@ -95,9 +95,9 @@
               }
              ?>
 
-             <div class="form-floating mb-3">
-               <textarea name="comment" class="form-control" placeholder="Leave a comment here" id="comment"></textarea>
-               <label for="comment">Comments</label>
+             <div class="mb-3">
+              <label for="comment">Comments</label>
+               <textarea name="comment" class="form-control " placeholder="Leave a comment here" id="comment" ></textarea>
              </div>
 
              <div class="d-flex justify-content-center mb-3 mt-2">
