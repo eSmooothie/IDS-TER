@@ -32,7 +32,7 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
           <form id="userLogin">
             <!-- Log in as -->
             <div>
-              <p class=" text-base" style="">You are?</p>
+              <p class=" text-base">You are?</p>
               <div class="flex justify-between mb-8">
                 <div class="">
                   <input type="radio" class="sr-only peer" id="btn-check-student" name="logInAs" value="student" required>
