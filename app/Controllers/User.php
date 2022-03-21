@@ -595,6 +595,33 @@ class User extends BaseController{
     return $this->setResponseFormat('json')->respond($response, 200);
   }
 
+  public function getTeacherComments(String $filter){
+    header("Content-type:application/json");
+    $response = [];
+    // check if session exist
+    if(!$this->session->has("userID")){
+      $response = ['ERROR' => "No session set"];
+      return $this->setResponseFormat('json')->respond($response, 200);
+    }
+    $teacherId = $this->session->get("userID");
+
+    $my_comments = $this->evalInfoModel->select("
+      `COMMENT`
+    ")->where("`EVALUATED_ID`", $teacherId)
+    ->where("`COMMENT` IS NOT NULL")
+    ->where("`COMMENT` <> ''")
+    ->where("`COMMENT` <> ' \\r\\n'")
+    ->orderBy("ID","DESC")
+    ->findAll();
+
+    $response = [
+      'teacher_id' => $teacherId,
+      'comments' => $my_comments,
+    ];
+
+    return $this->setResponseFormat('json')->respond($response, 200);
+  }
+
   public function analyticsComment(){
     if(!$this->session->has("userID")){
       return redirect()->to("/");
@@ -610,19 +637,6 @@ class User extends BaseController{
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->where("EVAL_TYPE_ID", 1)
     ->findAll();
-
-    $comments = [];
-    foreach ($evalinfo as $key => $value) {
-      $comment = $value['COMMENT'];
-
-      if(!empty($comment)){
-        $data = [
-          'ID' => $key,
-          'COMMENT' => $comment,
-        ];
-        array_push($comments, $data);
-      }
-    }
 
     // check if a supervisor
     $isChairperson = $this->departmentHistoryModel
@@ -697,7 +711,6 @@ class User extends BaseController{
       'myDept' => $myDept,
       'sy' => $sy,
       'schoolyears' => $schoolyears,
-      'comments' => $comments,
     ];
     echo view("teacher/layout/header", $data);
     echo view("teacher/pages/analyticsComments", $data);

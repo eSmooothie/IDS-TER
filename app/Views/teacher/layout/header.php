@@ -19,13 +19,13 @@
 background-color: #420516;
 background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
 ">
-<div class="border border-black w-52 max-w-52 bg-gray-200 min-h-full">
+<div class="border border-black w-56 max-w-56 bg-gray-200 min-h-full">
   <!-- PROFILE INFO -->
-  <div class="flex-col flex items-center p-3">
+  <div class="flex-col flex items-center p-3 w-full">
     <div class="mb-4">
       <img src="<?php echo "$baseUrl";?>/assets/img/hornet_400x400.jpg" alt="" class="border border-pink-700 rounded-full w-32"></a>
     </div>
-    <p class=" whitespace-nowrap" ><?php echo "{$myData['FN']} {$myData['LN']}"; ?></p>
+    <p class=" px-1 break-words w-full text-center" ><?php echo "{$myData['FN']} {$myData['LN']}"; ?></p>
     <p class=" text-base"><small><?php echo "{$myData['ID']}"; ?></small></p>
   </div>
   <!-- NAVIGATION -->

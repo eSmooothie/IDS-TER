@@ -34,16 +34,9 @@
   </div>
   <!-- COMMENTS -->
   <div class="p-3 bg-gray-100 rounded-md mb-3 " id="commentContainer">
-    <?php
-      foreach ($comments as $key => $value) {
-          $hashId = password_hash($value["ID"], PASSWORD_DEFAULT);
-          $comment = $value['COMMENT'];
-        ?>
-        <div class="border border-gray-600 mb-4 p-3 rounded-lg">
-          <span class="mb-5"><?php echo "$comment"; ?></span>
-        </div>
-        <?php
-      }
-    ?>
+  
+    <p class="py-1 px-6 text-sm font-bold whitespace-nowrap" id="loading_msg">Retrieving Comments.</p>
+    
   </div>
 </div>
+<script src="<?php echo "$baseUrl/assets/js/tchrComments.js";?>"></script>

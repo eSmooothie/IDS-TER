@@ -233,7 +233,7 @@ class Evaluation extends BaseController{
       'evaluated' => $evaluated_id,
       'eval_type' => $eval_type_id,
       'rating' => $ratings,
-      'comment' => (isset($comment))? html_entity_decode($comment, ENT_COMPAT, 'UTF-8') : 'NULL',
+      'comment' => (isset($comment))? $comment : null,
     ];
 
     $response = [
