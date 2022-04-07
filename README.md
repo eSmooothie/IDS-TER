@@ -10,6 +10,7 @@ On other hand, teachers can also rate their colleagues. In addition, they can al
   - JQuery
   - Tailwind CSS
   - Flowbite
+  - PHP v7.4
 
 
 ### 🤝 Open for collaborator 
