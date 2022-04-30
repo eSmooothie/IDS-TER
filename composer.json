@@ -1,13 +1,41 @@
 {
-    "name": "ids/ter",
-    "description": "IDS Teacher Efficiency Rating is a web application that allows the student to rate their respective subject teachers. On other hand, teachers can also rate their colleagues. In addition, they can also view and download their rating and comments.",
-    "authors": [
-        {
-            "name": "Sherwin Sandoval",
-            "email": "33995402+eSmooothie@users.noreply.github.com"
-        }
-    ],
+    "name": "codeigniter4/appstarter",
+    "type": "project",
+    "description": "CodeIgniter4 starter app",
+    "homepage": "https://codeigniter.com",
+    "license": "MIT",
     "require": {
-        "dompdf/dompdf": "1.2.1"
+        "php": "^7.3 || ^8.0",
+        "codeigniter4/framework": "^4"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.9",
+        "mikey179/vfsstream": "^1.6",
+        "phpunit/phpunit": "^9.1"
+    },
+    "suggest": {
+        "ext-fileinfo": "Improves mime type detection for files"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app",
+            "Config\\": "app/Config"
+        },
+        "exclude-from-classmap": [
+            "**/Database/Migrations/**"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Support\\": "tests/_support"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "support": {
+        "forum": "http://forum.codeigniter.com/",
+        "source": "https://github.com/codeigniter4/CodeIgniter4",
+        "slack": "https://codeigniterchat.slack.com"
     }
 }
