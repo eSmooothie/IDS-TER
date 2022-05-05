@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\MyCustomUtil;
 class Evaluation extends BaseController{
   public function peer($evaluated = false){
     if(!$this->session->has("userID")){
@@ -60,23 +61,25 @@ class Evaluation extends BaseController{
 		echo view("evaluation/layout/footer");
   }
 
-  public function student($evaluated = false, $subject = false){
-    if(!$this->session->has("userID")){
+  public function student($evaluated_id = false, $subject_id = false){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
 
-    if(!$evaluated || !$subject){
+    if(!$evaluated_id || !$subject_id){
       return redirect()->to("/");
     }
-    // do something here
-    $id = $this->session->get("userID");
+    
+    $custom_utl = new MyCustomUtil();
+
+    $student_id = $this->session->get("user_id");
     $evaluator = $this->evaluatorModel
-    ->where("STUDENT_ID", $id)
+    ->where("STUDENT_ID", $student_id)
     ->first();
 
     if(empty($evaluator)){
       $create = [
-        'STUDENT_ID' => $id,
+        'STUDENT_ID' => $student_id,
       ];
       $this->evaluatorModel->insert($create);
       $evaluator_id = $this->evaluatorModel->insertID;
@@ -85,16 +88,9 @@ class Evaluation extends BaseController{
     }
 
     // check if done rated
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $curr_school_year = $this->schoolyearModel->orderBy("ID","DESC")->first();
 
-
-    $isExist = $this->evalInfoModel
-    ->where("EVALUATOR_ID", $evaluator_id)
-    ->where("EVALUATED_ID", $evaluated)
-    ->where("SUBJECT_ID", $subject)
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->where("EVAL_TYPE_ID", 1)
-    ->countAllResults();
+    $is_done = $custom_utl->is_done_evaluated($evaluator_id, $evaluated_id, $curr_school_year['ID'], 1, $subject_id);
 
     $questions = $this->evalQuestionModel
     ->where("EVAL_TYPE_ID", 1)
@@ -102,19 +98,19 @@ class Evaluation extends BaseController{
     ->orderBy("ID","ASC")
     ->findAll();
 
-    $teacher = $this->teacherModel->find($evaluated);
+    $teacher = $this->teacherModel->find($evaluated_id);
 
     $data = [
-      'id' => $this->session->get("userID"),
-      'pageTitle' => "EVALUATE | STUDENT",
-      'baseUrl' => base_url(),
+      'page_title' => "EVALUATE | STUDENT",
+      'base_url' => base_url(),
       // add some variables here
       'evaluator_id' => $evaluator_id,
-      'subject_id' => $subject,
-      'evaluated' => $teacher,
-      'isDone' => ($isExist > 0)? true: false,
+      'subject_id' => $subject_id,
+      'evaluated_data' => $teacher,
+      'is_done' => $is_done,
       'questions' => $questions,
     ];
+
     echo view("evaluation/layout/header", $data);
     echo view("evaluation/student", $data);
     echo view("evaluation/layout/footer");

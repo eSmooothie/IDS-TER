@@ -110,10 +110,10 @@ $routes->get("/teacher/comments/(:segment)", "User::getTeacherComments/$1");
 
 $routes->post("/user/teacher/update/password", "User::updateTeacherPassword");
 // user::student
-$routes->get("/user/student", "User::student");
-$routes->get("/user/student/settings", "User::studentSetting");
+$routes->get("/user/student", "User::student_page");
+$routes->get("/user/student/settings", "User::student_settings_page");
 
-$routes->post("/user/student/update/password", "User::updateStudentPassword");
+$routes->post("/user/student/update/password", "User::update_student_password");
 // evaluation
 $routes->get("/evaluate/peer/(:segment)", "Evaluation::peer/$1");
 $routes->get("/evaluate/student/(:segment)/(:segment)", "Evaluation::student/$1/$2");

@@ -6,8 +6,8 @@
 
       </div>
       <div class="col">
-        <p class="mb-0 fs-5 fw-bold"><?php echo "{$evaluated['LN']}, {$evaluated['FN']}"; ?></p>
-        <p class="">ID#<?php echo "{$evaluated['ID']}"; ?></p>
+        <p class="mb-0 fs-5 fw-bold"><?php echo "{$evaluated_data['LN']}, {$evaluated_data['FN']}"; ?></p>
+        <p class="">ID#<?php echo "{$evaluated_data['ID']}"; ?></p>
       </div>
     </div>
     <!-- direction -->
@@ -40,7 +40,7 @@
       </table>
     </div>
     <?php
-      if($isDone){
+      if($is_done){
         ?>
         <div class="p-3 text-center bg-success bg-gradient text-white rounded ">
           <p class="mb-0">DONE</p>
@@ -50,7 +50,7 @@
         ?>
         <div class="">
           <form class="evaluation">
-            <input type="hidden" name="evaluated_id" value="<?php echo "{$evaluated['ID']}"; ?>">
+            <input type="hidden" name="evaluated_id" value="<?php echo "{$evaluated_data['ID']}"; ?>">
             <input type="hidden" name="evaluator_id" value="<?php echo "$evaluator_id"; ?>">
             <input type="hidden" name="eval_type" value="1">
             <input type="hidden" name="subject" value="<?php echo "$subject_id"; ?>">
@@ -113,4 +113,4 @@
   </div>
   <div class="col-xl-3 col-lg-2"></div>
 </div>
-<script src="<?php echo "$baseUrl/assets/js/evaluation.js"; ?>" charset="utf-8"></script>
+<script src="<?php echo "$base_url/assets/js/evaluation.js"; ?>" charset="utf-8"></script>

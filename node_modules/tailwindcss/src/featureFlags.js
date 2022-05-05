@@ -1,12 +1,8 @@
-import chalk from 'chalk'
+import colors from 'picocolors'
 import log from './util/log'
 
 let defaults = {
-  // TODO: Drop this once we can safely rely on optimizeUniversalDefaults being
-  // the default.
-  optimizeUniversalDefaults: process.env.NODE_ENV === 'test' ? true : false,
-
-  // optimizeUniversalDefaults: true
+  optimizeUniversalDefaults: false,
 }
 
 let featureFlags = {
@@ -45,7 +41,7 @@ export function issueFlagNotices(config) {
 
   if (experimentalFlagsEnabled(config).length > 0) {
     let changes = experimentalFlagsEnabled(config)
-      .map((s) => chalk.yellow(s))
+      .map((s) => colors.yellow(s))
       .join(', ')
 
     log.warn('experimental-flags-enabled', [

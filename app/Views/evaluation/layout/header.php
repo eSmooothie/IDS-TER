@@ -14,7 +14,7 @@
   <!-- TinyMCE -->
   <script src="https://cdn.tiny.cloud/1/715z15p0goo0jibbxy5gev7voi0rekzepfc8fxl97vz2wrpo/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
-  <title><?php echo "$pageTitle"; ?></title>
+  <title><?php echo "$page_title"; ?></title>
 
 
   <script>

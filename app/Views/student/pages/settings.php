@@ -12,15 +12,15 @@
       <tbody>
         <tr>
           <td class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap">Name:</td>
-          <td class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap"><p class="m-0 ps-2"><?php echo "{$myData['FN']} {$myData['LN']}"; ?></p></td>
+          <td class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap"><p class="m-0 ps-2"><?php echo "{$student_data['FN']} {$student_data['LN']}"; ?></p></td>
         </tr>
         <tr>
           <td class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap">ID #:</td>
-          <td class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap"><p class="m-0 ps-2"><?php echo "{$myData['ID']}"; ?></p></td>
+          <td class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap"><p class="m-0 ps-2"><?php echo "{$student_data['ID']}"; ?></p></td>
         </tr>
         <tr>
           <td class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap">Grade Lv. & Section:</td>
-          <td class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap"> <p class="m-0 ps-2"><?php echo "{$mySection['GRADE_LV']} - {$mySection['NAME']}"; ?></p></td>
+          <td class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap"> <p class="m-0 ps-2"><?php echo "{$student_section['GRADE_LV']} - {$student_section['NAME']}"; ?></p></td>
         </tr>
       </tbody>
     </table>
@@ -78,4 +78,4 @@
   </div>
 </div>
 
-<script src="<?php echo "$baseUrl/assets/js/studentSettings.js"; ?>" charset="utf-8"></script>
+<script src="<?php echo "$base_url/assets/js/studentSettings.js"; ?>" charset="utf-8"></script>

@@ -2,15 +2,15 @@
 
 namespace App\Controllers;
 
+use App\Libraries\MyCustomUtil;
 class User extends BaseController{
   public function index_temp(){
-    if(!$this->session->has("userID")){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
-    // do something here
 
     $data = [
-			'id' => $this->session->get("userID"),
+			'id' => $this->session->get("user_id"),
 			'pageTitle' => "user_type | view_name",
 			'baseUrl' => base_url(),
       // add some variables here
@@ -21,8 +21,6 @@ class User extends BaseController{
   }
   // general
   public function login(){
-    header("Content-type:application/json");
-    // do something here
     $as = $this->request->getPost("logInAs");
     $id = $this->request->getPost("username");
     $pass = $this->request->getPost("password");
@@ -31,44 +29,35 @@ class User extends BaseController{
     $pattern = "/^\d{4}(-)(\d{1,}|\d{4})$/";
     $isValid = preg_match($pattern,$id);
     if(!$isValid){
-      $response = [
-        "message" => "Invalid ID or Password",
-        "data" => null,
-      ];
-      return $this->setResponseFormat('json')->respond($response, 200);
+      $this->session->setFlashdata('sys_response_msg', 'Invalid ID or Password.');
+      return redirect()->to("/");
     }
 
     $isTeacher = false;
-    if(strcmp($as,"teacher") === 0){
+    if(strcmp($as, "teacher") === 0){
       $isTeacher = true;
     }
 
     if($isTeacher){
       // get info
-
       $teacher = $this->teacherModel->find($id);
 
       // err if no record found
       if(empty($teacher)){
-        $response = [
-          "message" => "Invalid ID or Password",
-          "data" => null,
-        ];
-        return $this->setResponseFormat('json')->respond($response, 200);
+        $this->session->setFlashdata('sys_response_msg', 'Invalid ID or Password.');
+        return redirect()->to("/");
       }
 
       $passwordMatch = password_verify($pass, $teacher['PASSWORD']);
 
       // err if password does not match
       if(!$passwordMatch){
-        $response = [
-          "message" => "Invalid ID or Password",
-          "data" => null,
-        ];
-        return $this->setResponseFormat('json')->respond($response, 200);
+        $this->session->setFlashdata('sys_response_msg', 'Invalid ID or Password.');
+        return redirect()->to("/");
       }
 
-      $this->session->set("userID", $teacher['ID']);
+      $this->session->set("user_id", $teacher['ID']);
+      return redirect()->to("/user/teacher");
     }else{
       $student = $this->studentModel->find($id);
 
@@ -85,32 +74,25 @@ class User extends BaseController{
 
       // err if password does not match
       if(!$passwordMatch){
-        $response = [
-          "message" => "Invalid ID or Password",
-          "data" => null,
-        ];
-        return $this->setResponseFormat('json')->respond($response, 200);
+        $this->session->setFlashdata('sys_response_msg', 'Invalid ID or Password.');
+        return redirect()->to("/");
       }
 
-      $this->session->set("userID", $student['ID']);
+      $this->session->set("user_id", $student['ID']);
+      return redirect()->to("/user/student");
     }
     // {end}
-
-    $response = [
-      "message" => "OK",
-      "data" => $isTeacher,
-    ];
-    return $this->setResponseFormat('json')->respond($response, 200);
+    return redirect()->to("/");
   }
 
   // teacher
   public function teacher(){
-    if(!$this->session->has("userID")){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
     // do something here
     // get data
-    $id = $this->session->get("userID");
+    $id = $this->session->get("user_id");
     $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
     $myData = $this->teacherModel->find($id);
     $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
@@ -224,7 +206,7 @@ class User extends BaseController{
     }
 
     $data = [
-			'id' => $this->session->get("userID"),
+			'id' => $this->session->get("user_id"),
 			'pageTitle' => "TEACHER | DASHBOARD",
 			'baseUrl' => base_url(),
       'isCleared' => $doneEvaluatedCounter == $TeacherstoRate,
@@ -246,12 +228,12 @@ class User extends BaseController{
   }
 
   public function supervisor(){
-    if(!$this->session->has("userID")){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
     // do something here
     // get data
-    $id = $this->session->get("userID");
+    $id = $this->session->get("user_id");
     $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
     $myData = $this->teacherModel->find($id);
     $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
@@ -470,10 +452,10 @@ class User extends BaseController{
 
   public function analyticsRating(){
     // check if session exist
-    if(!$this->session->has("userID")){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
-    $id = $this->session->get("userID"); // get session
+    $id = $this->session->get("user_id"); // get session
     $sy = $this->schoolyearModel->orderBy("ID","DESC")->first(); // get latest school year
     $myData = $this->teacherModel->find($id); // get user data
     $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']); // get department
@@ -568,11 +550,11 @@ class User extends BaseController{
     header("Content-type:application/json");
     $response = [];
     // check if session exist
-    if(!$this->session->has("userID")){
+    if(!$this->session->has("user_id")){
       $response = ['ERROR' => "No session set"];
       return $this->setResponseFormat('json')->respond($response, 200);
     }
-    $teacherId = $this->session->get("userID");
+    $teacherId = $this->session->get("user_id");
 
     // rating 
     $studentRating = $this->getRating($teacherId, 1, $schoolyear);
@@ -599,11 +581,11 @@ class User extends BaseController{
     header("Content-type:application/json");
     $response = [];
     // check if session exist
-    if(!$this->session->has("userID")){
+    if(!$this->session->has("user_id")){
       $response = ['ERROR' => "No session set"];
       return $this->setResponseFormat('json')->respond($response, 200);
     }
-    $teacherId = $this->session->get("userID");
+    $teacherId = $this->session->get("user_id");
 
     $my_comments = $this->evalInfoModel->select("
       `COMMENT`
@@ -623,10 +605,10 @@ class User extends BaseController{
   }
 
   public function analyticsComment(){
-    if(!$this->session->has("userID")){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
-    $id = $this->session->get("userID");
+    $id = $this->session->get("user_id");
     $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
     $myData = $this->teacherModel->find($id);
     $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
@@ -702,7 +684,7 @@ class User extends BaseController{
     }
 
     $data = [
-      'id' => $this->session->get("userID"),
+      'id' => $this->session->get("user_id"),
       'pageTitle' => "TEACHER | COMMENTS",
       'baseUrl' => base_url(),
       'isCleared' => $doneEvaluatedCounter == $TeacherstoRate,
@@ -718,10 +700,10 @@ class User extends BaseController{
   }
 
   public function analyticsDownload(){
-    if(!$this->session->has("userID")){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
-    $id = $this->session->get("userID");
+    $id = $this->session->get("user_id");
     $sy = $this->schoolyearModel->orderBy("ID","DESC")->findAll();
     $myData = $this->teacherModel->find($id);
     $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
@@ -810,12 +792,12 @@ class User extends BaseController{
   }
 
   public function teacherSetting(){
-    if(!$this->session->has("userID")){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
     // do something here
     // get data
-    $id = $this->session->get("userID");
+    $id = $this->session->get("user_id");
     $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
     $myData = $this->teacherModel->find($id);
     $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
@@ -918,7 +900,7 @@ class User extends BaseController{
   public function updateTeacherPassword(){
     header("Content-type:application/json");
     // do something here
-    $id = $this->session->get("userID");
+    $id = $this->session->get("user_id");
     $oldPassword = $this->request->getPost("oldPass");
     $newPassword = $this->request->getPost("confirmPass");
 
@@ -959,154 +941,58 @@ class User extends BaseController{
   }
 
   // student
-  public function student(){
+  public function student_page(){
     // check if their is a session
-    if(!$this->session->has("userID")){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
-    // do something here
-    $id = $this->session->get("userID");
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
-    $myData = $this->studentModel->find($id);
-    $currSection = $this->studentSectionModel
-    ->where("STUDENT_ID", $myData['ID'])
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->first();
 
-    if(!empty($currSection)){
-      $mySection = $this->sectionModel->find($currSection['SECTION_ID']);
-    }else{
-      $mySection = null;
-    }
+    // get user information
+    $student_data = $this->get_student_info($this->session->get("user_id"));
 
-
-    $evaluator = $this->evaluatorModel
-    ->where("STUDENT_ID", $myData['ID'])
-    ->first();
-
-    if(empty($evaluator)){
-      $_create = [
-        'STUDENT_ID' => $id,
-      ];
-      $this->evaluatorModel->insert($_create);
-      $evaluator_id = $this->evaluatorModel->insertID;
-    }else{
-      $evaluator_id = $evaluator['ID'];
-    }
-
-    $subjects = [];
-    $isCleared = false;
-    $count_isDone = 0;
-    if(!empty($mySection)){
-      // get subjects
-      $sectionSubject = $this->sectionSubjectModel
-      ->where("SECTION_ID", $mySection['ID'])
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->findAll();
-
-      foreach ($sectionSubject as $key => $subject) {
-        $subject_id = $subject['SUBJECT_ID'];
-        $teacher_id = $subject['TEACHER_ID'];
-
-        // check if is done rating
-        $isDone = $this->evalInfoModel
-        ->where("EVALUATOR_ID", $evaluator_id)
-        ->where("EVALUATED_ID", $teacher_id)
-        ->where("SUBJECT_ID", $subject_id)
-        ->where("SCHOOL_YEAR_ID", $sy['ID'])
-        ->where("EVAL_TYPE_ID", 1)
-        ->countAllResults();
-
-        if($isDone > 0){
-          $count_isDone += 1;
-        }
-
-        $teacherData = $this->teacherModel->find($teacher_id);
-        $subjectData = $this->subjectModel->find($subject_id);
-
-        $add = [
-          'isDone' => ($isDone > 0)? true:false,
-          'teacher' => $teacherData,
-          'subject' => $subjectData,
-        ];
-
-        array_push($subjects, $add);
-      }
-
-      $count_sectionSubject = $this->sectionSubjectModel
-      ->where("SECTION_ID", $mySection['ID'])
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->countAllResults();
-
-      $isCleared = ($count_sectionSubject == $count_isDone)? true:false;
-
-      if($isCleared){
-        $updateStatus = [
-          'STATUS' => 1,
-          'DATE' => $this->getCurrentDateTime(),
-        ];
-
-        $this->studentStatusModel
-        ->where("SCHOOL_YEAR_ID", $sy['ID'])
-        ->where("STUDENT_ID", $myData['ID'])
-        ->set($updateStatus)
-        ->update();
-      }
-    }
     $data = [
-      'id' => $this->session->get("userID"),
-      'pageTitle' => "STUDENT | DASHBOARD",
-      'baseUrl' => base_url(),
+      'page_title' => "STUDENT | DASHBOARD",
+      'base_url' => base_url(),
       // add some variables here
-      'myData' => $myData,
-      'sy' => $sy,
-      'mySection' => $mySection,
-      'subjects' => $subjects,
-      'isCleared' => $isCleared,
-      'ttlEvaluated' => $count_isDone,
+      'student_data' => $student_data['personal_data'],
+      'school_year' => $student_data['school_year'],
+      'student_section' => $student_data['section'],
+      'student_subjects' => $student_data['subjects'],
+      'student_status' => $student_data['status'],
+      'curr_ttl_evaluated' => $student_data['total_evaluated'],
     ];
+
     echo view("student/layout/header", $data);
     echo view("student/index", $data);
     echo view("student/layout/footer");
   }
 
-  public function studentSetting(){
-    if(!$this->session->has("userID")){
+  public function student_settings_page(){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
-    // do something here
-    $id = $this->session->get("userID");
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
-    $myData = $this->studentModel->find($id);
-    $currSection = $this->studentSectionModel
-    ->where("STUDENT_ID", $myData['ID'])
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->first();
 
-    if(!empty($currSection)){
-      $mySection = $this->sectionModel->find($currSection['SECTION_ID']);
-    }else{
-      $mySection = null;
-    }
+    // get user information
+    $student_data = $this->get_student_info($this->session->get("user_id"));
 
     $data = [
-      'id' => $this->session->get("userID"),
-      'pageTitle' => "STUDENT | SETTINGS",
-      'baseUrl' => base_url(),
+      'page_title' => "STUDENT | SETTINGS",
+      'base_url' => base_url(),
       // add some variables here
-      'myData' => $myData,
-      'sy' => $sy,
-      'mySection' => $mySection,
+      'student_data' => $student_data['personal_data'],
+      'school_year' => $student_data['school_year'],
+      'student_section' => $student_data['section'],
     ];
+
     echo view("student/layout/header", $data);
     echo view("student/pages/settings", $data);
     echo view("student/layout/footer");
   }
 
-  public function updateStudentPassword(){
+  public function update_student_password(){
     header("Content-type:application/json");
-    // do something here
-    $id = $this->session->get("userID");
+    
+    $id = $this->session->get("user_id");
     $oldPassword = $this->request->getPost("oldPass");
     $newPassword = $this->request->getPost("confirmPass");
 
@@ -1144,6 +1030,109 @@ class User extends BaseController{
     ];
 
     return $this->setResponseFormat('json')->respond($response, 200);
+  }
+
+  private function get_student_info($id){
+
+    $custom_utl = new MyCustomUtil();
+
+    $curr_school_year = $this->schoolyearModel->orderBy("ID","DESC")->first(); // get current school year
+    $student_data = $this->studentModel->find($id); 
+    $curr_section = $this->studentSectionModel
+      ->where("STUDENT_ID", $student_data['ID'])
+      ->where("SCHOOL_YEAR_ID", $curr_school_year['ID'])
+      ->first();
+
+    $student_curr_section = null;
+    if(!empty($curr_section)){
+      $student_curr_section = $this->sectionModel->find($curr_section['SECTION_ID']);
+    }
+
+    // retrieve student evaluator information
+    $student_evaluator_data = $this->evaluatorModel
+    ->where("STUDENT_ID", $student_data['ID'])
+    ->first();
+
+    if(empty($student_evaluator_data)){
+      $_create = [
+        'STUDENT_ID' => $id,
+      ];
+      $this->evaluatorModel->insert($_create);
+      $student_evaluator_id = $this->evaluatorModel->insertID;
+    }else{
+      $student_evaluator_id = $student_evaluator_data['ID'];
+    }
+
+    // TODO: CLEAN
+    $student_subjects = []; 
+    $is_cleared = false;
+    $done_evaluated_counter = 0;
+
+    if(!empty($student_curr_section)){
+      // get subjects
+      $sectionSubject = $this->sectionSubjectModel
+      ->where("SECTION_ID", $student_curr_section['ID'])
+      ->where("SCHOOL_YEAR_ID", $curr_school_year['ID'])
+      ->findAll();
+
+      foreach ($sectionSubject as $key => $subject) {
+        $subject_id = $subject['SUBJECT_ID'];
+        $teacher_id = $subject['TEACHER_ID'];
+
+        // check if is done rating
+        $is_done = $custom_utl->is_done_evaluated($student_evaluator_id, 
+          $teacher_id, 
+          $curr_school_year['ID'],
+          1, $subject_id
+        );
+
+        if($is_done){
+          $done_evaluated_counter += 1;
+        }
+
+        $teacher_data = $this->teacherModel->find($teacher_id);
+        $subject_data = $this->subjectModel->find($subject_id);
+
+        $subject = [
+          'is_done' => $is_done,
+          'teacher_data' => $teacher_data,
+          'subject_data' => $subject_data,
+        ];
+
+        array_push($student_subjects, $subject);
+      }
+
+      $ttl_subjects_in_section = $this->sectionSubjectModel
+      ->where("SECTION_ID", $student_curr_section['ID'])
+      ->where("SCHOOL_YEAR_ID", $curr_school_year['ID'])
+      ->countAllResults();
+
+      $is_cleared = ($ttl_subjects_in_section == $done_evaluated_counter)? true:false;
+
+      // update student status
+      if($is_cleared){
+        $update_status = [
+          'STATUS' => 1,
+          'DATE' => $this->getCurrentDateTime(),
+        ];
+
+        $this->studentStatusModel
+        ->where("SCHOOL_YEAR_ID", $curr_school_year['ID'])
+        ->where("STUDENT_ID", $student_data['ID'])
+        ->set($update_status)
+        ->update();
+      }
+    }
+
+    return [
+      "personal_data" => $student_data,
+      "section" => $student_curr_section,
+      "evaluator_id" => $student_evaluator_id,
+      "subjects" => $student_subjects,
+      "status" => $is_cleared,
+      "total_evaluated" => $done_evaluated_counter,
+      "school_year" => $curr_school_year
+    ];
   }
 
   public function func_name(){
