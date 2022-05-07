@@ -45,7 +45,7 @@
         </tbody>
       </table>
     </div>
-    <div class="mb-3 hidden <?php echo ($is_supervisor)? "":"hidden";?>">
+    <div class="mb-3 <?php echo ($is_supervisor)? "":"hidden";?>">
       <?php if($is_supervisor){
         $as = "";
         if($is_chairperson){
@@ -98,8 +98,6 @@
     </table>
   </div>
 </div>
-
-
 <script>
 // refresh the page when active
   document.addEventListener("visibilitychange", function() {

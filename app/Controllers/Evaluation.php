@@ -2,7 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Libraries\MyCustomUtil;
+use App\Libraries\UserDButil;
+
 class Evaluation extends BaseController{
   public function peer($evaluated = false){
     if(!$this->session->has("userID")){
@@ -70,7 +71,7 @@ class Evaluation extends BaseController{
       return redirect()->to("/");
     }
     
-    $custom_utl = new MyCustomUtil();
+    $user_db_util = new UserDButil();
 
     $student_id = $this->session->get("user_id");
     $evaluator = $this->evaluatorModel
@@ -90,7 +91,7 @@ class Evaluation extends BaseController{
     // check if done rated
     $curr_school_year = $this->schoolyearModel->orderBy("ID","DESC")->first();
 
-    $is_done = $custom_utl->is_done_evaluated($evaluator_id, $evaluated_id, $curr_school_year['ID'], 1, $subject_id);
+    $is_done = $user_db_util->is_done_evaluated($evaluator_id, $evaluated_id, $curr_school_year['ID'], 1, $subject_id);
 
     $questions = $this->evalQuestionModel
     ->where("EVAL_TYPE_ID", 1)

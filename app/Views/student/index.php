@@ -1,7 +1,7 @@
 <div class="w-full p-2">
   <!-- INFO -->
   <div class="p-3 bg-gray-100 rounded-md mb-3">
-    <p class=" text-lg font-bold">Information</p>
+    <p class=" text-lg font-bold">System Information</p>
     <div class=" grid grid-cols-4 text-sm uppercase">
       <p class="">School Year: </p>
       <p class=" col-span-3"><?php echo "{$school_year['SY']}"; ?></p>
@@ -16,7 +16,7 @@
       <p class=" col-span-3"><?php echo ($student_section['HAS_RNI'])? "Yes":"No"; ?></p>
 
       <p class="">Total Evaluated: </p>
-      <p class=" col-span-3"><?php echo "$curr_ttl_evaluated"; ?></p>
+      <p class=" col-span-3"><?php echo "$done_evaluated_counter/".count($student_subjects); ?></p>
 
       <p class="">Status: </p>
       <p class=" col-span-3"><?php echo ($student_status)? "Cleared":"Not Cleared"; ?></p>

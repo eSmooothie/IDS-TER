@@ -101,7 +101,7 @@ $routes->post("/user/login", "User::login");
 $routes->get("/user/teacher", "User::teacher_page");
 $routes->get("/user/teacher/settings", "User::teacherSetting");
 $routes->get("/user/teacher/rate/supervisor", "User::supervisor");
-$routes->get("/user/teacher/analytics/rating", "User::analyticsRating");
+$routes->get("/user/teacher/analytics/rating", "User::teacher_analytics_rating");
 $routes->get("/user/teacher/analytics/comment", "User::analyticsComment");
 $routes->get("/user/teacher/analytics/download", "User::analyticsDownload");
 

@@ -50,7 +50,7 @@
       }else{
         ?>
         <div class="">
-          <form class="evaluation">
+          <form id="evaluation">
             <input type="hidden" name="evaluated_id" value="<?php echo "{$evaluated['ID']}"; ?>">
             <input type="hidden" name="evaluator_id" value="<?php echo "$evaluator_id"; ?>">
             <input type="hidden" name="eval_type" value="3">

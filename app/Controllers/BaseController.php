@@ -118,21 +118,18 @@ class BaseController extends Controller
 	/**
 	 * map the data to be passed in the view
 	 * 
-	 * @param Object $sessionId, 
 	 * @param String $pageTitle,
 	 * @param Array $others = [],
 	 * 
 	 * @return Array $map
 	 */
-	public function mapPageParameters($sessionId, string $pageTitle, array $others = []){
+	public function map_page_parameters(string $pageTitle, array $others = []){
 		$map = [
-			'sessionId' => $sessionId,
-			'pageTitle' => $pageTitle,
-			'baseUrl' => base_url(),
+			'page_title' => $pageTitle,
+			'base_url' => base_url(),
 		];
 
 		foreach($others as $key => $value){
-			// do something
 			$map[$key] = $value;
 		}
 

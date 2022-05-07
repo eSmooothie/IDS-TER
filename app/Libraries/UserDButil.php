@@ -277,4 +277,18 @@ class UserDButil{
     public function get_current_school_year(){
       return $this->school_year_model->orderBy("ID","DESC")->first();
     }
+
+    public function get_total_done_evaluated($evaluator_id, $school_year_id){
+      return $this->evaluator_info_model->where("EVALUATOR_ID", $evaluator_id)
+        ->where("SCHOOL_YEAR_ID", $school_year_id)
+        ->countAllResults();
+    }
+
+    public function get_total_number_of_colleagues($teacher_id, $department_id, $include_leave = False){
+      return $this->teacher_model
+        ->where("DEPARTMENT_ID", $department_id)
+        ->notLike("ID", $teacher_id)
+        ->where("ON_LEAVE", ($include_leave)? 1: 0)
+      ->countAllResults();
+    }
 }

@@ -3,13 +3,13 @@
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <p class="mb-4 text-lg font-bold">Rating</p>
     <div class="grid grid-cols-9 text-blue-600">
-      <a href="<?php echo "$baseUrl/user/teacher/analytics/rating"; ?>" class="">
+      <a href="<?php echo "$base_url/user/teacher/analytics/rating"; ?>" class="">
         <i class="fas fa-star-half-alt"></i>
         Rating</a>
-      <a href="<?php echo "$baseUrl/user/teacher/analytics/comment"; ?>" class="">
+      <a href="<?php echo "$base_url/user/teacher/analytics/comment"; ?>" class="">
         <i class="far fa-comments"></i>
         Comments</a>
-      <a href="<?php echo "$baseUrl/user/teacher/analytics/download"; ?>" class="">
+      <a href="<?php echo "$base_url/user/teacher/analytics/download"; ?>" class="">
         <i class="fas fa-download"></i>
         Download</a>
     </div>
@@ -24,7 +24,7 @@
       <!-- TODO: CHANGE TABLE DATA BASED IN SY -->
       <select id="select_sy" class="mb-3 min-w-full">
         <?php
-          foreach ($schoolyears as $key => $value) {
+          foreach ($all_school_years as $key => $value) {
             ?>
               <option value="<?php echo "{$value['ID']}"; ?>">
                 <?php echo "{$value['SY']}:{$value['SEMESTER']}"; ?>
@@ -62,4 +62,4 @@
   </div>
 </div>
 
-<script src="<?php echo "$baseUrl/assets/js/tchrRating.js";?>"></script>
+<script src="<?php echo "$base_url/assets/js/tchrRating.js";?>"></script>

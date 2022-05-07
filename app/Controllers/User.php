@@ -99,9 +99,7 @@ class User extends BaseController{
     $school_year = $this->schoolyearModel->orderBy("ID","DESC")->first();
     $teacher_data = $user_db_util->get_teacher_info($id);
 
-    $done_evaluated_counter = $this->evalInfoModel->where("EVALUATOR_ID", $teacher_data['evaluator_id'])
-    ->where("SCHOOL_YEAR_ID", $school_year['ID'])
-    ->countAllResults();
+    $done_evaluated_counter = $user_db_util->get_total_done_evaluated($teacher_data['evaluator_id'], $school_year['ID']);
 
     // Count number of teachers needed to rate in order mark as cleared.
     $teachers_to_rate = count($teacher_data['colleagues']); 
@@ -117,20 +115,11 @@ class User extends BaseController{
 
       $teachers_to_rate = $teachers_to_rate + $total_chairpersons + $total_execoms;
     }else if($teacher_data['is_chairperson']){
-      $colleagues = $this->teacherModel
-      ->where("DEPARTMENT_ID", $teacher_data['department_data']['ID'])
-      ->where("ID !=", $id)
-      ->where("ON_LEAVE", 0)
-      ->countAllResults();
-
-      $teachers_to_rate = $teachers_to_rate + $colleagues;
+      $teachers_to_rate = $teachers_to_rate * 2;
     }
 
-    $data = [
-			'page_title' => "TEACHER | DASHBOARD",
-			'base_url' => base_url(),
+    $args = [
       'is_cleared' => $done_evaluated_counter == $teachers_to_rate,
-      // add some variables here
       'personal_data' => $teacher_data['teacher_data'],
       'subject_teaches' => $teacher_data['subject_teaches'],
       'department' => $teacher_data['department_data'],
@@ -142,6 +131,8 @@ class User extends BaseController{
       'is_chairperson' => $teacher_data['is_chairperson'],
       'is_principal' => $teacher_data['is_principal'],
 		];
+
+    $data = $this->map_page_parameters("TEACHER | DASHBOARD", $args);
 
     echo view("teacher/layout/header", $data);
 		echo view("teacher/index.php", $data);
@@ -346,7 +337,6 @@ class User extends BaseController{
       $TeacherstoRate = $TeacherstoRate + $colleagues;
     }
 
-    $sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | TEACHER";
 		$args = [
       'isCleared' => $doneEvaluatedCounter == $TeacherstoRate,
@@ -360,8 +350,7 @@ class User extends BaseController{
       'isPrincipal' => $isPrincipal ,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
@@ -371,93 +360,47 @@ class User extends BaseController{
     echo view("teacher/layout/footer");
   }
 
-  public function analyticsRating(){
+  public function teacher_analytics_rating(){
     // check if session exist
     if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
+
+    $user_db_util = new UserDButil();
+
     $id = $this->session->get("user_id"); // get session
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first(); // get latest school year
-    $myData = $this->teacherModel->find($id); // get user data
-    $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']); // get department
-    $schoolyears = $this->schoolyearModel->orderBy("ID","DESC")->findAll(); // get all school year
+    $teacher_data = $user_db_util->get_teacher_info($id);
+    $all_school_year = $this->schoolyearModel->orderBy("ID","DESC")->findAll(); // get all school year
 
-    // check if a supervisor
-    $isChairperson = $this->departmentHistoryModel
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
-    ->where("TEACHER_ID", $myData['ID'])
-    ->countAllResults();
+    $curr_school_year = $user_db_util->get_current_school_year();
+    $done_evaluated_counter = $user_db_util->get_total_done_evaluated($teacher_data['evaluator_id'], $curr_school_year['ID']);
 
-    $isPrincipal = $this->execomHistoryModel
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->where("EXECOM_ID", 1)
-    ->where("TEACHER_ID", $myData['ID'])
-    ->countAllResults();
+    $teachers_to_rate = count($teacher_data['colleagues']); 
 
-    $evaluator = $this->evaluatorModel
-    ->where("TEACHER_ID", $id)
-    ->first();
-
-    if(empty($evaluator)){
-      // if no evaluator id, create one
-      $create_evaluator_id = [
-        'TEACHER_ID' => $id,
-      ];
-
-      $this->evaluatorModel->insert($create_evaluator_id);
-      $myEvaluatorId = $this->evaluatorModel->insertID;
-    }else{
-      $myEvaluatorId = $evaluator['ID'];
-    }
-
-
-    $doneEvaluatedCounter = $this->evalInfoModel->where("EVALUATOR_ID", $myEvaluatorId)
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->countAllResults();
-
-
-    $totalPeers = $this->teacherModel
-    ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
-    ->where("ID !=", $id)
-    ->where("ON_LEAVE", 0)
-    ->countAllResults();
-
-    $TeacherstoRate = $totalPeers;
-
-    if($isPrincipal){
-      $totalChairpersons = $this->departmentHistoryModel
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
+    if($teacher_data['is_principal']){
+      $total_chairpersons = $this->departmentHistoryModel
+      ->where("SCHOOL_YEAR_ID", $curr_school_year['ID'])
       ->countAllResults();
 
-      $totalExecoms = $this->execomHistoryModel
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
+      $total_execoms = $this->execomHistoryModel
+      ->where("SCHOOL_YEAR_ID", $curr_school_year['ID'])
       ->where("EXECOM_ID !=", 1)
       ->countAllResults();
 
-      $TeacherstoRate = $TeacherstoRate + $totalChairpersons + $totalExecoms;
-    }else if($isChairperson){
-      $colleagues = $this->teacherModel
-      ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
-      ->where("ID !=", $id)
-      ->where("ON_LEAVE", 0)
-      ->countAllResults();
-
-      $TeacherstoRate = $TeacherstoRate + $colleagues;
+      $teachers_to_rate = $teachers_to_rate + $total_chairpersons + $total_execoms;
+    }else if($teacher_data['is_chairperson']){
+      $teachers_to_rate = $teachers_to_rate * 2;
     }
 
-    $sessionId = $this->session->get("adminID");
 		$pageTitle = "TEACHER | RATING";
 		$args = [
-      'isCleared' => $doneEvaluatedCounter == $TeacherstoRate,
-      'myData' => $myData,
-      'myDept' => $myDept,
-      'sy' => $sy,
-      'schoolyears' => $schoolyears,
+      'is_cleared' => $done_evaluated_counter == $teachers_to_rate,
+      'personal_data' => $teacher_data['teacher_data'],
+      'department' => $teacher_data['department_data'],
+      'all_school_years' => $all_school_year,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
@@ -692,8 +635,7 @@ class User extends BaseController{
       $TeacherstoRate = $TeacherstoRate + $colleagues;
     }
 
-    $sessionId = $this->session->get("adminID");
-		$pageTitle = "TEACHER | DOWNLOADS";
+		$page_title = "TEACHER | DOWNLOADS";
 		$args = [
       'isCleared' => $doneEvaluatedCounter == $TeacherstoRate,
       'myData' => $myData,
@@ -701,9 +643,8 @@ class User extends BaseController{
       'sy' => $sy,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
-			$pageTitle,
+		$data = $this->map_page_parameters(
+			$page_title,
 			$args
 		);
 
@@ -798,7 +739,6 @@ class User extends BaseController{
       $TeacherstoRate = $TeacherstoRate + $colleagues;
     }
 
-    $sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | TEACHER";
 		$args = [
       'isCleared' => $doneEvaluatedCounter == $TeacherstoRate,
@@ -807,8 +747,7 @@ class User extends BaseController{
       'sy' => $sy,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
@@ -873,17 +812,16 @@ class User extends BaseController{
     // get user information
     $student_data = $user_db_util->get_student_info($this->session->get("user_id"));
 
-    $data = [
-      'page_title' => "STUDENT | DASHBOARD",
-      'base_url' => base_url(),
-      // add some variables here
+    $args = [
       'student_data' => $student_data['personal_data'],
       'school_year' => $student_data['school_year'],
       'student_section' => $student_data['section'],
       'student_subjects' => $student_data['subjects'],
       'student_status' => $student_data['status'],
-      'curr_ttl_evaluated' => $student_data['total_evaluated'],
+      'done_evaluated_counter' => $student_data['total_evaluated'],
     ];
+
+    $data = $this->map_page_parameters("STUDENT | DASHBOARD", $args);
 
     echo view("student/layout/header", $data);
     echo view("student/index", $data);
@@ -900,14 +838,13 @@ class User extends BaseController{
     // get user information
     $student_data = $user_db_util->get_student_info($this->session->get("user_id"));
 
-    $data = [
-      'page_title' => "STUDENT | SETTINGS",
-      'base_url' => base_url(),
-      // add some variables here
+    $args = [
       'student_data' => $student_data['personal_data'],
       'school_year' => $student_data['school_year'],
       'student_section' => $student_data['section'],
     ];
+
+    $data = $this->map_page_parameters("STUDENT | SETTINGS", $args);
 
     echo view("student/layout/header", $data);
     echo view("student/pages/settings", $data);
