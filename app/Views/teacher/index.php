@@ -12,31 +12,31 @@
         <tbody class=" text-sm">
           <tr>
             <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">School Year</td>
-            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$sy['SY']}"; ?></td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$school_year['SY']}"; ?></td>
           </tr>
           <tr>
             <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">Semester</td>
-            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$sy['SEMESTER']}";?></td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$school_year['SEMESTER']}";?></td>
           </tr>
           <tr>
             <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">Department</td>
-            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$myDept['NAME']}"; ?></td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$department['NAME']}"; ?></td>
           </tr>
           <tr>
             <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">is Lecturer</td>
-            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo ($myData['IS_LECTURER'])? "Yes":"No"; ?></td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo ($personal_data['IS_LECTURER'])? "Yes":"No"; ?></td>
           </tr>
           <tr>
             <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">is Supervisor</td>
-            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo ($isSupervisor)? "Yes" : "No"; ?></td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo ($is_supervisor)? "Yes" : "No"; ?></td>
           </tr>
           <tr>
             <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">Total Evaluated</td>
-            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo $evaluatedCounter; ?></td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo $done_evaluated_counter."/".$teachers_to_rate; ?></td>
           </tr>
           <tr>
             <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">Status</td>
-            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo ($isCleared)? "CLEARED":"NOT CLEARED"; ?></td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo ($is_cleared)? "CLEARED":"NOT CLEARED"; ?></td>
           </tr>
           <tr>
             <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">Mode</td>
@@ -45,16 +45,16 @@
         </tbody>
       </table>
     </div>
-    <div class="mb-3 hidden <?php echo ($isSupervisor)? "":"hidden";?>">
-      <?php if($isSupervisor){
+    <div class="mb-3 hidden <?php echo ($is_supervisor)? "":"hidden";?>">
+      <?php if($is_supervisor){
         $as = "";
-        if($isChairperson){
+        if($is_chairperson){
           $as = "chairperson";
-        }else if($isPrincipal){
+        }else if($is_principal){
           $as = "principal";
         }
         ?>
-        <a href="<?php echo "$baseUrl/user/teacher/rate/supervisor"; ?>" class="hover:bg-blue-400 rounded-full px-5 bg-blue-300 p-2">RATE AS A SUPERVISOR</a>
+        <a href="<?php echo "$base_url/user/teacher/rate/supervisor"; ?>" class="hover:bg-blue-400 rounded-full px-5 bg-blue-300 p-2">RATE AS A SUPERVISOR</a>
         <?php
       } ?>
     </div>
@@ -75,19 +75,19 @@
         class="d-block mx-auto rounded-circle"
         style="height:100px; width:100px;"></a> -->
         <?php
-          foreach ($peer as $key => $value) {
-            $isDone = $value['isDone'];
+          foreach ($colleagues as $key => $value) {
+            $is_done = $value['is_done'];
             $teacher = $value['teacher'];
 
-            $path = ($isDone)?"#":"$baseUrl/evaluate/peer/{$teacher['ID']}";
+            $path = ($is_done)?"#":"$base_url/evaluate/peer/{$teacher['ID']}";
             ?>
             <tr class="">
               <th scope="row" class="py-1 px-6 text-sm font-medium whitespace-nowrap text-left"><?php echo "{$teacher['ID']}"; ?></th>
               <td class="py-2 px-6 text-sm font-medium whitespace-nowrap"><?php echo "{$teacher['LN']}, {$teacher['FN']}"; ?></td>
               <td class="py-2 px-6 text-sm font-medium whitespace-nowrap text-center">
-                <a <?php echo ($isDone)?"":"target=\"_blank\""; ?> href="<?php echo "$path"; ?>" 
-                class="py-1 px-2 rounded-lg <?php echo ($isDone)? "bg-green-300": "bg-blue-300"; ?>">
-                <?php echo ($isDone)?"Done":"Evaluate"; ?>
+                <a <?php echo ($is_done)?"":"target=\"_blank\""; ?> href="<?php echo "$path"; ?>" 
+                class="py-1 px-2 rounded-lg <?php echo ($is_done)? "bg-green-300": "bg-blue-300"; ?>">
+                <?php echo ($is_done)?"Done":"Evaluate"; ?>
               </a></td>
             </tr>
             <?php

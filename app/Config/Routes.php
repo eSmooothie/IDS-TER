@@ -98,7 +98,7 @@ $routes->post("/admin/execom/update", "Execom::assign");
 // user::
 $routes->post("/user/login", "User::login");
 // user::teacher
-$routes->get("/user/teacher", "User::teacher");
+$routes->get("/user/teacher", "User::teacher_page");
 $routes->get("/user/teacher/settings", "User::teacherSetting");
 $routes->get("/user/teacher/rate/supervisor", "User::supervisor");
 $routes->get("/user/teacher/analytics/rating", "User::analyticsRating");

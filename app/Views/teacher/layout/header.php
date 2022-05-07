@@ -13,7 +13,7 @@
   <!-- TailwindCSS -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>/assets/css/output.css">
 
-  <title><?php echo "$pageTitle"; ?></title>
+  <title><?php echo "$page_title"; ?></title>
 </head>
 <body class="flex min-h-full" style="
 background-color: #420516;
@@ -23,35 +23,35 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
   <!-- PROFILE INFO -->
   <div class="flex-col flex items-center p-3 w-full">
     <div class="mb-4">
-      <img src="<?php echo "$baseUrl";?>/assets/img/hornet_400x400.jpg" alt="" class="border border-pink-700 rounded-full w-32"></a>
+      <img src="<?php echo "$base_url";?>/assets/img/hornet_400x400.jpg" alt="" class="border border-pink-700 rounded-full w-32"></a>
     </div>
-    <p class=" px-1 break-words w-full text-center" ><?php echo "{$myData['FN']} {$myData['LN']}"; ?></p>
-    <p class=" text-base"><small><?php echo "{$myData['ID']}"; ?></small></p>
+    <p class=" px-1 break-words w-full text-center" ><?php echo "{$personal_data['FN']} {$personal_data['LN']}"; ?></p>
+    <p class=" text-base"><small><?php echo "{$personal_data['ID']}"; ?></small></p>
   </div>
   <!-- NAVIGATION -->
   <div class=" flex-col flex">
-    <a href="<?php echo "$baseUrl/user/teacher/"; ?>" 
+    <a href="<?php echo "$base_url/user/teacher/"; ?>" 
     class="border border-black p-2 border-r-0 border-l-0 items-center grid grid-cols-4 hover:bg-gray-300">
       <i class="fas fa-star"></i>
       <span class=" col-span-2">Evaluate</span> 
     </a>
-    <a href="<?php echo ($isCleared)? "$baseUrl/user/teacher/analytics/rating":""; ?>"
+    <a href="<?php echo ($is_cleared)? "$base_url/user/teacher/analytics/rating":""; ?>"
      class="border border-black p-2 border-r-0 border-l-0 items-center grid grid-cols-4 hover:bg-gray-300">
       <?php
-        if($isCleared){
+        if($is_cleared){
           ?><i class="fas fa-chart-bar"></i> Analytics<?php
         }else{
           ?><i class="fas fa-lock"></i> Analytics (lock)<?php
         }
        ?>
     </a>
-    <a href="<?php echo "$baseUrl/user/teacher/settings"; ?>"
+    <a href="<?php echo "$base_url/user/teacher/settings"; ?>"
      class="border border-black p-2 border-r-0 border-l-0 items-center grid grid-cols-4 hover:bg-gray-300">
       <i class="fas fa-cog"></i>
       Settings
 
     </a>
-    <a href="<?php echo "$baseUrl/"; ?>"
+    <a href="<?php echo "$base_url/"; ?>"
      class="border border-black p-2 border-r-0 border-l-0 items-center grid grid-cols-4 hover:bg-gray-300">
       <i class="fas fa-sign-out-alt"></i>
       Logout
