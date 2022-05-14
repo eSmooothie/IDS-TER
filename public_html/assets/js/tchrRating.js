@@ -19,15 +19,32 @@ function sendRequest(
 $(document).ready(function(){
     console.log("docs ready");
 
-    load_rating();
+    $('#select_sy').on('change', function(){
+        let school_year_id = $(this).find(":selected").val();
+        load_rating(school_year_id);
+    });
+
+    load_rating($('#select_sy').find(":selected").val());
 });
 
 var computing_interval = null
 
 $(document).ajaxStart(function(){
     console.log("Loading...");
+
+    document.getElementById("rating_loading").classList.remove("hidden");
+    document.getElementById("teacherOverall").classList.add("hidden");
+
     let text = "Computing";
     var start = 1;
+    let tbody = document.getElementById("teacherRating");
+    let total_child = tbody.children.length - 1;
+    
+    while(total_child > 0){
+        tbody.removeChild(tbody.lastChild);
+        total_child -= 1;
+    }
+    
     computing_interval = setInterval(function(){
         for(let i = 0; i < start; i++){
             text += ".";
@@ -48,18 +65,18 @@ $(document).ajaxStop(function(){
     document.getElementById("rating_loading").classList.add("hidden");
 });
 
-function load_rating(){
-    var school_year = 1;
+function load_rating(school_year_id){
     var method = 'get';
-    var path = '/teacher/rating/breakdown/'+ school_year;
+    var path = '/teacher/rating/breakdown/'+ school_year_id;
 
     const tr = document.createElement("tr");
     const th = document.createElement("th");
     const td = document.createElement("td");
-    const tbody = document.getElementById("teacherRating");
+   
     
     var done = function(data, textStatus, xhr ){
         // console.log(data);
+        const tbody = document.getElementById("teacherRating");
 
         let student_rating = data['student_rating'];
         let peer_rating = data['peer_rating'];
@@ -151,8 +168,8 @@ function load_rating(){
 
         document.getElementById("Overall").innerHTML = overall;
 
-
         document.getElementById("teacherOverall").classList.remove("hidden");
+        
     }
     var fail = function(xhr,textStatus,errorMessage){
         console.log(xhr);

@@ -361,8 +361,6 @@ class User extends BaseController{
     $teacher_data = $user_db_util->get_teacher_info($id);
     $all_school_year = $this->schoolyearModel->orderBy("ID","DESC")->findAll(); // get all school year
 
-    $curr_school_year = $user_db_util->get_current_school_year();
-
 		$pageTitle = "TEACHER | RATING";
 		$args = [
       'is_cleared' => $this->session->get('teacher_is_cleared'),
@@ -450,7 +448,6 @@ class User extends BaseController{
     $teacher_data = $user_db_util->get_teacher_info($id);
     $all_school_year = $this->schoolyearModel->orderBy("ID","DESC")->findAll(); // get all school year
 
-    $curr_school_year = $user_db_util->get_current_school_year();
 
 		$pageTitle = "TEACHER | RATING";
 		$args = [

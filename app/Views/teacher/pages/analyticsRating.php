@@ -24,14 +24,18 @@
       <!-- TODO: CHANGE TABLE DATA BASED IN SY -->
       <select id="select_sy" class="mb-3 min-w-full">
         <?php
+         $is_selected = false;
           foreach ($all_school_years as $key => $value) {
+            $id = $value['ID'];
+            $sy = $value['SY'];
+            $semester = $value['SEMESTER'];
             ?>
-              <option value="<?php echo "{$value['ID']}"; ?>">
-                <?php echo "{$value['SY']}:{$value['SEMESTER']}"; ?>
-              </option>
+              <option <?php if(!$is_selected){ echo "selected"; $is_selected = true;}?> 
+              value="<?php echo "$id"; ?>"><?php echo "$sy : $semester"; ?></option>
             <?php
           }
           ?>
+          
       </select>
     </div>
     <table class="mb-3 min-w-full">

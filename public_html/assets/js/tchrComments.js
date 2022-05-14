@@ -33,6 +33,16 @@ $(document).ajaxStart(function(){
     console.log("Fetching comments...");
     let text = "Retrieving Comments";
     var start = 1;
+
+    const comment_container = document.getElementById('commentContainer');
+        
+    let total_child = comment_container.children.length - 1;
+    
+    while(total_child > 0){
+        comment_container.removeChild(comment_container.lastChild);
+        total_child -= 1;
+    }
+
     computing_interval = setInterval(function(){
         for(let i = 0; i < start; i++){
             text += ".";
@@ -64,13 +74,6 @@ function get_comments(school_year_id){
         var comments = data['comments'];
         
         const comment_container = document.getElementById('commentContainer');
-        
-        let total_child = comment_container.children.length - 1;
-        
-        while(total_child > 0){
-            comment_container.removeChild(comment_container.lastChild);
-            total_child -= 1;
-        }
 
         for(let i = 0; i < comments.length; i++){
             const comment = comments[i]['COMMENT'];

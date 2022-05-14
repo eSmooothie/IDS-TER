@@ -30,7 +30,7 @@
             <?php
           }
           ?>
-          <option value="2">TEST</option>
+          
       </select>
     </div>
   </div>
