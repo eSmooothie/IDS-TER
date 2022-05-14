@@ -7,7 +7,7 @@ function sendRequest(
       ){
       var baseUrl = window.location.origin;
       var url = baseUrl + path;
-  
+      
       $.ajax({
         type:method,
         url:url,
@@ -19,13 +19,18 @@ function sendRequest(
 $(document).ready(function(){
     console.log("docs ready");
 
-    get_comments();
+    $('#select_sy').on('change', function(){
+        let school_year_id = $(this).find(":selected").val();
+        get_comments(school_year_id);
+    });
+    
+    get_comments($('#select_sy').find(":selected").val());
 });
 
 var computing_interval = null
 
 $(document).ajaxStart(function(){
-    console.log("Loading...");
+    console.log("Fetching comments...");
     let text = "Retrieving Comments";
     var start = 1;
     computing_interval = setInterval(function(){
@@ -48,18 +53,24 @@ $(document).ajaxStop(function(){
     document.getElementById("loading_msg").classList.add("hidden");
 });
 
-function get_comments(){
-    var filter = "1";
+function get_comments(school_year_id){
     var method = 'get';
-    var path = '/teacher/comments/'+ filter;
+    var path = '/teacher/comments/'+ school_year_id;
+    
+
     
     var done = function(data, textStatus, xhr ){
         // console.log(data);
-
         var comments = data['comments'];
-        console.log(comments);
         
         const comment_container = document.getElementById('commentContainer');
+        
+        let total_child = comment_container.children.length - 1;
+        
+        while(total_child > 0){
+            comment_container.removeChild(comment_container.lastChild);
+            total_child -= 1;
+        }
 
         for(let i = 0; i < comments.length; i++){
             const comment = comments[i]['COMMENT'];
@@ -73,7 +84,18 @@ function get_comments(){
 
             div.appendChild(span);
             comment_container.appendChild(div);
+        }
+
+        if (comments.length == 0){
+            const div = document.createElement('div');
+            div.className = "border border-gray-600 mb-4 p-3 rounded-lg";
+            const span = document.createElement("span");
+            span.classList.add("mb-5");
             
+            span.innerHTML = "NO COMMENTS";
+
+            div.appendChild(span);
+            comment_container.appendChild(div);
         }
     }
     var fail = function(xhr,textStatus,errorMessage){}

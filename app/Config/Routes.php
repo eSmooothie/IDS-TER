@@ -101,12 +101,12 @@ $routes->post("/user/login", "User::login");
 $routes->get("/user/teacher", "User::teacher_page");
 $routes->get("/user/teacher/settings", "User::teacherSetting");
 $routes->get("/user/teacher/rate/supervisor", "User::supervisor");
-$routes->get("/user/teacher/analytics/rating", "User::teacher_analytics_rating");
-$routes->get("/user/teacher/analytics/comment", "User::analyticsComment");
+$routes->get("/user/teacher/analytics/rating", "User::teacher_analytics_rating_page");
+$routes->get("/user/teacher/analytics/comment", "User::teacher_analytics_comment_page");
 $routes->get("/user/teacher/analytics/download", "User::analyticsDownload");
 
-$routes->get("/teacher/rating/breakdown/(:num)", "User::getTeacherRating/$1");
-$routes->get("/teacher/comments/(:segment)", "User::getTeacherComments/$1");
+$routes->get("/teacher/rating/breakdown/(:num)", "User::get_teacher_rating/$1");
+$routes->get("/teacher/comments/(:segment)", "User::get_teacher_feedbacks/$1");
 
 $routes->post("/user/teacher/update/password", "User::updateTeacherPassword");
 // user::student

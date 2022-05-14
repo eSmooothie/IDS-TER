@@ -138,12 +138,7 @@ class UserDButil{
           array_push($student_subjects, $subject);
         }
   
-        $ttl_subjects_in_section = $this->section_subject_model
-        ->where("SECTION_ID", $student_curr_section['ID'])
-        ->where("SCHOOL_YEAR_ID", $curr_school_year['ID'])
-        ->countAllResults();
-  
-        $is_cleared = ($ttl_subjects_in_section == $done_evaluated_counter)? true:false;
+        $is_cleared = $this->is_cleared($student_data['ID']);
   
         // update student status
         if($is_cleared){
@@ -194,12 +189,15 @@ class UserDButil{
       // get teacher colleagues
       $teacher_peers = $this->get_teacher_colleagues($id, $teacher_deparment['ID'], $teacher_evaluator_id, $curr_school_year['ID']);
 
+      $is_cleared = $this->is_cleared($teacher_data['ID'], false);
+
       return [
         'teacher_data' => $teacher_data,
         'evaluator_id' => $teacher_evaluator_id,
         'subject_teaches' => $teacher_subject_teaches,
         'department_data' => $teacher_deparment,
         'colleagues' => $teacher_peers,
+        'is_cleared' => $is_cleared,
         'is_chairperson' => $this->is_chairperson($teacher_data['ID'], $teacher_data['DEPARTMENT_ID'], $curr_school_year['ID']),
         'is_principal' => $this->is_principal($teacher_data['ID'], $curr_school_year['ID']),
         'is_supervisor' => $this->is_supervisor($teacher_data['ID'], $teacher_data['DEPARTMENT_ID'], $curr_school_year['ID'])
@@ -279,9 +277,10 @@ class UserDButil{
     }
 
     public function get_total_done_evaluated($evaluator_id, $school_year_id){
-      return $this->evaluator_info_model->where("EVALUATOR_ID", $evaluator_id)
-        ->where("SCHOOL_YEAR_ID", $school_year_id)
-        ->countAllResults();
+      $done_evaluated = $this->evaluator_info_model->where("EVALUATOR_ID", $evaluator_id)
+      ->where("SCHOOL_YEAR_ID", $school_year_id)
+      ->countAllResults();
+      return $done_evaluated;
     }
 
     public function get_total_number_of_colleagues($teacher_id, $department_id, $include_leave = False){
@@ -290,5 +289,72 @@ class UserDButil{
         ->notLike("ID", $teacher_id)
         ->where("ON_LEAVE", ($include_leave)? 1: 0)
       ->countAllResults();
+    }
+
+    public function get_student_total_subjects($student_id, $school_year_id){
+      $section = $this->student_section_model
+        ->where("STUDENT_ID", $student_id)
+        ->where("SCHOOL_YEAR_ID", $school_year_id)
+        ->first();
+
+      $ttl_subjects_in_section = $this->section_subject_model
+        ->where("SECTION_ID", $section['ID'])
+        ->where("SCHOOL_YEAR_ID", $school_year_id)
+        ->countAllResults();
+
+      return $ttl_subjects_in_section;
+    }
+
+    public function get_teacher_needed_to_evaluate($teacher_id, $department_id, $school_year_id){
+      // Count number of teachers needed to rate in order mark as cleared.
+      $total_peers_to_rate = $this->teacher_model
+        ->where("DEPARTMENT_ID", $department_id)
+        ->notLike("ID", $teacher_id)
+        ->where("ON_LEAVE", 0)
+        ->countAllResults();
+      
+      log_message('debug', "Total peer: $total_peers_to_rate");
+
+      if($this->is_principal($teacher_id, $school_year_id)){
+        $total_chairpersons = $this->departmentHistoryModel
+        ->where("SCHOOL_YEAR_ID", $school_year_id)
+        ->countAllResults();
+
+        $total_execoms = $this->execomHistoryModel
+        ->where("SCHOOL_YEAR_ID", $school_year_id)
+        ->where("EXECOM_ID !=", 1)
+        ->countAllResults();
+
+        return $total_peers_to_rate + $total_chairpersons + $total_execoms;
+      }else if($this->is_chairperson($teacher_id, $department_id, $school_year_id)){
+        return $total_peers_to_rate * 2;
+      }
+
+      return $total_peers_to_rate;
+    }
+
+    public function is_cleared($user_id, $is_student = true){
+      if(gettype($is_student) !== "boolean"){
+        return -1;
+      }
+
+      $evaluator_id = $this->get_evaluator_id($user_id, $is_student);
+      $current_school_year_id = $this->get_current_school_year()['ID'];
+      $done_evaluated_counter = $this->get_total_done_evaluated($evaluator_id, $current_school_year_id);
+
+      if($is_student){
+        $total_subjects = $this->get_student_total_subjects($user_id, $current_school_year_id);
+        
+        $is_cleared = ($total_subjects === $done_evaluated_counter);
+
+        return $is_cleared;
+      }else{
+        $teacher_data = $this->teacher_model->find($user_id);
+        $total_to_rate = $this->get_teacher_needed_to_evaluate($teacher_data['ID'], $teacher_data['DEPARTMENT_ID'], $current_school_year_id);
+
+        $is_cleared = ($total_to_rate === $done_evaluated_counter);
+
+        return $is_cleared;
+      }
     }
 }
