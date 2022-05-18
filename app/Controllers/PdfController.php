@@ -77,8 +77,8 @@ class PdfController extends BaseController{
       'overall' => $overall_rating,
     ];
 
-
-    $this->generatePDF($rating, $department, $school_year, $teacher_data[], $supervisor, true);
+    $page_title = $teacher_data['data']['ID']."_".$school_year['SY']."_".$school_year['SEMESTER'];
+    $this->generatePDF($rating, $department, $school_year, $teacher_data['data'], $supervisor, true, $page_title);
   }
 
   function individual($school_year_id = false){
@@ -131,8 +131,8 @@ class PdfController extends BaseController{
       'overall' => $overall_rating,
     ];
 
-
-    $this->generatePDF($rating, $department, $school_year, $teacher_data['data'], $supervisor, true);
+    $page_title = "My Rating";
+    $this->generatePDF($rating, $department, $school_year, $teacher_data['data'], $supervisor, true, $page_title);
   }
 
   function bulk_pdf_per_department($school_year_id = false, $department_id = false){
@@ -194,14 +194,15 @@ class PdfController extends BaseController{
     }
     
     $this->response->setHeader('Content-Type', 'application/pdf');
-    $pdf->Output();
+    $docs_title = $department['NAME']."_".$school_year['SY']."_".$school_year['SEMESTER'];
+    $pdf->Output('I',$docs_title);
     $pdf->Close();
   }
 
 
-  private function generatePDF($rating, $department,  $school_year, $teacher, $supervisor = null, $with_comment = false){
+  private function generatePDF($rating, $department,  $school_year, $teacher, $supervisor = null, $with_comment = false, $page_title = ""){
     $pdf = new FPDF();
-
+    $pdf->setTitle($page_title);
     $pdf->AddPage();
 
     $pageWidth = $pdf->GetPageWidth();
@@ -286,7 +287,7 @@ class PdfController extends BaseController{
     }
 
     $this->response->setHeader('Content-Type', 'application/pdf');
-    $pdf->Output();
+    $pdf->Output('I',$page_title);
   }
 
   private function generateMultiplePDF($pdf, $rating, $department,  $school_year, $teacher, $supervisor = null, $with_comment = false){
@@ -397,6 +398,7 @@ class PdfController extends BaseController{
       $comment = $value['COMMENT'];
 
       if(!empty($comment)){
+        $comment = utf8_decode($comment);
         $pdf->MultiCell(0, 7, "$comment","B",'J');
         $pdf->Cell(0, 7, "",0,2,'C');
       }
