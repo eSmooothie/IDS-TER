@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Controllers;
+
+use App\Libraries\ComputeRating;
+use App\Libraries\UserDButil;
 use FPDF;
 
 // TODO: Optimize 
 class PdfController extends BaseController{
   public function index($sy = false){
-    if(!$this->session->has("userID")){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
 
@@ -14,7 +17,7 @@ class PdfController extends BaseController{
       return redirect()->to("/");
     }
 
-    $id = $this->session->get("userID");
+    $id = $this->session->get("user_id");
 
     $data = [
       'document_name' =>  "$id-$sy",
@@ -25,43 +28,33 @@ class PdfController extends BaseController{
     return view('evaluation/pdf/format', $data);
   }
 
-  function individualAdmin($schoolyear = false, $teacherId = false){
+  function individual_admin($school_year_id = false, $teacher_id = false){
     if(!$this->session->has("adminID")){
       return redirect()->to("/admin");
     }
-    if(!$schoolyear || !$teacherId){
+    if(!$school_year_id || !$teacher_id){
       return redirect()->to("/");
     }
 
-    $id = $teacherId;
-    $sy = $this->schoolyearModel->find($schoolyear);
-    $teacher = $this->teacherModel->find($id);
+    $user_db_util = new UserDButil();
 
-    $department = $this->departmentModel->find($teacher['DEPARTMENT_ID']);
+    $id = $this->session->get("user_id");
+    $school_year = $this->schoolyearModel->find($school_year_id);
+    $teacher_data = $user_db_util->get_teacher_info($teacher_id);
+
+    $department = $teacher_data['department_data'];
 
     $supervisor = null;
-    // check if supervisor / execom
-    $isLecturer = $teacher['IS_LECTURER'];
 
-    // check if teacher X is execom or supervisor
-    $isExecom = $this->execomHistoryModel->where("TEACHER_ID", $id)
-    ->where("EXECOM_ID !=", 1)
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->countAllResults();
-
-    $isChairperson = $this->departmentHistoryModel->where("TEACHER_ID", $id)
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->countAllResults();
-
-    if($isExecom > 0 || $isChairperson > 0){
+    if($teacher_data['is_supervisor']){
       $principal = $this->execomHistoryModel->where("EXECOM_ID", 1)
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
+      ->where("SCHOOL_YEAR_ID", $school_year_id)
       ->first();
 
       $supervisor = $this->teacherModel->find($principal['TEACHER_ID']);
     }else{
       $chairperson = $this->departmentHistoryModel->where("DEPARTMENT_ID", $department['ID'])
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
+      ->where("SCHOOL_YEAR_ID", $school_year_id)
       ->first();
 
       if(!empty($chairperson)){
@@ -69,62 +62,53 @@ class PdfController extends BaseController{
       }
     }
 
+    $compute_rating = new ComputeRating();
 
-    $studentRating = $this->getRating($id, 1, $sy["ID"]);
-    $peerRating = $this->getRating($id, 2, $sy["ID"]);
-    $supervisorRating = $this->getRating($id, 3, $sy["ID"]);
+    $student_rating = $compute_rating->get_student_rating($teacher_id, $school_year_id);
+    $peer_rating = $compute_rating->get_peer_rating($teacher_id, $school_year_id);
+    $supervisor_rating = $compute_rating->get_supervisor_rating($teacher_id, $school_year_id);
 
-    $totalOverall = $this->getOverallRating($studentRating["OVERALL"], $peerRating["OVERALL"], $supervisorRating["OVERALL"]);
+    $overall_rating = $compute_rating->get_overall_rating($student_rating["OVERALL"], $peer_rating["OVERALL"], $supervisor_rating["OVERALL"]);
 
     $rating = [
-      'student' => $studentRating,
-      'peer' => $peerRating,
-      'supervisor' => $supervisorRating,
-      'overall' => $totalOverall,
+      'student' => $student_rating,
+      'peer' => $peer_rating,
+      'supervisor' => $supervisor_rating,
+      'overall' => $overall_rating,
     ];
 
 
-    $this->generatePDF($rating, $department, $sy, $teacher, $supervisor, true);
+    $this->generatePDF($rating, $department, $school_year, $teacher_data[], $supervisor, true);
   }
 
-  function individual($schoolyear = false){
-    if(!$this->session->has("userID")){
+  function individual($school_year_id = false){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
 
-    if(!$schoolyear){
+    if(!$school_year_id){
       return redirect()->to("/");
     }
 
-    $id = $this->session->get("userID");
-    $sy = $this->schoolyearModel->find($schoolyear);
-    $teacher = $this->teacherModel->find($id);
+    $user_db_util = new UserDButil();
 
-    $department = $this->departmentModel->find($teacher['DEPARTMENT_ID']);
+    $id = $this->session->get("user_id");
+    $school_year = $this->schoolyearModel->find($school_year_id);
+    $teacher_data = $user_db_util->get_teacher_info($id);
+
+    $department = $teacher_data['department_data'];
 
     $supervisor = null;
-    // check if supervisor / execom
-    $isLecturer = $teacher['IS_LECTURER'];
 
-    // check if teacher X is execom or supervisor
-    $isExecom = $this->execomHistoryModel->where("TEACHER_ID", $id)
-    ->where("EXECOM_ID !=", 1)
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->countAllResults();
-
-    $isChairperson = $this->departmentHistoryModel->where("TEACHER_ID", $id)
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->countAllResults();
-
-    if($isExecom > 0 || $isChairperson > 0){
+    if($teacher_data['is_supervisor']){
       $principal = $this->execomHistoryModel->where("EXECOM_ID", 1)
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
+      ->where("SCHOOL_YEAR_ID", $school_year_id)
       ->first();
 
       $supervisor = $this->teacherModel->find($principal['TEACHER_ID']);
     }else{
       $chairperson = $this->departmentHistoryModel->where("DEPARTMENT_ID", $department['ID'])
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
+      ->where("SCHOOL_YEAR_ID", $school_year_id)
       ->first();
 
       if(!empty($chairperson)){
@@ -132,66 +116,58 @@ class PdfController extends BaseController{
       }
     }
 
+    $compute_rating = new ComputeRating();
 
-    $studentRating = $this->getRating($id, 1, $sy["ID"]);
-    $peerRating = $this->getRating($id, 2, $sy["ID"]);
-    $supervisorRating = $this->getRating($id, 3, $sy["ID"]);
+    $student_rating = $compute_rating->get_student_rating($id, $school_year_id);
+    $peer_rating = $compute_rating->get_peer_rating($id, $school_year_id);
+    $supervisor_rating = $compute_rating->get_supervisor_rating($id, $school_year_id);
 
-    $totalOverall = $this->getOverallRating($studentRating["OVERALL"], $peerRating["OVERALL"], $supervisorRating["OVERALL"]);
+    $overall_rating = $compute_rating->get_overall_rating($student_rating["OVERALL"], $peer_rating["OVERALL"], $supervisor_rating["OVERALL"]);
 
     $rating = [
-      'student' => $studentRating,
-      'peer' => $peerRating,
-      'supervisor' => $supervisorRating,
-      'overall' => $totalOverall,
+      'student' => $student_rating,
+      'peer' => $peer_rating,
+      'supervisor' => $supervisor_rating,
+      'overall' => $overall_rating,
     ];
 
 
-    $this->generatePDF($rating, $department, $sy, $teacher, $supervisor, true);
+    $this->generatePDF($rating, $department, $school_year, $teacher_data['data'], $supervisor, true);
   }
 
-  function department($schoolyear = false, $departmentId = false){
+  function bulk_pdf_per_department($school_year_id = false, $department_id = false){
     $pdf = new FPDF();
+    $user_db_util = new UserDButil();
+    $compute_rating = new ComputeRating();
 
     if(!$this->session->has("adminID")){
       return redirect()->to("/admin");
     }
-    if(!$schoolyear || !$departmentId){
+    if(!$school_year_id || !$department_id){
       return redirect()->to("/");
     }
 
-    $department = $this->departmentModel->find($departmentId);
-    $sy = $this->schoolyearModel->find($schoolyear);
-
-    $teachers = $this->teacherModel->where("DEPARTMENT_ID", $departmentId)->findAll();
+    $department = $this->departmentModel->find($department_id);
+    $school_year = $this->schoolyearModel->find($school_year_id);
+    $teachers = $this->teacherModel->where("DEPARTMENT_ID", $department_id)->findAll();
 
     foreach ($teachers as $key => $value) {
-      $id = $value['ID'];
+      $teacher_id = $value['ID'];
+
+
+      $teacher = $user_db_util->get_teacher_info($teacher_id);
 
       $supervisor = null;
 
-      // check if supervisor / execom
-      $isLecturer = $value['IS_LECTURER'];
-
-      // check if teacher X is execom or supervisor
-      $isExecom = $this->execomHistoryModel->where("TEACHER_ID", $id)
-      ->where("EXECOM_ID !=", 1)
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->countAllResults();
-
-      $isChairperson = $this->departmentHistoryModel->where("TEACHER_ID", $id)
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->countAllResults();
-
-      if($isExecom > 0 || $isChairperson > 0){
+      if($teacher['is_supervisor']){
         $principal = $this->execomHistoryModel->where("EXECOM_ID", 1)
-        ->where("SCHOOL_YEAR_ID", $sy['ID'])
+        ->where("SCHOOL_YEAR_ID", $school_year_id)
         ->first();
 
         $supervisor = $this->teacherModel->find($principal['TEACHER_ID']);
       }else{
         $chairperson = $this->departmentHistoryModel->where("DEPARTMENT_ID", $department['ID'])
-        ->where("SCHOOL_YEAR_ID", $sy['ID'])
+        ->where("SCHOOL_YEAR_ID", $school_year_id)
         ->first();
 
         if(!empty($chairperson)){
@@ -200,22 +176,21 @@ class PdfController extends BaseController{
       }
 
 
-      $studentRating = $this->getRating($id, 1, $sy["ID"]);
-      $peerRating = $this->getRating($id, 2, $sy["ID"]);
-      $supervisorRating = $this->getRating($id, 3, $sy["ID"]);
+      $student_rating = $compute_rating->get_student_rating($teacher_id, $school_year_id);
+      $peer_rating = $compute_rating->get_peer_rating($teacher_id, $school_year_id);
+      $supervisor_rating = $compute_rating->get_supervisor_rating($teacher_id, $school_year_id);
 
-      $totalOverall = $this->getOverallRating($studentRating["OVERALL"], $peerRating["OVERALL"], $supervisorRating["OVERALL"]);
+      $overall_rating = $compute_rating->get_overall_rating($student_rating["OVERALL"], $peer_rating["OVERALL"], $supervisor_rating["OVERALL"]);
 
       $rating = [
-        'student' => $studentRating,
-        'peer' => $peerRating,
-        'supervisor' => $supervisorRating,
-        'overall' => $totalOverall,
+        'student' => $student_rating,
+        'peer' => $peer_rating,
+        'supervisor' => $supervisor_rating,
+        'overall' => $overall_rating,
       ];
 
-      $teacher = $this->teacherModel->find($id);
       // print_r($teacher);
-      $this->generateMultiplePDF($pdf, $rating, $department, $sy, $teacher, $supervisor, false);
+      $this->generateMultiplePDF($pdf, $rating, $department, $school_year, $teacher['data'], $supervisor, false);
     }
     
     $this->response->setHeader('Content-Type', 'application/pdf');
@@ -224,7 +199,7 @@ class PdfController extends BaseController{
   }
 
 
-  private function generatePDF($rating, $department,  $schoolyear, $teacher, $supervisor = null, $withComment = false){
+  private function generatePDF($rating, $department,  $school_year, $teacher, $supervisor = null, $with_comment = false){
     $pdf = new FPDF();
 
     $pdf->AddPage();
@@ -233,7 +208,7 @@ class PdfController extends BaseController{
     $pageHeight = $pdf->GetPageHeight();
     $pdf->SetFont('Arial','',12);
     // start header
-    $this->pdfHeader($pdf, $department, $schoolyear);
+    $this->pdfHeader($pdf, $department, $school_year);
     // thead
     $pdf->Cell($pageWidth / 8, 14, "Question #",1,0,'C');
     $pdf->Cell(0, 7, "Rating",1,2,'C');
@@ -243,25 +218,25 @@ class PdfController extends BaseController{
     // tbody
     $ratings = [];
 
-    $studentOverall = round($rating["student"]["OVERALL"] * 10, 2);
-    $peerOverall = round($rating["peer"]["OVERALL"] * 10, 2);
-    $supervisorOverall = round($rating["supervisor"]["OVERALL"] * 10, 2);
+    $student_overall = round($rating["student"]["OVERALL"], 2);
+    $peer_overall = round($rating["peer"]["OVERALL"], 2);
+    $supervisor_overall = round($rating["supervisor"]["OVERALL"], 2);
 
-    $totalOverall = round($this->getOverallRating($studentOverall, $peerOverall, $supervisorOverall), 2);
+    $overall_rating = round($rating["overall"], 2);
 
     $n = 1; // question number
     foreach ($rating["student"]["RATING"] as $key => $value) {
-      $ratings[$n]["STUDENT"] = round($value["avg"] * 10, 2);
+      $ratings[$n]["STUDENT"] = round($value["avg_rate"], 2);
       $n += 1;
     }
     $n = 1;
     foreach ($rating["peer"]["RATING"] as $key => $value) {
-      $ratings[$n]["PEER"] = round($value["avg"] * 10, 2);
+      $ratings[$n]["PEER"] = round($value["avg_rate"], 2);
       $n += 1;
     }
     $n = 1;
     foreach ($rating["supervisor"]["RATING"] as $key => $value) {
-      $ratings[$n]["SUPERVISOR"] = round($value["avg"] * 10, 2);
+      $ratings[$n]["SUPERVISOR"] = round($value["avg_rate"], 2);
       $n += 1;
     }
 
@@ -285,15 +260,15 @@ class PdfController extends BaseController{
     $pdf->Cell((3 * $pageWidth) / 8, 7, "{$teacher['FN']} {$teacher['LN']}","B:1",1,'C');
     // student
     $pdf->Cell(((3 * $pageWidth) / 16), 7, "Student",1,0,'C');
-    $pdf->Cell(((3 * $pageWidth) / 16), 7, "$studentOverall",1,0,'C');
+    $pdf->Cell(((3 * $pageWidth) / 16), 7, "$student_overall",1,0,'C');
     $pdf->Cell(30);
     $pdf->Cell((3 * $pageWidth) / 8, 7, "TEACHER","0",1,'C');
     // peer
     $pdf->Cell(((3 * $pageWidth) / 16), 7, "Peer",1,0,'C');
-    $pdf->Cell(((3 * $pageWidth) / 16), 7, "$peerOverall",1,1,'C');
+    $pdf->Cell(((3 * $pageWidth) / 16), 7, "$peer_overall",1,1,'C');
     // supervisor
     $pdf->Cell(((3 * $pageWidth) / 16), 7, "Supervisor",1,0,'C');
-    $pdf->Cell(((3 * $pageWidth) / 16), 7, "$supervisorOverall",1,0,'C');
+    $pdf->Cell(((3 * $pageWidth) / 16), 7, "$supervisor_overall",1,0,'C');
     $pdf->Cell(30);
 
     $name = (!empty($supervisor))? "{$supervisor['FN']} {$supervisor['LN']}":"";
@@ -301,27 +276,27 @@ class PdfController extends BaseController{
     $pdf->Cell((3 * $pageWidth) / 8, 7, "$name","B:1",1,'C');
     // overall
     $pdf->Cell(((3 * $pageWidth) / 16), 7, "Overall",1,0,'C');
-    $pdf->Cell(((3 * $pageWidth) / 16), 7, "$totalOverall",1,0,'C');
+    $pdf->Cell(((3 * $pageWidth) / 16), 7, "$overall_rating",1,0,'C');
     $pdf->Cell(30);
     $pdf->Cell((3 * $pageWidth) / 8, 7, "Supervisor","0",1,'C');
 
     // generate comment
-    if($withComment){
-      $this->generateComments($pdf, $department, $schoolyear, $teacher);
+    if($with_comment){
+      $this->generateComments($pdf, $department, $school_year, $teacher);
     }
 
     $this->response->setHeader('Content-Type', 'application/pdf');
     $pdf->Output();
   }
 
-  private function generateMultiplePDF($pdf, $rating, $department,  $schoolyear, $teacher, $supervisor = null, $withComment = false){
+  private function generateMultiplePDF($pdf, $rating, $department,  $school_year, $teacher, $supervisor = null, $with_comment = false){
     $pdf->AddPage();
 
     $pageWidth = $pdf->GetPageWidth();
     $pageHeight = $pdf->GetPageHeight();
     $pdf->SetFont('Arial','',12);
     // start header
-    $this->pdfHeader($pdf, $department, $schoolyear);
+    $this->pdfHeader($pdf, $department, $school_year);
     // thead
     $pdf->Cell($pageWidth / 8, 14, "Question #",1,0,'C');
     $pdf->Cell(0, 7, "Rating",1,2,'C');
@@ -331,25 +306,25 @@ class PdfController extends BaseController{
     // tbody
     $ratings = [];
 
-    $studentOverall = round($rating["student"]["OVERALL"] * 10, 2);
-    $peerOverall = round($rating["peer"]["OVERALL"] * 10, 2);
-    $supervisorOverall = round($rating["supervisor"]["OVERALL"] * 10, 2);
+    $studentOverall = round($rating["student"]["OVERALL"], 2);
+    $peerOverall = round($rating["peer"]["OVERALL"], 2);
+    $supervisorOverall = round($rating["supervisor"]["OVERALL"], 2);
 
-    $totalOverall = round($this->getOverallRating($studentOverall, $peerOverall, $supervisorOverall), 2);
+    $overall_rating = round($rating['overall'], 2);
 
     $n = 1; // question number
     foreach ($rating["student"]["RATING"] as $key => $value) {
-      $ratings[$n]["STUDENT"] = round($value["avg"] * 10, 2);
+      $ratings[$n]["STUDENT"] = round($value["avg"], 2);
       $n += 1;
     }
     $n = 1;
     foreach ($rating["peer"]["RATING"] as $key => $value) {
-      $ratings[$n]["PEER"] = round($value["avg"] * 10, 2);
+      $ratings[$n]["PEER"] = round($value["avg"], 2);
       $n += 1;
     }
     $n = 1;
     foreach ($rating["supervisor"]["RATING"] as $key => $value) {
-      $ratings[$n]["SUPERVISOR"] = round($value["avg"] * 10, 2);
+      $ratings[$n]["SUPERVISOR"] = round($value["avg"], 2);
       $n += 1;
     }
 
@@ -389,23 +364,23 @@ class PdfController extends BaseController{
     $pdf->Cell((3 * $pageWidth) / 8, 7, "$name","B:1",1,'C');
     // overall
     $pdf->Cell(((3 * $pageWidth) / 16), 7, "Overall",1,0,'C');
-    $pdf->Cell(((3 * $pageWidth) / 16), 7, "$totalOverall",1,0,'C');
+    $pdf->Cell(((3 * $pageWidth) / 16), 7, "$overall_rating",1,0,'C');
     $pdf->Cell(30);
     $pdf->Cell((3 * $pageWidth) / 8, 7, "Supervisor","0",1,'C');
 
     // generate comment
-    if($withComment){
-      $this->generateComments($pdf, $department, $schoolyear, $teacher);
+    if($with_comment){
+      $this->generateComments($pdf, $department, $school_year, $teacher);
     }
   }
 
-  private function generateComments($pdf, $department, $schoolyear, $teacher){
+  private function generateComments($pdf, $department, $school_year, $teacher){
     $pdf->AddPage();
     $pageWidth = $pdf->GetPageWidth();
     $pageHeight = $pdf->GetPageHeight();
     $pdf->SetFont('Arial','',12);
     // start header
-    $this->pdfHeader($pdf, $department, $schoolyear);
+    $this->pdfHeader($pdf, $department, $school_year);
 
     // thead
     $pdf->Cell(0, 7, "Comments","B",2,'C');
@@ -414,7 +389,7 @@ class PdfController extends BaseController{
 
     // comments
     $evalinfo = $this->evalInfoModel->where("EVALUATED_ID", $teacher['ID'])
-    ->where("SCHOOL_YEAR_ID", $schoolyear['ID'])
+    ->where("SCHOOL_YEAR_ID", $school_year['ID'])
     ->where("EVAL_TYPE_ID", 1)
     ->findAll();
 
@@ -429,7 +404,7 @@ class PdfController extends BaseController{
 
   }
 
-  private function pdfHeader($pdf, $department, $schoolyear){
+  private function pdfHeader($pdf, $department, $school_year){
     $pageWidth = $pdf->GetPageWidth();
     $pageHeight = $pdf->GetPageHeight();
 
@@ -441,7 +416,7 @@ class PdfController extends BaseController{
     $pdf->SetFont('Arial','',12);
     $pdf->Cell(0, 6, "Teaching Efficiency Rating",0,2,'C');
     $pdf->Cell(0, 6, "{$department['NAME']}",0,2,'C');
-    $pdf->Cell(0, 6, "SY: {$schoolyear['SY']} Semester: {$schoolyear['SEMESTER']}",0,2,'C');
+    $pdf->Cell(0, 6, "SY: {$school_year['SY']} Semester: {$school_year['SEMESTER']}",0,2,'C');
     $pdf->Ln();$pdf->Ln();
   }
 }

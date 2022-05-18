@@ -95,7 +95,7 @@ function load_rating(school_year_id){
             if (Object.hasOwnProperty.call(student_rating['RATING'], key)) {
                 const value = student_rating['RATING'][key];
                 
-                all_rating[question_no]["STUDENT"] = round(value['avg']);
+                all_rating[question_no]["STUDENT"] = round(value['avg_rate']);
             }
             question_no += 1;
         }
@@ -106,7 +106,7 @@ function load_rating(school_year_id){
             if (Object.hasOwnProperty.call(peer_rating['RATING'], key)) {
                 const value = peer_rating['RATING'][key];
                 
-                all_rating[question_no]["PEER"] = round(value['avg']);
+                all_rating[question_no]["PEER"] = round(value['avg_rate']);
             }
             question_no += 1;
         }
@@ -117,7 +117,7 @@ function load_rating(school_year_id){
             if (Object.hasOwnProperty.call(supervisor_rating['RATING'], key)) {
                 const value = supervisor_rating['RATING'][key];
                 
-                all_rating[question_no]["SUPERVISOR"] = round(value['avg']);
+                all_rating[question_no]["SUPERVISOR"] = round(value['avg_rate']);
             }
             question_no += 1;
         }
@@ -179,5 +179,5 @@ function load_rating(school_year_id){
 }
 
 function round(num){
-    return Number.parseFloat(num * 10).toFixed(2);
+    return Number.parseFloat(num).toFixed(2);
 }

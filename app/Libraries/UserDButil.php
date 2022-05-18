@@ -192,7 +192,7 @@ class UserDButil{
       $is_cleared = $this->is_cleared($teacher_data['ID'], false);
 
       return [
-        'teacher_data' => $teacher_data,
+        'data' => $teacher_data,
         'evaluator_id' => $teacher_evaluator_id,
         'subject_teaches' => $teacher_subject_teaches,
         'department_data' => $teacher_deparment,

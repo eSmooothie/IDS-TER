@@ -103,7 +103,7 @@ $routes->get("/user/teacher/settings", "User::teacherSetting");
 $routes->get("/user/teacher/rate/supervisor", "User::supervisor");
 $routes->get("/user/teacher/analytics/rating", "User::teacher_analytics_rating_page");
 $routes->get("/user/teacher/analytics/comment", "User::teacher_analytics_comment_page");
-$routes->get("/user/teacher/analytics/download", "User::analyticsDownload");
+$routes->get("/user/teacher/analytics/download", "User::teacher_analytics_download_page");
 
 $routes->get("/teacher/rating/breakdown/(:num)", "User::get_teacher_rating/$1");
 $routes->get("/teacher/comments/(:segment)", "User::get_teacher_feedbacks/$1");
@@ -121,8 +121,8 @@ $routes->get("/evaluate/supervisor/(:segment)", "Evaluation::supervisor/$1");
 $routes->post("/evaluate/submit", "Evaluation::submit");
 // pdf
 $routes->get("/download/individual/(:segment)", "PdfController::individual/$1");
-$routes->get("/download/individual/(:segment)/(:segment)/(:any)", "PdfController::individualAdmin/$1/$2");
-$routes->get("/download/department/(:segment)/(:segment)/(:any)", "PdfController::department/$1/$2");
+$routes->get("/download/individual/(:segment)/(:segment)/(:any)", "PdfController::individual_admin/$1/$2");
+$routes->get("/download/department/(:segment)/(:segment)/(:any)", "PdfController::bulk_pdf_per_department/$1/$2");
 
 /*
  * --------------------------------------------------------------------
