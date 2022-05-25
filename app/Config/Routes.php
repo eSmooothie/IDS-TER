@@ -99,8 +99,8 @@ $routes->post("/admin/execom/update", "Execom::assign");
 $routes->post("/user/login", "User::login");
 // user::teacher
 $routes->get("/user/teacher", "User::teacher_page");
-$routes->get("/user/teacher/settings", "User::teacherSetting");
-$routes->get("/user/teacher/rate/supervisor", "User::supervisor");
+$routes->get("/user/teacher/settings", "User::teacher_setting_page");
+$routes->get("/user/teacher/rate/supervisor", "User::teacher_supervisor_page");
 $routes->get("/user/teacher/analytics/rating", "User::teacher_analytics_rating_page");
 $routes->get("/user/teacher/analytics/comment", "User::teacher_analytics_comment_page");
 $routes->get("/user/teacher/analytics/download", "User::teacher_analytics_download_page");

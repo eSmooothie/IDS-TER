@@ -15,11 +15,12 @@
 
   <title><?php echo "$page_title"; ?></title>
 </head>
-<body class="flex min-h-full" style="
+<body class="min-h-full" style="
 background-color: #420516;
 background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
 ">
-<div class="border border-black w-56 max-w-56 bg-gray-200 min-h-full">
+
+<div class="border border-black w-56 max-w-56 bg-gray-200 min-h-full fixed">
   <!-- PROFILE INFO -->
   <div class="flex-col flex items-center p-3 w-full">
     <div class="mb-4">
@@ -29,32 +30,45 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
     <p class=" text-base"><small><?php echo "{$personal_data['ID']}"; ?></small></p>
   </div>
   <!-- NAVIGATION -->
-  <div class=" flex-col flex">
-    <a href="<?php echo "$base_url/user/teacher/"; ?>" 
-    class="border border-black p-2 border-r-0 border-l-0 items-center grid grid-cols-4 hover:bg-gray-300">
-      <i class="fas fa-star"></i>
-      <span class=" col-span-2">Evaluate</span> 
-    </a>
-    <a href="<?php echo ($is_cleared)? "$base_url/user/teacher/analytics/rating":""; ?>"
-     class="border border-black p-2 border-r-0 border-l-0 items-center grid grid-cols-4 hover:bg-gray-300">
-      <?php
-        if($is_cleared){
-          ?><i class="fas fa-chart-bar"></i> Analytics<?php
-        }else{
-          ?><i class="fas fa-lock"></i> Analytics (lock)<?php
-        }
-       ?>
-    </a>
-    <a href="<?php echo "$base_url/user/teacher/settings"; ?>"
-     class="border border-black p-2 border-r-0 border-l-0 items-center grid grid-cols-4 hover:bg-gray-300">
-      <i class="fas fa-cog"></i>
-      Settings
+  <div class=" flex flex-col justify-between h-[71vh]">
+    <div>
+        <a href="<?php echo "$base_url/user/teacher/"; ?>" 
+        class="border border-black p-2 border-r-0 border-l-0 items-center hover:bg-gray-300 flex justify-between py-3">
+          <span class="">Evaluate</span>
+          <i class="fa-solid fa-list-check fa-lg"></i>
+        </a>
+        <a href="<?php echo ($is_cleared)? "$base_url/user/teacher/analytics/rating":""; ?>"
+        class="border border-black p-2 border-r-0 border-l-0 items-center flex justify-between hover:bg-gray-300 py-3">
+          <?php
+            if($is_cleared){
+              ?>
+              <span>Analytics</span>
+              <i class="fa-solid fa-chart-pie fa-lg"></i> 
+              <?php
+            }else{
+              ?>
+              <span>Analytics (lock)</span>
+              <i class="fas fa-lock fa-lg"></i> 
+              <?php
+            }
+          ?>
+        </a>
+        <a href="<?php echo "$base_url/user/teacher/settings"; ?>"
+        class="border border-black p-2 border-r-0 border-l-0 items-center flex justify-between hover:bg-gray-300 py-3">
+          <span>Settings</span>
+          <i class="fa-solid fa-screwdriver-wrench fa-lg"></i>
+        </a>
+    </div>
 
-    </a>
     <a href="<?php echo "$base_url/"; ?>"
-     class="border border-black p-2 border-r-0 border-l-0 items-center grid grid-cols-4 hover:bg-gray-300">
-      <i class="fas fa-sign-out-alt"></i>
-      Logout
+     class=" p-2 border-r-0 border-l-0 items-center
+      bg-red-500
+     flex justify-between hover:bg-red-600 h-24">
+      <span>Logout</span>
+      <i class="fa-solid fa-arrow-right-from-bracket fa-lg"></i>
     </a>
   </div>
 </div>
+
+<div class="grid grid-cols-10">
+  <div class=" col-span-2"></div>

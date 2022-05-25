@@ -1,29 +1,29 @@
-<div class="w-full p-2">
+<div class="w-full col-span-7 p-2">
   <!-- USER INFO -->
   <div class="p-3 bg-gray-100 rounded-md mb-3">
-    <table class="mb-3 min-w-full text-xs">
+    <table class="mb-3 min-w-full">
       <thead class="">
         <tr>
           <th class=""></th>
           <th class=""></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class=" text-sm">
         <tr>
-          <td class="py-1 px-6 font-medium whitespace-nowrap w-6">ID Number:</td>
-          <td class="py-1 px-6 font-medium whitespace-nowrap"><?php echo "{$myData['ID']}"; ?></td>
+          <td class="py-1 px-6 font-medium whitespace-nowrap w-6 uppercase">ID Number:</td>
+          <td class="py-1 px-6 font-medium whitespace-nowrap"><?php echo "{$personal_data['ID']}"; ?></td>
         </tr>
         <tr>
-          <td class="py-1 px-6 font-medium whitespace-nowrap w-6">Name:</td>
-          <td class="py-1 px-6 font-medium whitespace-nowrap"><?php echo "{$myData['FN']} {$myData['LN']}"; ?></td>
+          <td class="py-1 px-6 font-medium whitespace-nowrap w-6 uppercase">Name:</td>
+          <td class="py-1 px-6 font-medium whitespace-nowrap"><?php echo "{$personal_data['FN']} {$personal_data['LN']}"; ?></td>
         </tr>
         <tr>
-          <td class="py-1 px-6 font-medium whitespace-nowrap w-6">Mobile Number:</td>
-          <td class="py-1 px-6 font-medium whitespace-nowrap"><?php echo (empty($myData['MOBILE_NO']))? "":"{$myData['MOBILE_NO']}"; ?></td>
+          <td class="py-1 px-6 font-medium whitespace-nowrap w-6 uppercase">Mobile Number:</td>
+          <td class="py-1 px-6 font-medium whitespace-nowrap"><?php echo (empty($personal_data['MOBILE_NO']))? "":"{$personal_data['MOBILE_NO']}"; ?></td>
         </tr>
         <tr>
-          <td class="py-1 px-6 font-medium whitespace-nowrap w-6">Department:</td>
-          <td class="py-1 px-6 font-medium whitespace-nowrap"><?php echo "{$myDept['NAME']}"; ?></td>
+          <td class="py-1 px-6 font-medium whitespace-nowrap w-6 uppercase">Department:</td>
+          <td class="py-1 px-6 font-medium whitespace-nowrap"><?php echo "{$department_data['NAME']}"; ?></td>
         </tr>
       </tbody>
     </table>
@@ -62,7 +62,7 @@
     <form id="uploadPicture">
       <div class="mb-5">
         <label class="block">
-          <input type="file" class="block w-1/5 text-sm rounded-full text-black bg-gray-300
+          <input type="file" class="block text-sm rounded-full text-black bg-gray-300
             file:mr-4 file:py-2 file:px-4 file:text-black
             file:rounded-full file:border-0
             file:text-sm file:font-semibold
@@ -79,4 +79,4 @@
 
 </div>
 
-<script src="<?php echo "$baseUrl/assets/js/teacherSettings.js"; ?>" charset="utf-8"></script>
+<script src="<?php echo "$base_url/assets/js/teacherSettings.js"; ?>" charset="utf-8"></script>

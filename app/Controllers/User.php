@@ -69,11 +69,8 @@ class User extends BaseController{
 
       // err if no record found
       if(empty($student)){
-        $response = [
-          "message" => "Invalid ID or Password",
-          "data" => null,
-        ];
-        return $this->setResponseFormat('json')->respond($response, 200);
+        $this->session->setFlashdata('sys_response_msg', 'Invalid ID or Password.');
+        return redirect()->to("/");
       }
 
       $passwordMatch = (strcmp($pass, $student['PASSWORD']) === 0)? true:false;
@@ -114,9 +111,9 @@ class User extends BaseController{
       'subject_teaches' => $teacher_data['subject_teaches'],
       'department' => $teacher_data['department_data'],
       'school_year' => $current_school_year,
-      'colleagues' => $teacher_data['colleagues'],
+      'peers' => $teacher_data['to_rate_as_peer'],
       'done_evaluated_counter' => $done_evaluated_counter,
-      'teachers_to_rate' => $needed_to_rate,
+      'num_teachers_to_rate' => $needed_to_rate,
       'is_supervisor' => $teacher_data['is_supervisor'],
       'is_chairperson' => $teacher_data['is_chairperson'],
       'is_principal' => $teacher_data['is_principal'],
@@ -129,215 +126,35 @@ class User extends BaseController{
 		echo view("teacher/layout/footer");
   }
 
-  public function supervisor(){
+  public function teacher_supervisor_page(){
     if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
     // do something here
     // get data
+    $user_db_util = new UserDButil();
+
     $id = $this->session->get("user_id");
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
-    $myData = $this->teacherModel->find($id);
-    $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
+    $teacher_data = $user_db_util->get_teacher_info($id);
+    $current_school_year = $user_db_util->get_current_school_year();
+    $done_evaluated_counter = $user_db_util->get_total_done_evaluated($teacher_data['evaluator_id'], $current_school_year['ID']);
+    $needed_to_rate = $user_db_util->get_teacher_needed_to_evaluate($id, $teacher_data['department_data']['ID'], $current_school_year['ID']);
 
-    // check if a supervisor
-    $isChairperson = $this->departmentHistoryModel
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
-    ->where("TEACHER_ID", $myData['ID'])
-    ->countAllResults();
-
-    $isPrincipal = $this->execomHistoryModel
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->where("EXECOM_ID", 1)
-    ->where("TEACHER_ID", $myData['ID'])
-    ->countAllResults();
-
-    $teachers = [];
-
-    $evaluatedCounter = 0;
-
-    if($isChairperson){
-      // get colleagues
-      $colleagues = $this->teacherModel
-      ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
-      ->where("ID !=", $id)
-      ->where("ON_LEAVE", 0)
-      ->findAll();
-
-      foreach ($colleagues as $key => $colleague) {
-        // check if done rated
-        $evaluator = $this->evaluatorModel
-        ->where("TEACHER_ID", $id)
-        ->first();
-
-        if(empty($evaluator)){
-          // if no evaluator id, create one
-          $create_evaluator_id = [
-            'TEACHER_ID' => $id,
-          ];
-
-          $this->evaluatorModel->insert($create_evaluator_id);
-          $myEvaluatorId = $this->evaluatorModel->insertID;
-        }else{
-          $myEvaluatorId = $evaluator['ID'];
-        }
-        $isDone = $this->evalInfoModel
-        ->where("EVALUATOR_ID", $myEvaluatorId)
-        ->where("EVALUATED_ID", $colleague['ID'])
-        ->where("SCHOOL_YEAR_ID", $sy['ID'])
-        ->where("EVAL_TYPE_ID", 3)
-        ->countAllResults();
-
-        $evaluatedCounter = ($isDone > 0)? $evaluatedCounter + 1:$evaluatedCounter;
-
-        $d = [
-          'isDone' => ($isDone > 0)? true: false,
-          'teacher' => $colleague,
-        ];
-
-        array_push($teachers, $d);
-      }
-
-    }
-    else if($isPrincipal){
-      // get all chairperson
-      $chairpersons = $this->departmentHistoryModel
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->findAll();
-
-      foreach ($chairpersons as $key => $value) {
-        // check if done rated
-        $evaluator = $this->evaluatorModel
-        ->where("TEACHER_ID", $id)
-        ->first();
-
-        if(empty($evaluator)){
-          // if no evaluator id, create one
-          $create_evaluator_id = [
-            'TEACHER_ID' => $id,
-          ];
-
-          $this->evaluatorModel->insert($create_evaluator_id);
-          $myEvaluatorId = $this->evaluatorModel->insertID;
-        }else{
-          $myEvaluatorId = $evaluator['ID'];
-        }
-
-        $isDone = $this->evalInfoModel
-        ->where("EVALUATOR_ID", $myEvaluatorId)
-        ->where("EVALUATED_ID", $value['TEACHER_ID'])
-        ->where("SCHOOL_YEAR_ID", $sy['ID'])
-        ->where("EVAL_TYPE_ID", 3)
-        ->countAllResults();
-
-        $dept = $this->departmentModel->find($value['DEPARTMENT_ID']);
-        $teacher = $this->teacherModel->find($value['TEACHER_ID']);
-
-        $evaluatedCounter = ($isDone > 0)? $evaluatedCounter + 1:$evaluatedCounter;
-
-        $d = [
-          'isDone' => ($isDone > 0)? true: false,
-          'position' => $dept['NAME'],
-          'teacher' => $teacher,
-        ];
-
-        array_push($teachers, $d);
-      }
-
-      // get all execom
-      $execom = $this->execomHistoryModel
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->where("EXECOM_ID !=", 1)
-      ->findAll();
-
-      foreach ($execom as $key => $value) {
-        // check if done rated
-        $evaluator = $this->evaluatorModel
-        ->where("TEACHER_ID", $id)
-        ->first();
-
-        if(empty($evaluator)){
-          // if no evaluator id, create one
-          $create_evaluator_id = [
-            'TEACHER_ID' => $id,
-          ];
-
-          $this->evaluatorModel->insert($create_evaluator_id);
-          $myEvaluatorId = $this->evaluatorModel->insertID;
-        }else{
-          $myEvaluatorId = $evaluator['ID'];
-        }
-
-        $isDone = $this->evalInfoModel
-        ->where("EVALUATOR_ID", $myEvaluatorId)
-        ->where("EVALUATED_ID", $value['TEACHER_ID'])
-        ->where("SCHOOL_YEAR_ID", $sy['ID'])
-        ->where("EVAL_TYPE_ID", 3)
-        ->countAllResults();
-
-        $execom = $this->execomModel->find($value['EXECOM_ID']);
-        $teacher = $this->teacherModel->find($value['TEACHER_ID']);
-
-        $evaluatedCounter = ($isDone > 0)? $evaluatedCounter + 1:$evaluatedCounter;
-
-        $d = [
-          'isDone' => ($isDone > 0)? true: false,
-          'position' => $execom['NAME'],
-          'teacher' => $teacher,
-        ];
-
-        array_push($teachers, $d);
-      }
-    }
-
-    $isSupervisor = ($isChairperson > 0 || $isPrincipal > 0)? true: false;
-
-    $doneEvaluatedCounter = $this->evalInfoModel->where("EVALUATOR_ID", $myEvaluatorId)
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->countAllResults();
-
-
-    $totalPeers = $this->teacherModel
-    ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
-    ->where("ID !=", $id)
-    ->where("ON_LEAVE", 0)
-    ->countAllResults();
-
-    $TeacherstoRate = $totalPeers;
-    if($isPrincipal){
-      $totalChairpersons = $this->departmentHistoryModel
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->countAllResults();
-
-      $totalExecoms = $this->execomHistoryModel
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->where("EXECOM_ID !=", 1)
-      ->countAllResults();
-
-      $TeacherstoRate = $TeacherstoRate + $totalChairpersons + $totalExecoms;
-    }
-    else if($isChairperson){
-      $colleagues = $this->teacherModel
-      ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
-      ->where("ID !=", $id)
-      ->where("ON_LEAVE", 0)
-      ->countAllResults();
-
-      $TeacherstoRate = $TeacherstoRate + $colleagues;
-    }
+    $teachers_to_rate = [];
 
 		$pageTitle = "ADMIN | TEACHER";
 		$args = [
-      'isCleared' => $doneEvaluatedCounter == $TeacherstoRate,
-      'myData' => $myData,
-      'myDept' => $myDept,
-      'sy' => $sy,
-      'teachers' => $teachers,
-      'evaluatedCounter' => $evaluatedCounter,
-      'isSupervisor' => $isSupervisor,
-      'isChairperson' => $isChairperson ,
-      'isPrincipal' => $isPrincipal ,
+      'is_cleared' => $teacher_data['is_cleared'],
+      'personal_data' => $teacher_data['data'],
+      'subject_teaches' => $teacher_data['subject_teaches'],
+      'department' => $teacher_data['department_data'],
+      'school_year' => $current_school_year,
+      'to_rate' => $teacher_data['to_rate_as_supervisor'],
+      'done_evaluated_counter' => $done_evaluated_counter,
+      'num_teachers_to_rate' => $needed_to_rate,
+      'is_supervisor' => $teacher_data['is_supervisor'],
+      'is_chairperson' => $teacher_data['is_chairperson'],
+      'is_principal' => $teacher_data['is_principal'],
 		];
 
 		$data = $this->map_page_parameters(
@@ -497,98 +314,30 @@ class User extends BaseController{
     echo view("teacher/layout/footer");
   }
 
-  public function teacherSetting(){
+  public function teacher_setting_page(){
     if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
-    // do something here
+    
+    $user_db_util = new UserDButil();
+
     // get data
     $id = $this->session->get("user_id");
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
-    $myData = $this->teacherModel->find($id);
-    $myDept = $this->departmentModel->find($myData['DEPARTMENT_ID']);
-    // get subjects
-    $mySubjects = $this->teacherSubjectModel
-    ->select("
-    `subject`.`ID` AS `ID`,
-    `subject`.`DESCRIPTION` AS `NAME`,
-    `school_year`.`SY` AS `SY`,
-    `school_year`.`SEMESTER` AS `SEMESTER`
-    ")
-    ->join("`subject`","`subject`.`ID` = `tchr_subj_lst`.`SUBJECT_ID`","INNER")
-    ->join("`school_year`","`school_year`.`ID` = `tchr_subj_lst`.`SCHOOL_YEAR_ID`","INNER")
-    ->where("`tchr_subj_lst`.`TEACHER_ID`", $id)
-    ->findAll();
+    $teacher_info = $user_db_util->get_teacher_info($id);
 
-    // check if a supervisor
-    $isChairperson = $this->departmentHistoryModel
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
-    ->where("TEACHER_ID", $myData['ID'])
-    ->countAllResults();
+    $teacher_data = $teacher_info['data'];
+    $department_data = $teacher_info['department_data'];
 
-    $isPrincipal = $this->execomHistoryModel
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->where("EXECOM_ID", 1)
-    ->where("TEACHER_ID", $myData['ID'])
-    ->countAllResults();
+    $is_cleared = $this->session->get('teacher_is_cleared');
 
-    $evaluator = $this->evaluatorModel
-    ->where("TEACHER_ID", $id)
-    ->first();
-
-    if(empty($evaluator)){
-      // if no evaluator id, create one
-      $create_evaluator_id = [
-        'TEACHER_ID' => $id,
-      ];
-
-      $this->evaluatorModel->insert($create_evaluator_id);
-      $myEvaluatorId = $this->evaluatorModel->insertID;
-    }else{
-      $myEvaluatorId = $evaluator['ID'];
-    }
-
-    $doneEvaluatedCounter = $this->evalInfoModel->where("EVALUATOR_ID", $myEvaluatorId)
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->countAllResults();
-
-
-    $totalPeers = $this->teacherModel
-    ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
-    ->where("ID !=", $id)
-    ->where("ON_LEAVE", 0)
-    ->countAllResults();
-
-    $TeacherstoRate = $totalPeers;
-    if($isPrincipal){
-      $totalChairpersons = $this->departmentHistoryModel
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->countAllResults();
-
-      $totalExecoms = $this->execomHistoryModel
-      ->where("SCHOOL_YEAR_ID", $sy['ID'])
-      ->where("EXECOM_ID !=", 1)
-      ->countAllResults();
-
-      $TeacherstoRate = $TeacherstoRate + $totalChairpersons + $totalExecoms;
-    }
-    else if($isChairperson){
-      $colleagues = $this->teacherModel
-      ->where("DEPARTMENT_ID", $myData['DEPARTMENT_ID'])
-      ->where("ID !=", $id)
-      ->where("ON_LEAVE", 0)
-      ->countAllResults();
-
-      $TeacherstoRate = $TeacherstoRate + $colleagues;
-    }
+    $current_school_year = $user_db_util->get_current_school_year();
 
 		$pageTitle = "ADMIN | TEACHER";
 		$args = [
-      'isCleared' => $doneEvaluatedCounter == $TeacherstoRate,
-      'myData' => $myData,
-      'myDept' => $myDept,
-      'sy' => $sy,
+      'is_cleared' => $is_cleared,
+      'personal_data' => $teacher_data,
+      'department_data' => $department_data,
+      'current_school_year' => $current_school_year,
 		];
 
 		$data = $this->map_page_parameters(

@@ -187,7 +187,18 @@ class UserDButil{
       $teacher_evaluator_id = $this->get_evaluator_id($id, False);
 
       // get teacher colleagues
-      $teacher_peers = $this->get_teacher_colleagues($id, $teacher_deparment['ID'], $teacher_evaluator_id, $curr_school_year['ID']);
+      $to_rate_as_peer = $this->get_teacher_to_rate($id, $teacher_deparment['ID'], $teacher_evaluator_id, $curr_school_year['ID'], 2);
+
+      // is supervisor
+      $is_chairperson = $this->is_chairperson($teacher_data['ID'], $teacher_data['DEPARTMENT_ID'], $curr_school_year['ID']);
+      $is_principal = $this->is_principal($teacher_data['ID'], $curr_school_year['ID']);
+
+      $to_rate_as_supervisor = null;
+      if($is_chairperson){
+        $to_rate_as_supervisor = $this->get_teacher_to_rate($id, $teacher_deparment['ID'], $teacher_evaluator_id, $curr_school_year['ID'], 3);
+      }else if($is_principal){
+        $to_rate_as_supervisor = $this->get_teacher_to_rate($id, $teacher_deparment['ID'], $teacher_evaluator_id, $curr_school_year['ID'], 3, true);
+      }
 
       $is_cleared = $this->is_cleared($teacher_data['ID'], false);
 
@@ -196,30 +207,96 @@ class UserDButil{
         'evaluator_id' => $teacher_evaluator_id,
         'subject_teaches' => $teacher_subject_teaches,
         'department_data' => $teacher_deparment,
-        'colleagues' => $teacher_peers,
+        'to_rate_as_peer' => $to_rate_as_peer,
+        'to_rate_as_supervisor' => $to_rate_as_supervisor,
         'is_cleared' => $is_cleared,
-        'is_chairperson' => $this->is_chairperson($teacher_data['ID'], $teacher_data['DEPARTMENT_ID'], $curr_school_year['ID']),
-        'is_principal' => $this->is_principal($teacher_data['ID'], $curr_school_year['ID']),
-        'is_supervisor' => $this->is_supervisor($teacher_data['ID'], $teacher_data['DEPARTMENT_ID'], $curr_school_year['ID'])
+        'is_chairperson' => $is_chairperson,
+        'is_principal' => $is_principal,
+        'is_supervisor' => ($is_chairperson || $is_principal),
       ];
     }
 
-    public function get_teacher_colleagues($teacher_id, $department_id, $evaluator_id, $school_year_id){
-      $teacher_colleagues = $this->teacher_model
-      ->where("DEPARTMENT_ID", $department_id)
-      ->notLike("ID", $teacher_id)
-      ->where("ON_LEAVE", 0)
-      ->findAll();
+    public function get_teacher_to_rate($teacher_id, $department_id, $evaluator_id, $school_year_id, $eval_type,
+      bool $is_principal = false){
+
+      if($is_principal){
+        $executives = $this->execom_history_model
+          ->select("
+            `execom_hist`.`ID` AS `ID`,
+            `execom_hist`.`TEACHER_ID` AS `TEACHER_ID`,
+            `execom`.`NAME` AS `POSITION`
+          ")
+          ->join("`execom`","`execom`.`ID` = `execom_hist`.`ID`","INNER")
+          ->where("SCHOOL_YEAR_ID", $school_year_id)
+          ->notLike("`execom_hist`.`EXECOM_ID`", 1)
+          ->findAll();
+
+        $chairpersons = $this->department_history_model
+          ->select("
+            `dept_hist`.`ID` AS `ID`,
+            `dept_hist`.`TEACHER_ID` AS `TEACHER_ID`,
+            `department`.`NAME` AS `POSITION`
+          ")
+          ->join("`department`","`department`.`ID` = `dept_hist`.`DEPARTMENT_ID`", "INNER")
+          ->where("SCHOOL_YEAR_ID", $school_year_id)
+          ->findAll();
+
+        $teacher_to_rate = [];
+
+        foreach($executives as $key => $value){
+          $teacher_id = $value['TEACHER_ID'];
+          $teacher = $this->teacher_model->find($teacher_id);
+          $data = [
+            'position' => $value['POSITION'],
+            'teacher' => $teacher,
+          ];
+
+          array_push($teacher_to_rate, $data);
+        }
+
+        foreach($chairpersons as $key => $value){
+          $teacher_id = $value['TEACHER_ID'];
+          $teacher = $this->teacher_model->find($teacher_id);
+          $data = [
+            'position' => $value['POSITION'],
+            'teacher' => $teacher,
+          ];
+
+          array_push($teacher_to_rate, $data);
+        }
+
+      }else{
+
+        $teacher_to_rate = $this->teacher_model
+          ->where("DEPARTMENT_ID", $department_id)
+          ->notLike("ID", $teacher_id)
+          ->where("ON_LEAVE", 0)
+          ->findAll();
+          
+      }
+      
 
       $teacher_peers = [];
      
-      foreach ($teacher_colleagues as $key => $colleague) {
+      foreach ($teacher_to_rate as $key => $value) {
         // check if X done rated Y
-        $is_done = $this->is_done_evaluated($evaluator_id, $colleague['ID'], $school_year_id, 2);
+        $position = null;
+        $is_done = null;
+        $teacher = null;
+
+        if($is_principal){
+          $position = $value['position'];
+          $teacher = $value['teacher'];
+        }else{
+          $teacher = $value;
+        }
+
+        $is_done = $this->is_done_evaluated($evaluator_id, $teacher['ID'], $school_year_id, $eval_type);
 
         $data = [
           'is_done' => $is_done,
-          'teacher' => $colleague,
+          'position' => $position,
+          'teacher' => $teacher,
         ];
 
         array_push($teacher_peers, $data);
@@ -316,11 +393,11 @@ class UserDButil{
       log_message('debug', "Total peer: $total_peers_to_rate");
 
       if($this->is_principal($teacher_id, $school_year_id)){
-        $total_chairpersons = $this->departmentHistoryModel
+        $total_chairpersons = $this->department_history_model
         ->where("SCHOOL_YEAR_ID", $school_year_id)
         ->countAllResults();
 
-        $total_execoms = $this->execomHistoryModel
+        $total_execoms = $this->execom_history_model
         ->where("SCHOOL_YEAR_ID", $school_year_id)
         ->where("EXECOM_ID !=", 1)
         ->countAllResults();

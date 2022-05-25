@@ -1,15 +1,18 @@
-<div class="w-full p-2">
+<div class="w-full col-span-7 p-2">
   <!-- working area -->
   <div class="p-3 bg-gray-100 rounded-md mb-3">
-    <p class="mb-4 text-lg font-bold">Rating</p>
-    <div class="grid grid-cols-9 text-blue-600">
-      <a href="<?php echo "$base_url/user/teacher/analytics/rating"; ?>" class="">
+    <p class="mb-4 text-lg font-bold uppercase">Ratings</p>
+    <div class="grid grid-cols-9  gap-x-5">
+      <a href="<?php echo "$base_url/user/teacher/analytics/rating"; ?>" 
+      class=" border border-blue-300 text-center col-span-3 py-2 rounded-md hover:bg-blue-400 bg-blue-300">
         <i class="fas fa-star-half-alt"></i>
         Rating</a>
-      <a href="<?php echo "$base_url/user/teacher/analytics/comment"; ?>" class="">
+      <a href="<?php echo "$base_url/user/teacher/analytics/comment"; ?>" 
+      class=" border border-blue-300 text-center col-span-3 py-2 rounded-md hover:bg-blue-400 bg-blue-300">
         <i class="far fa-comments"></i>
         Comments</a>
-      <a href="<?php echo "$base_url/user/teacher/analytics/download"; ?>" class="">
+      <a href="<?php echo "$base_url/user/teacher/analytics/download"; ?>" 
+      class=" border border-blue-300 text-center col-span-3 py-2 rounded-md hover:bg-blue-400 bg-blue-300">
         <i class="fas fa-download"></i>
         Download</a>
     </div>

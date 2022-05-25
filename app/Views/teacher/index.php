@@ -1,4 +1,4 @@
-<div class="w-full p-2">
+<div class="w-full col-span-7 p-2">
   <!-- working area -->
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <div class="mb-3">
@@ -32,7 +32,7 @@
           </tr>
           <tr>
             <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">Total Evaluated</td>
-            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo $done_evaluated_counter."/".$teachers_to_rate; ?></td>
+            <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo $done_evaluated_counter."/".$num_teachers_to_rate; ?></td>
           </tr>
           <tr>
             <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">Status</td>
@@ -54,7 +54,8 @@
           $as = "principal";
         }
         ?>
-        <a href="<?php echo "$base_url/user/teacher/rate/supervisor"; ?>" class="hover:bg-blue-400 rounded-full px-5 bg-blue-300 p-2">RATE AS A SUPERVISOR</a>
+        <a href="<?php echo "$base_url/user/teacher/rate/supervisor"; ?>" 
+        class="hover:bg-blue-400 rounded-md px-5 bg-blue-300 p-2">RATE AS A SUPERVISOR</a>
         <?php
       } ?>
     </div>
@@ -75,7 +76,7 @@
         class="d-block mx-auto rounded-circle"
         style="height:100px; width:100px;"></a> -->
         <?php
-          foreach ($colleagues as $key => $value) {
+          foreach ($peers as $key => $value) {
             $is_done = $value['is_done'];
             $teacher = $value['teacher'];
 
