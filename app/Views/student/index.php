@@ -1,4 +1,4 @@
-<div class="w-full p-2">
+<div class="w-full p-2 col-span-7">
   <!-- INFO -->
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <p class=" text-lg font-bold">System Information</p>
@@ -36,7 +36,7 @@
           <th scope="col" class="py-3 px-6 font-medium tracking-wider text-center text-gray-700 uppercase">Action</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class=" ">
         <?php
           foreach ($student_subjects as $key => $value) {
             $is_done = $value['is_done'];
@@ -45,7 +45,7 @@
 
             $evaluation_path = ($is_done)? "#":"$base_url/evaluate/student/{$teacher['ID']}/{$subject['ID']}";
             ?>
-            <tr>
+            <tr class="odd:bg-white even:bg-gray-200">
               <th scope="row" class="py-1 px-6 text-left font-medium whitespace-nowrap"><?php echo "{$teacher['ID']}"; ?></th>
               <td class="py-1 px-6 text-left font-medium whitespace-nowrap"><?php echo "{$teacher['LN']}, {$teacher['FN']}"; ?></td>
               <td class="py-1 px-6 text-left font-medium whitespace-nowrap"><?php echo "{$subject['DESCRIPTION']}"; ?></td>

@@ -82,7 +82,7 @@
 
             $path = ($is_done)?"#":"$base_url/evaluate/peer/{$teacher['ID']}";
             ?>
-            <tr class="">
+            <tr class="odd:bg-white even:bg-gray-200">
               <th scope="row" class="py-1 px-6 text-sm font-medium whitespace-nowrap text-left"><?php echo "{$teacher['ID']}"; ?></th>
               <td class="py-2 px-6 text-sm font-medium whitespace-nowrap"><?php echo "{$teacher['LN']}, {$teacher['FN']}"; ?></td>
               <td class="py-2 px-6 text-sm font-medium whitespace-nowrap text-center">

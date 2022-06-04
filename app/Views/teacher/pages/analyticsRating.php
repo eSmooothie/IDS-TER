@@ -4,15 +4,18 @@
     <p class="mb-4 text-lg font-bold uppercase">Ratings</p>
     <div class="grid grid-cols-9  gap-x-5">
       <a href="<?php echo "$base_url/user/teacher/analytics/rating"; ?>" 
-      class=" border border-blue-300 text-center col-span-3 py-2 rounded-md hover:bg-blue-400 bg-blue-300">
+      class=" border border-blue-300 text-center col-span-3 py-2 rounded-md hover:bg-blue-400 
+      bg-blue-500 font-medium">
         <i class="fas fa-star-half-alt"></i>
         Rating</a>
       <a href="<?php echo "$base_url/user/teacher/analytics/comment"; ?>" 
-      class=" border border-blue-300 text-center col-span-3 py-2 rounded-md hover:bg-blue-400 bg-blue-300">
+      class=" border border-blue-300 text-center col-span-3 py-2 rounded-md hover:bg-blue-400 
+      bg-blue-500 font-medium">
         <i class="far fa-comments"></i>
         Comments</a>
       <a href="<?php echo "$base_url/user/teacher/analytics/download"; ?>" 
-      class=" border border-blue-300 text-center col-span-3 py-2 rounded-md hover:bg-blue-400 bg-blue-300">
+      class=" border border-blue-300 text-center col-span-3 py-2 rounded-md hover:bg-blue-400 
+      bg-blue-500 font-medium">
         <i class="fas fa-download"></i>
         Download</a>
     </div>
