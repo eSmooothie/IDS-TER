@@ -5,10 +5,9 @@ namespace App\Controllers;
 class Admin extends BaseController
 {
 	public function index(){
-		$data = [
-		'pageTitle' => "IDS | TER",
-		];
-			echo view("admin/layout/header",$data);
+		$data = $this->map_page_parameters("IDS | TER");
+		
+		echo view("admin/layout/header",$data);
 		echo view("admin/index");
 		echo view("admin/layout/footer");
 	}

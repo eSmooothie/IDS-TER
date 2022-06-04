@@ -14,20 +14,24 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
         </div>
         <div class="text-center">
             <span class="block text-4xl">IDS - TER</span>
-            <span class="block text-xxs">INTEGRATED DEVELOPMENTAL SCHOOL <br />TEACHER EFFICIENCY RATING</span>
+            <span class="block text-sm">INTEGRATED DEVELOPMENTAL SCHOOL <br />TEACHER EFFICIENCY RATING</span>
         </div>
       </div>
       <div class="mt-3">
         <form id="adminLogin" class="" action="" method="post">
           <!-- Username -->
-          <div class="border border-gray-300 rounded-md flex justify-between mb-2">
-            <span class="text-center p-2 w-11 text-black bg-pink-300 rounded-md rounded-r-none" id="label-username"><i class="fas fa-id-card-alt"></i></span>
-            <input name="username" required type="text" class="w-full rounded-md rounded-l-none pl-3" placeholder="Username" aria-label="Username" aria-describedby="label-username">
+          <div class=" rounded-md flex justify-between mb-2">
+            <span class="text-center p-2 w-11 text-black bg-pink-300 rounded-md rounded-r-none" id="label-username">
+              <i class="fas fa-id-card-alt"></i></span>
+            <input name="username" required type="text" class="w-full rounded-md rounded-l-none pl-3  border-none" placeholder="Username" 
+            aria-label="Username" aria-describedby="label-username">
           </div>
           <!-- Password -->
-          <div class="border border-gray-300 rounded-md flex justify-between mb-2">
-            <span class="text-center p-2 w-11 text-black bg-pink-300 rounded-md rounded-r-none" id="label-password"><i class="fas fa-key"></i></span>
-            <input name="password" required type="password" class="w-full rounded-md rounded-l-none pl-3" placeholder="Password" aria-label="Password" aria-describedby="label-password">
+          <div class=" rounded-md flex justify-between mb-2">
+            <span class="text-center p-2 w-11 text-black bg-pink-300 rounded-md rounded-r-none" id="label-password">
+              <i class="fas fa-key"></i></span>
+            <input name="password" required type="password" class="w-full rounded-md rounded-l-none pl-3  border-none" 
+            placeholder="Password" aria-label="Password" aria-describedby="label-password">
           </div>
           <div class="mb-2 text-center text-red-500">
             <span class="" id="errorMessage"></span>

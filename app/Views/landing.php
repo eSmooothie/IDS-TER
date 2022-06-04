@@ -25,7 +25,7 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
           </div>
           <div class="text-center">
             <span class="block text-4xl">IDS - TER</span>
-            <span class="block text-xs">INTEGRATED DEVELOPMENTAL SCHOOL <br />TEACHER EFFICIENCY RATING</span>
+            <span class="block text-sm">INTEGRATED DEVELOPMENTAL SCHOOL <br />TEACHER EFFICIENCY RATING</span>
           </div>
         </div>
         <div class="mt-3">
