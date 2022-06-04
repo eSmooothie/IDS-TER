@@ -7,7 +7,7 @@
         ?></p>
         <a href="<?php 
             $name = strtolower($type);
-            echo "$baseUrl/admin/questionaire/$id/$name";
+            echo "$base_url/admin/questionaire/$id/$name";
         ?>" class=" text-blue-600 hover:text-blue-700">
         <i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back</a>
     </div>
@@ -37,8 +37,8 @@
         console.log(formData);
 
         let path = "/admin/questionaire/remove";
-        let baseUrl=window.location.origin;
-        let url=baseUrl+path;
+        let base_url=window.location.origin;
+        let url=base_url+path;
 
         $.ajax({
             type:'post',
@@ -49,7 +49,7 @@
             let paths = path.split("/");
             let newPath = "/admin/questionaire/"+ paths[3] + "/" + paths[4];
 
-            window.location.href = baseUrl + newPath;
+            window.location.href = base_url + newPath;
         }).fail(function(xhr,textStatus,errorMessage){
             console.log(xhr);
         });

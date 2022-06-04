@@ -16,52 +16,52 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);">
     <!-- DASHBOARD -->
     <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
       <span class=" text-xl col-span-1"><i class="fas fa-columns"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/dashboard" class="col-span-3">Dashboard</a>
+      <a href="<?php echo $base_url; ?>/admin/dashboard" class="col-span-3">Dashboard</a>
     </div>
     <!-- STUDENT -->
     <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
       <span class=" text-xl col-span-1"><i class="fa fa-users"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/student" class="col-span-3">Student</a>
+      <a href="<?php echo $base_url; ?>/admin/student" class="col-span-3">Student</a>
     </div>
     <!-- TEACHER -->
     <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
       <span class=" text-xl"><i class="fas fa-user-tie"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/teacher" class="col-span-3">Teacher</a>
+      <a href="<?php echo $base_url; ?>/admin/teacher" class="col-span-3">Teacher</a>
     </div>
     <!-- EXECOM -->
     <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
       <span class=" text-xl"><i class="fas fa-user-secret"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/execom" class="col-span-3">Executives</a>
+      <a href="<?php echo $base_url; ?>/admin/execom" class="col-span-3">Executives</a>
     </div>
     <!-- SECTION -->
     <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
       <span class=" text-xl"><i class="fab fa-buromobelexperte"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/section" class="col-span-3">Section</a>
+      <a href="<?php echo $base_url; ?>/admin/section" class="col-span-3">Section</a>
     </div>
     <!-- DEPARTMENT -->
     <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
       <span class=" text-xl"><i class="fa fa-th-list" aria-hidden="true"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/department" class="col-span-3">Department</a>
+      <a href="<?php echo $base_url; ?>/admin/department" class="col-span-3">Department</a>
     </div>
     <!-- SUBJECT -->
     <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
       <span class=" text-xl"><i class="fa fa-list"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/subject" class="col-span-3">Subject</a>
+      <a href="<?php echo $base_url; ?>/admin/subject" class="col-span-3">Subject</a>
     </div>
     <!-- QUESTIONNAIRE -->
     <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
       <span class=" text-xl"><i class="fa fa-list-ol" aria-hidden="true"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/questionaire" class="col-span-3">Questionnaire</a>
+      <a href="<?php echo $base_url; ?>/admin/questionaire" class="col-span-3">Questionnaire</a>
     </div>
     <!-- ACTIVITY LOG -->
     <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
       <span class=" text-xl"><i class="fas fa-clipboard-list"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/activitylog" class="col-span-3">Activity Log</a>
+      <a href="<?php echo $base_url; ?>/admin/activitylog" class="col-span-3">Activity Log</a>
     </div>
     <!-- LOGOUT -->
     <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
       <span class=" text-xl"><i class="fa fa-sign-out"></i></span>
-      <a href="<?php echo $baseUrl; ?>" class="col-span-3">Log out</a>
+      <a href="<?php echo $base_url; ?>" class="col-span-3">Log out</a>
     </div>
     
   </div>
@@ -119,19 +119,19 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);">
           <ul class=" list-decimal pl-8 mt-3">
             <li>
               Update/Edit the teachers handled subjects. 
-              <a href="<?php echo "$baseUrl/admin/teacher"; ?>" class=" text-blue-700 text-xs">GO TO TEACHER PAGE</a>
+              <a href="<?php echo "$base_url/admin/teacher"; ?>" class=" text-blue-700 text-xs">GO TO TEACHER PAGE</a>
             </li>
             <li>
               Enroll students in the section and update/edit subjects in section. 
-              <a href="<?php echo "$baseUrl/admin/section"; ?>" class=" text-blue-700 text-xs">GO TO SECTION PAGE</a>
+              <a href="<?php echo "$base_url/admin/section"; ?>" class=" text-blue-700 text-xs">GO TO SECTION PAGE</a>
             </li>
             <li>
               Select a chairperson per department.
-              <a href="<?php echo "$baseUrl/admin/department"; ?>" class=" text-blue-700 text-xs">GO TO DEPARTMENT PAGE</a>
+              <a href="<?php echo "$base_url/admin/department"; ?>" class=" text-blue-700 text-xs">GO TO DEPARTMENT PAGE</a>
             </li>
             <li>
               Assign a teacher in the executive committee.
-              <a href="<?php echo "$baseUrl/admin/execom"; ?>" class=" text-blue-700 text-xs">GO TO EXECOM PAGE</a>
+              <a href="<?php echo "$base_url/admin/execom"; ?>" class=" text-blue-700 text-xs">GO TO EXECOM PAGE</a>
             </li>
           </ul>
         </div>
@@ -139,7 +139,7 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);">
       <!-- LINKS -->
       <div class="px-2 pb-7 pt-9 mb- grid grid-cols-3 gap-7 border border-gray-400 rounded-md">
         <!-- Student -->
-        <a href="<?php echo $baseUrl; ?>/admin/student" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/student" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
           <span class=" text-3xl mr-3"><i class="fa fa-users"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Student</p>
@@ -147,7 +147,7 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);">
           </div>
         </a>
         <!-- Teacher -->
-        <a href="<?php echo $baseUrl; ?>/admin/teacher" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/teacher" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
           <span class=" text-3xl mr-3"><i class="fas fa-user-tie"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Teacher</p>
@@ -155,7 +155,7 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);">
           </div>
         </a>
         <!-- Execom -->
-        <a href="<?php echo $baseUrl; ?>/admin/execom" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/execom" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
           <span class=" text-3xl mr-3"><i class="fas fa-user-secret" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Executive Committee</p>
@@ -163,7 +163,7 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);">
           </div>
         </a>        
         <!-- Section -->
-        <a href="<?php echo $baseUrl; ?>/admin/section" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/section" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
           <span class=" text-3xl mr-3"><i class="fab fa-buromobelexperte"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Section</p>
@@ -171,7 +171,7 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);">
           </div>
         </a>
         <!-- Department -->
-        <a href="<?php echo $baseUrl; ?>/admin/department" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/department" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
           <span class=" text-3xl mr-3"><i class="fa fa-th-list" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Department</p>
@@ -179,7 +179,7 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);">
           </div>
         </a>
         <!-- Subject -->
-        <a href="<?php echo $baseUrl; ?>/admin/subject" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/subject" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
           <span class=" text-3xl mr-3"><i class="fa fa-list" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Subjects</p>
@@ -187,7 +187,7 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);">
           </div>
         </a>
         <!-- Manage Questionnaire -->
-        <a href="<?php echo $baseUrl; ?>/admin/questionaire" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/questionaire" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
           <span class=" text-3xl mr-3"><i class="fa fa-list-ol" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Questionnaire</p>
@@ -195,7 +195,7 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);">
           </div>
         </a>
         <!-- Activit log -->
-        <a href="<?php echo $baseUrl; ?>/admin/activitylog" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/activitylog" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
           <span class=" text-3xl mr-3"><i class="fas fa-clipboard-list"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Activity Log</p>
@@ -208,4 +208,4 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);">
     </div>
   </div>
 
-<script src="<?php echo "$baseUrl/assets/js/adminDashboard.js"; ?>" charset="utf-8"></script>
+<script src="<?php echo "$base_url/assets/js/adminDashboard.js"; ?>" charset="utf-8"></script>

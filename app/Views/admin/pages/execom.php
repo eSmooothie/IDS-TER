@@ -30,10 +30,10 @@
           ?>
           <tr class="border border-black text-left">
             <th scope="row" class="border border-gray-500 py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap"><?php echo "$pos"; ?></th>
-            <td class="border border-gray-500 py-4 px-6 text-sm  whitespace-nowrap <?php echo ($teacher_id)? "text-blue-700":"";?> "><a href="<?php echo ($teacher_id)? "$baseUrl/admin/teacher/view/{$teacher_id}":"#"; ?>">
+            <td class="border border-gray-500 py-4 px-6 text-sm  whitespace-nowrap <?php echo ($teacher_id)? "text-blue-700":"";?> "><a href="<?php echo ($teacher_id)? "$base_url/admin/teacher/view/{$teacher_id}":"#"; ?>">
               <?php echo (empty($teacher_id))? "NO TEACHER":"{$teacher_ln}, {$teacher_fn}"; ?>
             </a></td>
-            <td class="border border-gray-500 py-4 px-6 text-sm text-center text-blue-700 whitespace-nowrap"><a href="<?php echo "$baseUrl/admin/execom/change/$id"; ?>">Change</a></td>
+            <td class="border border-gray-500 py-4 px-6 text-sm text-center text-blue-700 whitespace-nowrap"><a href="<?php echo "$base_url/admin/execom/change/$id"; ?>">Change</a></td>
           </tr>
           <?php
         }

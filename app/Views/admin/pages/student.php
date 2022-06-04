@@ -22,7 +22,7 @@
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <button type="button" name="button" class="hover:bg-blue-400 pt-2 pb-2 pl-9 pr-9 rounded-md bg-blue-300" id="filterBtn">
       <i id="filterIcon" class="fas fa-chevron-right"></i> Filter</button>
-    <a href="<?php echo "$baseUrl/admin/student/add"; ?>" class=" ml-5 hover:bg-blue-400 pt-2 pb-2 pl-9 pr-9 rounded-md bg-blue-300">
+    <a href="<?php echo "$base_url/admin/student/add"; ?>" class=" ml-5 hover:bg-blue-400 pt-2 pb-2 pl-9 pr-9 rounded-md bg-blue-300">
       <i class="fas fa-plus"></i> Add students</a>
   </div>
  
@@ -65,4 +65,4 @@
   </div>
 </div>
 
-<script src="<?php echo "$baseUrl/assets/js/adminStudent.js"; ?>" charset="utf-8"></script>
+<script src="<?php echo "$base_url/assets/js/adminStudent.js"; ?>" charset="utf-8"></script>

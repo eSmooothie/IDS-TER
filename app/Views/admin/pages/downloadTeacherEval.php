@@ -10,7 +10,7 @@
         <?php echo "{$teacherData['ID']}"; ?>
       </span>
       <span class="uppercase rounded-full border py-2 px-3 text-xs flex items-center justify-center border-blue-400 bg-blue-300 hover:bg-blue-200 hover:cursor-pointer">
-        <a class="" href="<?php echo "$baseUrl/admin/department/view/{$teacherData['DEPARTMENT_ID']}"; ?>">
+        <a class="" href="<?php echo "$base_url/admin/department/view/{$teacherData['DEPARTMENT_ID']}"; ?>">
           <?php echo ($teacherData['DEPARTMENT'])?"{$teacherData['DEPARTMENT']}":"No Department"; ?>
         </a>
       </span>
@@ -28,11 +28,11 @@
   <!-- NAV BAR -->
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <div class="grid grid-cols-9">
-    <a href="<?php echo "$baseUrl/admin/teacher/view/{$teacherData['ID']}"; ?>" class=" text-blue-700">
+    <a href="<?php echo "$base_url/admin/teacher/view/{$teacherData['ID']}"; ?>" class=" text-blue-700">
         <i class="fa fa-eye" aria-hidden="true"></i> View</a>
-      <a href="<?php echo "$baseUrl/admin/teacher/view/{$teacherData['ID']}/edit"; ?>" class=" text-blue-700">
+      <a href="<?php echo "$base_url/admin/teacher/view/{$teacherData['ID']}/edit"; ?>" class=" text-blue-700">
         <i class="fas fa-cog"></i> Edit</a>
-      <a href="<?php echo "$baseUrl/admin/teacher/view/{$teacherData['ID']}/downloads"; ?>" class=" text-blue-700">
+      <a href="<?php echo "$base_url/admin/teacher/view/{$teacherData['ID']}/downloads"; ?>" class=" text-blue-700">
         <i class="fas fa-download"></i> Downloads</a>
     </div>
   </div>
@@ -59,7 +59,7 @@
               <th scope="row" class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap"><?php echo "$sy:$sem"; ?></th>
               <td>
                 <a target="_blank" class="text-blue-600 hover:text-blue-900"
-                href="<?php echo "$baseUrl/download/individual/{$id}/{$teacherData['ID']}/$pdfName"; ?>">Download</a>
+                href="<?php echo "$base_url/download/individual/{$id}/{$teacherData['ID']}/$pdfName"; ?>">Download</a>
               </td>
             </tr>
             <?php

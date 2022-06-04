@@ -6,21 +6,6 @@ use App\Libraries\ComputeRating;
 use App\Libraries\UserDButil;
 class User extends BaseController{
 
-  public function index_temp(){
-    if(!$this->session->has("user_id")){
-      return redirect()->to("/");
-    }
-
-    $data = [
-			'id' => $this->session->get("user_id"),
-			'pageTitle' => "user_type | view_name",
-			'baseUrl' => base_url(),
-      // add some variables here
-		];
-    echo view("user_folder/layout/header", $data);
-		echo view("user_folder/pages/view_name", $data);
-		echo view("user_folder/layout/footer");
-  }
   // general
   public function login(){
     $as = $this->request->getPost("logInAs");

@@ -7,8 +7,8 @@
             echo "$type questionnaire";
         ?></p>
         <div class="grid grid-cols-10">
-        <a href="<?php echo "$baseUrl/admin/questionaire";?>" class=" text-blue-600 hover:text-blue-700"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back</a>
-        <a href="<?php echo "$baseUrl/admin/questionaire/$id/$name/add";?>"
+        <a href="<?php echo "$base_url/admin/questionaire";?>" class=" text-blue-600 hover:text-blue-700"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back</a>
+        <a href="<?php echo "$base_url/admin/questionaire/$id/$name/add";?>"
             class="text-blue-600 hover:text-blue-700"
         ><i class="fa fa-plus" aria-hidden="true"></i> Add Question</a>
         </div>
@@ -40,8 +40,8 @@
                                 echo $question;
                             ?></td>
                             <td class="py-4 px-6 text-sm  whitespace-nowrap uppercase flex justify-between">
-                                <a href="<?php echo "$baseUrl/admin/questionaire/$id/$name/modify/$questionId";?>" class="text-blue-600 hover:text-blue-900">Modify</a>
-                                <a href="<?php echo "$baseUrl/admin/questionaire/$id/$name/remove/$questionId";?>" class="text-blue-600 hover:text-blue-900">Remove</a>
+                                <a href="<?php echo "$base_url/admin/questionaire/$id/$name/modify/$questionId";?>" class="text-blue-600 hover:text-blue-900">Modify</a>
+                                <a href="<?php echo "$base_url/admin/questionaire/$id/$name/remove/$questionId";?>" class="text-blue-600 hover:text-blue-900">Remove</a>
                             </td>
                         </tr>
                         <?php

@@ -6,7 +6,7 @@ use App\Libraries\UserDButil;
 
 class Evaluation extends BaseController{
   public function peer($evaluated = false){
-    if(!$this->session->has("userID")){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
 
@@ -14,7 +14,7 @@ class Evaluation extends BaseController{
       return redirect()->to("/");
     }
     // do something here
-    $id = $this->session->get("userID");
+    $id = $this->session->get("user_id");
     $evaluator = $this->evaluatorModel
     ->where("TEACHER_ID", $id)
     ->first();
@@ -47,16 +47,15 @@ class Evaluation extends BaseController{
 
     $teacher = $this->teacherModel->find($evaluated);
 
-    $data = [
-			'id' => $this->session->get("userID"),
-			'pageTitle' => "EVALUATE | PEER",
-			'baseUrl' => base_url(),
-      // add some variables here
+    $args = [
       'evaluator_id' => $evaluator_id,
       'evaluated' => $teacher,
       'isDone' => ($isExist > 0)? true: false,
       'questions' => $questions,
-		];
+    ];
+
+    $data = $this->map_page_parameters("EVALUATE | PEER", $args);
+
     echo view("evaluation/layout/header", $data);
     echo view("evaluation/peer", $data);
 		echo view("evaluation/layout/footer");
@@ -118,7 +117,7 @@ class Evaluation extends BaseController{
   }
 
   public function supervisor($evaluated = false){
-    if(!$this->session->has("userID")){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
 
@@ -126,7 +125,7 @@ class Evaluation extends BaseController{
       return redirect()->to("/");
     }
     // do something here
-    $id = $this->session->get("userID");
+    $id = $this->session->get("user_id");
     $evaluator = $this->evaluatorModel
     ->where("TEACHER_ID", $id)
     ->first();
@@ -160,7 +159,7 @@ class Evaluation extends BaseController{
     $teacher = $this->teacherModel->find($evaluated);
 
     $data = [
-			'id' => $this->session->get("userID"),
+			'id' => $this->session->get("user_id"),
 			'pageTitle' => "EVALUATE | SUPERVISOR",
 			'baseUrl' => base_url(),
       // add some variables here

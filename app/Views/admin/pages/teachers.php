@@ -53,7 +53,7 @@
               <td class="py-4 px-6 text-sm  whitespace-nowrap"><?php echo ($isLecturer)? "Yes":"No"; ?></td>
               <td class="py-4 px-6 text-sm  whitespace-nowrap"><?php echo ($onLeave)? "ON LEAVE":""; ?></td>
               <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                <a href="<?php echo "$baseUrl/admin/teacher/view/$id"; ?>" class="text-blue-600 hover:text-blue-900">View</a>
+                <a href="<?php echo "$base_url/admin/teacher/view/$id"; ?>" class="text-blue-600 hover:text-blue-900">View</a>
               </td>
             </tr>
             <?php
@@ -164,4 +164,4 @@
     </div>
 </div>
 
-<script src="<?php echo "$baseUrl/assets/js/adminTeacher.js"; ?>" charset="utf-8"></script>
+<script src="<?php echo "$base_url/assets/js/adminTeacher.js"; ?>" charset="utf-8"></script>

@@ -57,4 +57,4 @@
   </div>
 </div>
 
-<script src="<?php echo "$baseUrl/assets/js/adminSubject.js"; ?>" charset="utf-8"></script>
+<script src="<?php echo "$base_url/assets/js/adminSubject.js"; ?>" charset="utf-8"></script>

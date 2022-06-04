@@ -99,21 +99,30 @@ class UserDButil{
       // retrieve student evaluator information
       $student_evaluator_id = $this->get_evaluator_id($id, True);
 
-      // TODO: CLEAN
       $student_subjects = []; 
       $is_cleared = false;
-      $done_evaluated_counter = 0;
-  
+      $done_evaluated_counter = $this->get_total_done_evaluated($student_evaluator_id, $curr_school_year['ID']);
+      
+      // check if enrolled
       if(!empty($student_curr_section)){
         // get subjects
         $section_subject_data = $this->section_subject_model
+        ->select("
+          `teacher`.`ID` AS `TEACHER_ID`,
+          `teacher`.`FN` AS `TEACHER_FN`,
+          `teacher`.`LN` AS `TEACHER_LN`,
+          `subject`.`ID` AS `SUBJ_ID`,
+          `subject`.`DESCRIPTION` AS `SUBJ_DESC`
+        ")
+        ->join("`teacher`","`teacher`.`ID` = `sec_subj_lst`.`TEACHER_ID`","INNER")
+        ->join("`subject`","`subject`.`ID` = `sec_subj_lst`.`SUBJECT_ID`","INNER")
         ->where("SECTION_ID", $student_curr_section['ID'])
         ->where("SCHOOL_YEAR_ID", $curr_school_year['ID'])
         ->findAll();
   
-        foreach ($section_subject_data as $key => $subject) {
-          $subject_id = $subject['SUBJECT_ID'];
-          $teacher_id = $subject['TEACHER_ID'];
+        foreach ($section_subject_data as $key => $value) {
+          $subject_id = $value['SUBJ_ID'];
+          $teacher_id = $value['TEACHER_ID'];
   
           // check if is done rating
           $is_done = $this->is_done_evaluated($student_evaluator_id, 
@@ -122,13 +131,17 @@ class UserDButil{
             1, $subject_id
           );
   
-          if($is_done){
-            $done_evaluated_counter += 1;
-          }
-  
-          $teacher_data = $this->teacher_model->find($teacher_id);
-          $subject_data = $this->subject_model->find($subject_id);
-  
+          $subject_data = [
+            "ID" => $subject_id,
+            "DESCRIPTION" => $value['SUBJ_DESC']
+          ];
+          
+          $teacher_data = [
+            "ID" => $teacher_id,
+            "FN" => $value["TEACHER_FN"],
+            "LN" => $value["TEACHER_LN"]
+          ];
+
           $subject = [
             'is_done' => $is_done,
             'teacher_data' => $teacher_data,
@@ -139,20 +152,18 @@ class UserDButil{
         }
   
         $is_cleared = $this->is_cleared($student_data['ID']);
-  
+        
         // update student status
-        if($is_cleared){
-          $update_status = [
-            'STATUS' => 1,
-            'DATE' => $this->time->now()->toDateTimeString(),
-          ];
-  
-          $this->student_status_model
+        $update_status = [
+          'STATUS' => ($is_cleared)? 1 : 0,
+          'DATE' => $this->time->now()->toDateTimeString()
+        ];
+      
+        $this->student_status_model
           ->where("SCHOOL_YEAR_ID", $curr_school_year['ID'])
           ->where("STUDENT_ID", $student_data['ID'])
           ->set($update_status)
           ->update();
-        }
       }
   
       return [
@@ -220,78 +231,90 @@ class UserDButil{
       bool $is_principal = false){
 
       if($is_principal){
-        $executives = $this->execom_history_model
-          ->select("
-            `execom_hist`.`ID` AS `ID`,
-            `execom_hist`.`TEACHER_ID` AS `TEACHER_ID`,
-            `execom`.`NAME` AS `POSITION`
-          ")
-          ->join("`execom`","`execom`.`ID` = `execom_hist`.`ID`","INNER")
-          ->where("SCHOOL_YEAR_ID", $school_year_id)
-          ->notLike("`execom_hist`.`EXECOM_ID`", 1)
-          ->findAll();
-
-        $chairpersons = $this->department_history_model
-          ->select("
-            `dept_hist`.`ID` AS `ID`,
+        
+        $department_query = "(
+          SELECT
+            `dept_hist`.`DEPARTMENT_ID` AS `DEPARTMENT_ID`,
             `dept_hist`.`TEACHER_ID` AS `TEACHER_ID`,
-            `department`.`NAME` AS `POSITION`
-          ")
-          ->join("`department`","`department`.`ID` = `dept_hist`.`DEPARTMENT_ID`", "INNER")
-          ->where("SCHOOL_YEAR_ID", $school_year_id)
-          ->findAll();
+            `department`.`NAME` AS `DEPT_NAME`
+            FROM `dept_hist` 
+            INNER JOIN `department` ON `department`.`ID` = `dept_hist`.`DEPARTMENT_ID`
+            WHERE `SCHOOL_YEAR_ID` = '$school_year_id'
+        ) as `dept_hist`";
+        
+        $execom_query = "(
+          SELECT
+            `execom_hist`.`EXECOM_ID` AS `EXECOM_ID`,
+            `execom_hist`.`TEACHER_ID` AS `TEACHER_ID`,
+            `execom`.`NAME` AS `EXECOM_NAME`
+            FROM `execom_hist` 
+            INNER JOIN `execom` ON `execom`.`ID` = `execom_hist`.`EXECOM_ID`
+            WHERE `SCHOOL_YEAR_ID` = '$school_year_id' AND `execom_hist`.`EXECOM_ID` != 1
+        ) as `execom_hist`";
 
-        $teacher_to_rate = [];
+        $eval_info_query = "(SELECT 
+        `eval_info`.`ID` AS `ID`,
+        `eval_info`.`EVALUATED_ID` AS `EVALUATED_ID` 
+        FROM `eval_info` 
+        WHERE `eval_info`.`EVALUATOR_ID` = '$evaluator_id' AND `eval_info`.`SCHOOL_YEAR_ID` = '$school_year_id'
+        AND `eval_info`.`EVAL_TYPE_ID` = '$eval_type'
+        ) as `eval_info`";
 
-        foreach($executives as $key => $value){
-          $teacher_id = $value['TEACHER_ID'];
-          $teacher = $this->teacher_model->find($teacher_id);
-          $data = [
-            'position' => $value['POSITION'],
-            'teacher' => $teacher,
-          ];
-
-          array_push($teacher_to_rate, $data);
-        }
-
-        foreach($chairpersons as $key => $value){
-          $teacher_id = $value['TEACHER_ID'];
-          $teacher = $this->teacher_model->find($teacher_id);
-          $data = [
-            'position' => $value['POSITION'],
-            'teacher' => $teacher,
-          ];
-
-          array_push($teacher_to_rate, $data);
-        }
+        $teacher_to_rate = $this->teacher_model
+        ->select("
+          `teacher`.`ID` AS `TEACHER_ID`,
+          `teacher`.`FN` AS `TEACHER_FN`,
+          `teacher`.`LN` AS `TEACHER_LN`,
+          `execom_hist`.`EXECOM_ID` AS `EXECOM`,
+          `dept_hist`.`DEPARTMENT_ID` AS `DEPT`,
+          IF(`dept_hist`.`DEPARTMENT_ID` IS NULL, `execom_hist`.`EXECOM_NAME`, `dept_hist`.`DEPT_NAME`) AS `POSITION`,
+          `eval_info`.`ID` AS `EVAL_INFO_ID`")
+        ->join($department_query,"`dept_hist`.`TEACHER_ID` = `teacher`.`ID`","LEFT")
+        ->join($execom_query,"`execom_hist`.`TEACHER_ID` = `teacher`.`ID`","LEFT")
+        ->join($eval_info_query,"`teacher`.`ID` = `eval_info`.`EVALUATED_ID`","LEFT")
+        ->where("`dept_hist`.`DEPARTMENT_ID` IS NOT NULL")
+        ->orWhere("`execom_hist`.`EXECOM_ID` IS NOT NULL")
+        ->findAll();
 
       }else{
 
+        $check_done_evaluated_query = "(SELECT 
+          `eval_info`.`ID` AS `ID`,
+          `eval_info`.`EVALUATED_ID` AS `EVALUATED_ID` 
+          FROM `eval_info` WHERE `eval_info`.`EVALUATOR_ID` = '$evaluator_id' AND `eval_info`.`EVAL_TYPE_ID` = '$eval_type'
+          AND `eval_info`.`SCHOOL_YEAR_ID` = '$school_year_id'
+          ) AS `eval_info`";
+
         $teacher_to_rate = $this->teacher_model
-          ->where("DEPARTMENT_ID", $department_id)
-          ->notLike("ID", $teacher_id)
-          ->where("ON_LEAVE", 0)
+          ->select("
+            `teacher`.`ID` AS `TEACHER_ID`,
+            `teacher`.`FN` AS `TEACHER_FN`,
+            `teacher`.`LN` AS `TEACHER_LN`,
+            `eval_info`.`ID` AS `EVAL_INFO_ID`
+          ")
+          ->join($check_done_evaluated_query,"`eval_info`.`EVALUATED_ID` = `teacher`.`ID`","LEFT")
+          ->where("`teacher`.`DEPARTMENT_ID`", $department_id)
+          ->notLike("`teacher`.`ID`", $teacher_id)
+          ->where("`teacher`.`ON_LEAVE`", 0)
           ->findAll();
           
       }
       
-
       $teacher_peers = [];
      
       foreach ($teacher_to_rate as $key => $value) {
         // check if X done rated Y
-        $position = null;
+        $position = (isset($value['POSITION']))? $value['POSITION']: null;
         $is_done = null;
         $teacher = null;
 
-        if($is_principal){
-          $position = $value['position'];
-          $teacher = $value['teacher'];
-        }else{
-          $teacher = $value;
-        }
+        $teacher = [
+          "ID" => $value['TEACHER_ID'],
+          "FN" => $value['TEACHER_FN'],
+          "LN" => $value['TEACHER_LN']
+        ];
 
-        $is_done = $this->is_done_evaluated($evaluator_id, $teacher['ID'], $school_year_id, $eval_type);
+        $is_done = (empty($value['EVAL_INFO_ID']))? False: True;
 
         $data = [
           'is_done' => $is_done,
@@ -375,7 +398,7 @@ class UserDButil{
         ->first();
 
       $ttl_subjects_in_section = $this->section_subject_model
-        ->where("SECTION_ID", $section['ID'])
+        ->where("SECTION_ID", $section['SECTION_ID'])
         ->where("SCHOOL_YEAR_ID", $school_year_id)
         ->countAllResults();
 
@@ -389,8 +412,6 @@ class UserDButil{
         ->notLike("ID", $teacher_id)
         ->where("ON_LEAVE", 0)
         ->countAllResults();
-      
-      log_message('debug', "Total peer: $total_peers_to_rate");
 
       if($this->is_principal($teacher_id, $school_year_id)){
         $total_chairpersons = $this->department_history_model
@@ -420,18 +441,13 @@ class UserDButil{
       $done_evaluated_counter = $this->get_total_done_evaluated($evaluator_id, $current_school_year_id);
 
       if($is_student){
-        $total_subjects = $this->get_student_total_subjects($user_id, $current_school_year_id);
-        
-        $is_cleared = ($total_subjects === $done_evaluated_counter);
-
-        return $is_cleared;
+        $total_to_rate = $this->get_student_total_subjects($user_id, $current_school_year_id);
       }else{
         $teacher_data = $this->teacher_model->find($user_id);
         $total_to_rate = $this->get_teacher_needed_to_evaluate($teacher_data['ID'], $teacher_data['DEPARTMENT_ID'], $current_school_year_id);
-
-        $is_cleared = ($total_to_rate === $done_evaluated_counter);
-
-        return $is_cleared;
       }
+      $is_cleared = intval($total_to_rate) == intval($done_evaluated_counter);
+      log_message("debug","at UserDBUtil method is_cleared: user_id=$user_id ttl_subj=$total_to_rate ttl_done=$done_evaluated_counter");
+      return $is_cleared;
     }
 }

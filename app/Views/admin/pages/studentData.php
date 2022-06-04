@@ -19,7 +19,7 @@
       </span>
       <span class="rounded-full border border-gray-400 bg-gray-300 py-2 px-3 text-xs flex items-center justify-center">Grade <?php echo "{$latestSection['SECTION_GRADE_LV']}"; ?></span>
       <span class="rounded-full border border-blue-400 bg-blue-300 py-2 px-3 text-xs flex items-center justify-center hover:bg-blue-200 hover:cursor-pointer">
-        <a class="" href="<?php echo $baseUrl."/admin/section/grade/{$latestSection['SECTION_GRADE_LV']}/{$latestSection['SECTION_ID']}"; ?>">
+        <a class="" href="<?php echo $base_url."/admin/section/grade/{$latestSection['SECTION_GRADE_LV']}/{$latestSection['SECTION_ID']}"; ?>">
           <?php echo "{$latestSection['SECTION_NAME']}"; ?>
         </a>
       </span>

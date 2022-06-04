@@ -4,7 +4,7 @@
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <p class=" text-xl font-bold mb-4"><?php echo "{$execom['NAME']}"; ?></p>
     <div class="">
-      <a href="<?php echo "$baseUrl/admin/execom"; ?>" class="text-blue-700">
+      <a href="<?php echo "$base_url/admin/execom"; ?>" class="text-blue-700">
         <i class="fas fa-arrow-circle-left"></i>
         Back</a>
     </div>
@@ -62,7 +62,7 @@
               <td class="py-4 px-6 text-sm  whitespace-nowrap"><?php echo "$ln"; ?></td>
               <td class="py-4 px-6 text-sm  whitespace-nowrap"><?php echo "$fn"; ?></td>
               <td class="py-4 px-6 text-sm font-medium text-center whitespace-nowrap">
-                <a href="<?php echo "$baseUrl/admin/teacher/view/$id"; ?>" class="text-blue-600 hover:text-blue-900">View</a>
+                <a href="<?php echo "$base_url/admin/teacher/view/$id"; ?>" class="text-blue-600 hover:text-blue-900">View</a>
               </td>
             </tr>
             <?php
@@ -73,4 +73,4 @@
   </div>
 </div>
 
-<script src="<?php echo "$baseUrl/assets/js/adminExecom.js"; ?>" charset="utf-8"></script>
+<script src="<?php echo "$base_url/assets/js/adminExecom.js"; ?>" charset="utf-8"></script>

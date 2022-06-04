@@ -107,4 +107,4 @@
   <div class="col-xl-3 col-lg-2"></div>
 </div>
 
-<script src="<?php echo "$baseUrl/assets/js/evaluation.js"; ?>" charset="utf-8"></script>
+<script src="<?php echo "$base_url/assets/js/evaluation.js"; ?>" charset="utf-8"></script>

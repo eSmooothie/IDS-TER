@@ -1,7 +1,7 @@
 <!-- content -->
 <div class="w-full p-2" id="studentsColContainer">
   <div class="p-3 bg-gray-100 rounded-md mb-3">
-    <a href="<?php echo "$baseUrl/admin/student"; ?>" class="hover:bg-blue-400 rounded-md bg-blue-300 p-2">
+    <a href="<?php echo "$base_url/admin/student"; ?>" class="hover:bg-blue-400 rounded-md bg-blue-300 p-2">
       <i class="fas fa-arrow-left"></i> Back
     </a>
   </div>
@@ -78,4 +78,4 @@
     </form>
   </div>
 </div>
-<script src="<?php echo "$baseUrl/assets/js/adminStudent.js"; ?>" charset="utf-8"></script>
+<script src="<?php echo "$base_url/assets/js/adminStudent.js"; ?>" charset="utf-8"></script>

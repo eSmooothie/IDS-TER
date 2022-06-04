@@ -4,9 +4,9 @@
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <p class=" font-bold text-lg uppercase mb-3"><?php echo "{$department['NAME']}"; ?></p>
     <div class="grid grid-cols-9">
-    <a class=" text-center text-blue-600 hover:text-blue-700" href="<?php echo "$baseUrl/admin/department/view/{$department['ID']}"; ?>"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
-      <a class=" text-center text-blue-600 hover:text-blue-700" href="<?php echo "$baseUrl/admin/department/view/{$department['ID']}/edit"; ?>"><i class="fas fa-edit"></i> Edit</a>
-      <a class=" text-center text-blue-600 hover:text-blue-700" href="<?php echo "$baseUrl/admin/department/view/{$department['ID']}/download"; ?>"><i class="fas fa-download"></i> Download</a>
+    <a class=" text-center text-blue-600 hover:text-blue-700" href="<?php echo "$base_url/admin/department/view/{$department['ID']}"; ?>"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
+      <a class=" text-center text-blue-600 hover:text-blue-700" href="<?php echo "$base_url/admin/department/view/{$department['ID']}/edit"; ?>"><i class="fas fa-edit"></i> Edit</a>
+      <a class=" text-center text-blue-600 hover:text-blue-700" href="<?php echo "$base_url/admin/department/view/{$department['ID']}/download"; ?>"><i class="fas fa-download"></i> Download</a>
       <!-- TODO: ADD DEPT HISTORY -->
       <a class=" text-center text-gray-600" href="<?php echo "#"; ?>"><i class="fa fa-history" aria-hidden="true"></i> History</a>
     </div>
@@ -55,4 +55,4 @@
   </div>
 </div>
 
-<script src="<?php echo "$baseUrl/assets/js/adminDepartment.js"; ?>" charset="utf-8"></script>
+<script src="<?php echo "$base_url/assets/js/adminDepartment.js"; ?>" charset="utf-8"></script>

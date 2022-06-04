@@ -4,9 +4,9 @@
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <p class=" font-bold text-lg uppercase mb-3"><?php echo "{$department['NAME']}"; ?></p>
     <div class="grid grid-cols-9">
-    <a class=" text-center text-blue-600 hover:text-blue-700" href="<?php echo "$baseUrl/admin/department/view/{$department['ID']}"; ?>"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
-      <a class=" text-center text-blue-600 hover:text-blue-700" href="<?php echo "$baseUrl/admin/department/view/{$department['ID']}/edit"; ?>"><i class="fas fa-edit"></i> Edit</a>
-      <a class=" text-center text-blue-600 hover:text-blue-700" href="<?php echo "$baseUrl/admin/department/view/{$department['ID']}/download"; ?>"><i class="fas fa-download"></i> Download</a>
+    <a class=" text-center text-blue-600 hover:text-blue-700" href="<?php echo "$base_url/admin/department/view/{$department['ID']}"; ?>"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
+      <a class=" text-center text-blue-600 hover:text-blue-700" href="<?php echo "$base_url/admin/department/view/{$department['ID']}/edit"; ?>"><i class="fas fa-edit"></i> Edit</a>
+      <a class=" text-center text-blue-600 hover:text-blue-700" href="<?php echo "$base_url/admin/department/view/{$department['ID']}/download"; ?>"><i class="fas fa-download"></i> Download</a>
       <!-- TODO: ADD DEPT HISTORY -->
       <a class=" text-center text-gray-600" href="<?php echo "#"; ?>"><i class="fa fa-history" aria-hidden="true"></i> History</a>
     </div>
@@ -15,7 +15,7 @@
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <p class=" font-bold text-lg uppercase mb-3">Current Chairperson</p>
     <p class=" uppercase <?php echo (empty($chairperson))? "text-gray-600" : "text-blue-600";?>">
-      <a href="<?php echo (empty($chairperson))? "":"$baseUrl/admin/teacher/view/{$chairperson['ID']}"; ?>">
+      <a href="<?php echo (empty($chairperson))? "":"$base_url/admin/teacher/view/{$chairperson['ID']}"; ?>">
         <?php echo (empty($chairperson))? "NO CHAIRPERSON":"{$chairperson['LN']}, {$chairperson['FN']}"; ?>
       </a>
     </p>
@@ -44,7 +44,7 @@
             <td class="py-4 px-6 text-sm  whitespace-nowrap"><?php echo "$fn"; ?></td>
             <td class="py-4 px-6 text-sm  whitespace-nowrap"><?php echo ($onLeave)? "ON LEAVE":""; ?></td>
             <td class="py-4 px-6 text-sm  whitespace-nowrap text-blue-600 text-center">
-              <a href="<?php echo "$baseUrl/admin/teacher/view/$id"; ?>">View</a>
+              <a href="<?php echo "$base_url/admin/teacher/view/$id"; ?>">View</a>
             </td>
           </tr>
           <?php

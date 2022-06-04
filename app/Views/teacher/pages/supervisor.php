@@ -1,7 +1,7 @@
 <div class="w-full col-span-7 p-2">
   <!-- NAV -->
   <div class="p-3 bg-gray-100 rounded-md mb-3">
-    <div class="mb-8">
+    <div class="mb-3">
       <table class="mb-3 min-w-full">
         <thead class="">
           <tr class="">
@@ -9,7 +9,7 @@
             <th class=""></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class=" text-sm">
           <tr>
             <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase">School Year</td>
             <td class="py-1 px-6 font-medium tracking-wider text-left text-gray-700 uppercase"><?php echo "{$school_year['SY']}"; ?></td>
@@ -56,7 +56,7 @@
         <tr>
           <th  scope="col" class="py-3 px-6 text-base font-medium tracking-wider text-left text-gray-700 uppercase">ID</th>
           <?php
-          echo ($is_principal)?"<th scope=\"col\" class=\"py-3 px-6 text-base font-medium tracking-wider text-left text-gray-700 uppercase\">Position</th>":"";
+            echo ($is_principal)?"<th scope=\"col\" class=\"py-3 px-6 text-base font-medium tracking-wider text-left text-gray-700 uppercase\">Position</th>":"";
             ?>
           <th scope="col" class="py-3 px-6 text-base font-medium tracking-wider text-left text-gray-700 uppercase">Name</th>
           <th scope="" class="py-3 px-6 text-base font-medium tracking-wider text-center text-gray-700 uppercase">Action</th>
@@ -78,11 +78,11 @@
               <th scope="row" class="py-1 px-6 text-sm font-medium whitespace-nowrap text-left"><?php echo "{$teacher['ID']}"; ?></th>
               <?php
                 if($is_principal){
-                  ?><td class="py-1 px-6 text-sm font-medium whitespace-nowrap"><?php echo "$position"; ?></td><?php
+                  ?><td class="py-2 px-6 text-sm font-medium whitespace-nowrap"><?php echo "$position"; ?></td><?php
                 }
                 ?>
-              <td class="py-1 px-6 text-sm font-medium whitespace-nowrap"><?php echo "{$teacher['LN']}, {$teacher['FN']}"; ?></td>
-              <td class="py-1 px-6 text-sm font-medium whitespace-nowrap text-center">
+              <td class="py-2 px-6 text-sm font-medium whitespace-nowrap"><?php echo "{$teacher['LN']}, {$teacher['FN']}"; ?></td>
+              <td class="py-2 px-6 text-sm font-medium whitespace-nowrap text-center">
                 <a <?php echo ($is_done)?"":"target=\"_blank\""; ?> href="<?php echo "$path"; ?>" 
                 class="py-1 px-2 rounded-lg <?php echo ($is_done)? "bg-green-300": "bg-blue-300"; ?>">
                 <?php echo ($is_done)?"Done":"Evaluate"; ?></a>

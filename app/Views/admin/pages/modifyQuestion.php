@@ -7,7 +7,7 @@
             echo "$type questionnaire";
         ?></p>
         <div class="grid grid-cols-10">
-            <a href="<?php echo "$baseUrl/admin/questionaire/$id/$name";?>" class=" text-blue-600 hover:text-blue-700">
+            <a href="<?php echo "$base_url/admin/questionaire/$id/$name";?>" class=" text-blue-600 hover:text-blue-700">
                 <i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back
             </a>
         </div>
@@ -35,8 +35,8 @@
         let formData = $(this).serializeArray();
 
         let path = "/admin/questionaire/modify";
-        let baseUrl=window.location.origin;
-        let url=baseUrl+path;
+        let base_url=window.location.origin;
+        let url=base_url+path;
 
         $.ajax({
             type:'post',
@@ -47,7 +47,7 @@
             let paths = path.split("/");
             let newPath = "/admin/questionaire/"+ paths[3] + "/" + paths[4];
 
-            window.location.href = baseUrl + newPath;
+            window.location.href = base_url + newPath;
             
         }).fail(function(xhr,textStatus,errorMessage){
             console.log(xhr);

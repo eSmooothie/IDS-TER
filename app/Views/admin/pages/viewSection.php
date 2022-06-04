@@ -11,12 +11,12 @@
           <span class=" bg-gray-400 rounded-full text-center py-1"><?php echo count($students); ?> Students</span>
           <span class=" bg-gray-400 rounded-full text-center py-1"><?php echo count($subjects); ?> Subjects</span>
           <span class=" bg-blue-400 rounded-full text-center py-1">
-            <a href="<?php echo "$baseUrl/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}"; ?>">
+            <a href="<?php echo "$base_url/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}"; ?>">
               <i class="fa fa-eye mr-2" aria-hidden="true"></i></i>View
             </a>
           </span>
           <span class=" bg-blue-400 rounded-full text-center py-1">
-            <a href="<?php echo "$baseUrl/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}/edit"; ?>">
+            <a href="<?php echo "$base_url/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}/edit"; ?>">
               <i class="fas fa-cog mr-2"></i>Option
             </a>
           </span>
@@ -55,7 +55,7 @@
               <th scope="row" class=" text-left py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap">
                 <?php echo "$id"; ?></th>
               <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
-                <a href="<?php echo ($isActive)? "$baseUrl/admin/student/view/$id":"#"; ?>"
+                <a href="<?php echo ($isActive)? "$base_url/admin/student/view/$id":"#"; ?>"
                 class="<?php echo ($isActive)? "text-blue-600 hover:text-blue-900":"text-gray-900"; ?>"><?php echo "$ln, $fn"; ?></a></td>
               <td class="py-4 px-6 text-sm font-medium whitespace-nowrap text-center <?php echo ($status)? "bg-green-300":"bg-gray-300"; ?>">
                 <?php echo ($status)? "CLEARED":"NOT CLEARED"; ?>
@@ -90,7 +90,7 @@
               <tr>
                 <td class="py-4 px-6 text-sm font-medium whitespace-nowrap"><a href="#"><?php echo $subjectDesc; ?></a></td>
                 <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
-                  <a href="<?php echo "$baseUrl/admin/teacher/view/$teacherID"; ?>" class="text-blue-600 hover:text-blue-900">
+                  <a href="<?php echo "$base_url/admin/teacher/view/$teacherID"; ?>" class="text-blue-600 hover:text-blue-900">
                     <?php echo "{$teacherLN}, {$teacherFN}"; ?>
                   </a>
                 </td>

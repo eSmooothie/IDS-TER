@@ -11,12 +11,12 @@
           <span class=" bg-gray-400 rounded-full text-center py-1"><?php echo count($students); ?> Students</span>
           <span class=" bg-gray-400 rounded-full text-center py-1"><?php echo count($sectionSubjects); ?> Subjects</span>
           <span class=" bg-blue-400 rounded-full text-center py-1">
-            <a href="<?php echo "$baseUrl/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}"; ?>">
+            <a href="<?php echo "$base_url/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}"; ?>">
               <i class="fa fa-eye mr-2" aria-hidden="true"></i></i>View
             </a>
           </span>
           <span class=" bg-blue-400 rounded-full text-center py-1">
-            <a href="<?php echo "$baseUrl/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}/edit"; ?>">
+            <a href="<?php echo "$base_url/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}/edit"; ?>">
               <i class="fas fa-cog mr-2"></i>Option
             </a>
           </span>
@@ -426,4 +426,4 @@
   </div>
 </div>
 
-<script src="<?php echo "$baseUrl/assets/js/adminSection.js"; ?>" charset="utf-8"></script>
+<script src="<?php echo "$base_url/assets/js/adminSection.js"; ?>" charset="utf-8"></script>

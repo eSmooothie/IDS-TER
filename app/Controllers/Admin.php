@@ -31,8 +31,7 @@ class Admin extends BaseController
 			'countTeacher' => $countTeacher,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);

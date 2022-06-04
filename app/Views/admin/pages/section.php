@@ -32,7 +32,7 @@
                     <tr>
                       <td class="py-1 px-6 text-sm  whitespace-nowrap"><?php echo "$name"; ?></td>
                       <td class="py-1 px-6 text-sm font-medium text-center whitespace-nowrap">
-                        <a href="<?php echo "$baseUrl/admin/section/grade/$lv/$id"; ?>" class="text-blue-600 hover:text-blue-900">
+                        <a href="<?php echo "$base_url/admin/section/grade/$lv/$id"; ?>" class="text-blue-600 hover:text-blue-900">
                           <span>View</span>
                         </a>
                       </td>
@@ -100,4 +100,4 @@
     </div>
 </div>
 
-<script src="<?php echo "$baseUrl/assets/js/adminSection.js"; ?>" charset="utf-8"></script>
+<script src="<?php echo "$base_url/assets/js/adminSection.js"; ?>" charset="utf-8"></script>
