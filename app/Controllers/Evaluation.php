@@ -100,16 +100,15 @@ class Evaluation extends BaseController{
 
     $teacher = $this->teacherModel->find($evaluated_id);
 
-    $data = [
-      'page_title' => "EVALUATE | STUDENT",
-      'base_url' => base_url(),
-      // add some variables here
+    $args = [
       'evaluator_id' => $evaluator_id,
       'subject_id' => $subject_id,
       'evaluated_data' => $teacher,
       'is_done' => $is_done,
       'questions' => $questions,
     ];
+
+    $data = $this->map_page_parameters("EVALUATE | STUDENT", $args);
 
     echo view("evaluation/layout/header", $data);
     echo view("evaluation/student", $data);
@@ -158,16 +157,15 @@ class Evaluation extends BaseController{
 
     $teacher = $this->teacherModel->find($evaluated);
 
-    $data = [
-			'id' => $this->session->get("user_id"),
-			'pageTitle' => "EVALUATE | SUPERVISOR",
-			'baseUrl' => base_url(),
-      // add some variables here
+    $args = [
       'evaluator_id' => $evaluator_id,
       'evaluated' => $teacher,
       'isDone' => ($isExist > 0)? true: false,
       'questions' => $questions,
 		];
+
+    $data = $this->map_page_parameters("EVALUATE | SUPERVISOR", $args);
+
     echo view("evaluation/layout/header", $data);
     echo view("evaluation/supervisor", $data);
 		echo view("evaluation/layout/footer");
@@ -232,19 +230,6 @@ class Evaluation extends BaseController{
       'comment' => (isset($comment))? $comment : null,
     ];
 
-    $response = [
-      "message" => "OK",
-      "data" => $data,
-    ];
-    return $this->setResponseFormat('json')->respond($response, 200);
-  }
-
-  public function func_name(){
-    header("Content-type:application/json");
-    // do something here
-
-    // {end}
-    $data = [];
     $response = [
       "message" => "OK",
       "data" => $data,
