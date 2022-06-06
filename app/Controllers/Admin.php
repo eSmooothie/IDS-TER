@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\UserDButil;
 class Admin extends BaseController
 {
 	public function index(){
@@ -40,60 +41,149 @@ class Admin extends BaseController
 		echo view("admin/layout/footer");
 	}
 
-	public function addSchoolYear(){
+	public function school_year_is_exist(){
 		header("Content-type:application/json");
-		// do something here
-		$from = $this->request->getPost("from");
-		$to = $this->request->getPost("to");
-		$semester = $this->request->getPost("semester");
+		$from = $this->request->getGet("start_yr");
+		$to = $this->request->getGet("end_yr");
 
-		$from = (int)substr($from, 0, 4);
-		$to = (int)substr($to,0,4);
+		$to_match = "$from-$to";
+		$match_school_year = $this->schoolyearModel
+		->like('SY',$to_match)
+		->findAll();
 
-		if($from >= $to){
-			$response = [
-				"message" => "Invalid school year",
-				"data" => null,
-			];
+		$response = [
+			'check_start_yr' => $from,
+			'check_end_yr' => $to,
+			'matches' => $match_school_year,
+		];
+		return $this->setResponseFormat('json')->respond($response, 200);
+	}
+
+	public function new_school_year(){
+		header("Content-type:application/json");
+		if(!$this->request->isAJAX()){
+			$response["status_code"] = 400;
+			$response["message"] = "Not an AJAX request.";
 			return $this->setResponseFormat('json')->respond($response, 200);
 		}
 
-		$sy = "$from-$to";
+		$start_yr = $this->request->getPost("start_yr");
+		$end_yr = $this->request->getPost("end_yr");
+		$semester = $this->request->getPost("semester");
 
-		$allSy = $this->schoolyearModel->findAll();
-		$isExist = null;
-		foreach ($allSy as $key => $value) {
-			if(strcmp($sy, $value['SY']) == 0 && $value['SEMESTER'] == $semester){
-				$isExist = 1;
-				break;
+		$is_retain_teacher_subject = !empty($this->request->getPost("is_retain_teacher_subj"));
+		$is_retain_student_sec = !empty($this->request->getPost("is_retain_stud_sec"));
+		$is_retain_dept_chair = !empty($this->request->getPost("is_retain_dept_chair"));
+		$is_retain_execom = !empty($this->request->getPost("is_retain_execom"));
+
+		$curr_school_year_id = $this->schoolyearModel->orderBy("ID","DESC")->first()['ID'];
+
+		$status_code = 200;
+		$message = [];
+		// create new school year
+		$start_yr = explode("-", $start_yr);
+		$start_yr = $start_yr[0];
+
+		$end_yr = explode("-", $end_yr);
+		$end_yr = $end_yr[0];
+
+		$new_school_year = [
+			"SY" => "$start_yr-$end_yr",
+			"SEMESTER" => $semester
+		];
+
+		$this->schoolyearModel->insert($new_school_year);
+		$new_school_year_id = $this->schoolyearModel->insertID;
+		
+		if($is_retain_teacher_subject){
+			$query = $this->teacherSubjectModel
+			->select("
+				TEACHER_ID,
+				SUBJECT_ID,
+				$new_school_year_id AS `SCHOOL_YEAR_ID`
+			")
+			->where("SCHOOL_YEAR_ID", $curr_school_year_id)
+			->findAll();
+
+			// update all teacher handled subject
+			if(!empty($query)){
+				$this->teacherSubjectModel->insertBatch($query);
+			}else{
+				$status_code = 500;
+				array_push($message, ["retain_teacher_subject"=>"Failed: No data from previous school year."]);
 			}
 		}
 
-		if(!empty($isExist)){
-			$response = [
-				"message" => "$from-$to:$semester already exist.",
-				"data" => null,
-			];
-			return $this->setResponseFormat('json')->respond($response, 200);
+		if($is_retain_student_sec){
+			$query = $this->studentSectionModel
+			->select("
+				STUDENT_ID,
+				SECTION_ID,
+				$new_school_year_id AS `SCHOOL_YEAR_ID`
+			")
+			->where("SCHOOL_YEAR_ID", $curr_school_year_id)
+			->findAll();
+
+			// update all student section
+			if(!empty($query)){
+				$this->studentSectionModel->insertBatch($query);
+			}else{
+				$status_code = 500;
+				array_push($message, ["retain_student_section"=>"Failed: No data from previous school year."]);
+			}
 		}
-		$add = [
-			'SY' => $sy,
-			'SEMESTER' => $semester,
-		];
 
-		$this->schoolyearModel->insert($add);
+		if($is_retain_dept_chair){
+			$query = $this->departmentHistoryModel
+			->select("
+				DEPARTMENT_ID,
+				TEACHER_ID,
+				$new_school_year_id AS `SCHOOL_YEAR_ID`
+			")
+			->where("SCHOOL_YEAR_ID", $curr_school_year_id)
+			->findAll();
 
-		// add
-		// {end}
-		$data = [
-			'from' => $from,
-			'to' => $to,
-			'semester' => $semester,
-		];
+			// update all dept
+			if(!empty($query)){
+				$this->departmentHistoryModel->insertBatch($query);
+			}else{
+				$status_code = 500;
+				array_push($message, ["retain_dept_chairperson"=>"Failed: No data from previous school year."]);
+			}
+		}
+
+		if($is_retain_execom){
+			$query = $this->execomHistoryModel
+			->select("
+				EXECOM_ID,
+				TEACHER_ID,
+				$new_school_year_id AS `SCHOOL_YEAR_ID`
+			")
+			->where("SCHOOL_YEAR_ID", $curr_school_year_id)
+			->findAll();
+
+			// update all teacher handled subject
+			if(!empty($query)){
+				$this->execomHistoryModel->insertBatch($query);
+			}else{
+				$status_code = 500;
+				array_push($message, ["retain_execom"=>"Failed: No data from previous school year."]);
+			}
+		}
+
+		if($status_code == 500){
+			$this->schoolyearModel->delete(["ID"=>$new_school_year_id]);
+			array_push($message, ["schoolyear"=>"Failed: Abort creating new schoolyear due to errors."]);
+		}
+
+		sleep(2);
+
 		$response = [
-			"message" => "OK",
-			"data" => $data,
+			"status_code" => $status_code,
+			"err_message" => $message,
+			"debug" => (isset($query))? $query:null,
 		];
+
 		return $this->setResponseFormat('json')->respond($response, 200);
 	}
 

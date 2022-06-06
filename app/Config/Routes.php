@@ -38,7 +38,8 @@ $routes->get('/admin', 'Admin::index');
 $routes->post("/admin/login", 'Admin::verifyCredentials');
 
 $routes->get("/admin/dashboard", "Admin::dashboard");
-$routes->post("/admin/schoolyear/new", "Admin::addSchoolYear");
+$routes->post("/admin/new/schoolyear", "Admin::new_school_year");
+$routes->get("/admin/check/schoolyear", "Admin::school_year_is_exist");
 // admin:section
 $routes->get("/admin/section", "Section::index");
 $routes->post("/admin/section/new", "Section::newSection");
