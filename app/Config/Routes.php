@@ -35,7 +35,7 @@ $routes->get('/', 'Home::index');
 
 // admin
 $routes->get('/admin', 'Admin::index');
-$routes->post("/admin/login", 'Admin::verifyCredentials');
+$routes->post("/admin/login", 'Admin::verify_credentials');
 
 $routes->get("/admin/dashboard", "Admin::dashboard");
 $routes->post("/admin/new/schoolyear", "Admin::new_school_year");

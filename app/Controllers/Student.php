@@ -41,7 +41,7 @@ class Student extends BaseController
 		$pageNumber = $this->request->getGet("pageNumber");
 		$keyword = $this->request->getGet("keyword");
 
-		$sy = $this->schoolyearModel->orderBy("ID","DESC")->first(); // get current school year
+		$sy = $this->schoolyear_model->orderBy("ID","DESC")->first(); // get current school year
 
 		if(!empty($keyword)){
 			$searchExpression = "`STUDENT`.`ID` LIKE '%$keyword%' OR ".
@@ -55,7 +55,7 @@ class Student extends BaseController
 
 		$student_section = "(SELECT * FROM `STUDENT_SECTION` WHERE `STUDENT_SECTION`.`SCHOOL_YEAR_ID` = '".$sy['ID']."') AS `STUDENT_SECTION`";
 		$student_status = "(SELECT `STUDENT_ID`, `STATUS` FROM `STUD_STATUS` WHERE `STUD_STATUS`.`SCHOOL_YEAR_ID` = '".$sy['ID']."') AS `STUDENT_STATUS`";
-		$students = $this->studentModel
+		$students = $this->student_model
 		->select("
 			`STUDENT`.`ID` AS `STUDENT_ID`,
 			`STUDENT`.`LN` AS `STUDENT_LN`,
@@ -89,9 +89,9 @@ class Student extends BaseController
 			return redirect()->to("/admin/student");
 		}
 
-		$studentData = $this->studentModel->find($id);
+		$studentData = $this->student_model->find($id);
 
-		$sections = $this->studentSectionModel
+		$sections = $this->student_section_model
 		->select("
 			`student_section`.`ID` AS `STUDENT_SECTION_ID`,
 			`section`.`ID` AS `SECTION_ID`,
@@ -109,7 +109,7 @@ class Student extends BaseController
 		->orderBy("`student_section`.`SCHOOL_YEAR_ID`","DESC")
 		->findAll();
 
-		$status = $this->studentStatusModel->where("STUDENT_ID", $id)
+		$status = $this->student_status_model->where("STUDENT_ID", $id)
 		->orderBy("SCHOOL_YEAR_ID","DESC")
 		->findAll();
 
@@ -139,7 +139,7 @@ class Student extends BaseController
 			return redirect()->to("/admin");
 		}
 
-		$sections = $this->sectionModel->where('IS_ACTIVE',1)
+		$sections = $this->section_model->where('IS_ACTIVE',1)
 		->orderBy("NAME","ASC")
 		->findAll();
 
@@ -258,10 +258,10 @@ class Student extends BaseController
 				'PASSWORD' => strtoupper($section),
 			];
 
-			$this->studentModel->insert($studentData);
+			$this->student_model->insert($studentData);
 
 			// add Y student to X section
-			$sectionData = $this->sectionModel->where("NAME", $section)->first();
+			$sectionData = $this->section_model->where("NAME", $section)->first();
 			$studentSection = [
 				'STUDENT_ID' => $id,
 				'SECTION_ID' => $sectionData['ID'],
@@ -269,7 +269,7 @@ class Student extends BaseController
 				'CREATED_AT' => $this->getCurrentDateTime(),
 			];
 
-			$this->studentSectionModel->insert($studentSection);
+			$this->student_section_model->insert($studentSection);
 
 			// add Y student status
 			$studentStatus = [
@@ -278,12 +278,12 @@ class Student extends BaseController
 				'DATE' => $this->getCurrentDateTime(),	
 			];
 
-			$this->studentStatusModel->insert($studentStatus);
+			$this->student_status_model->insert($studentStatus);
 		}
 	}
 
 	private function isIDExist(string $studentId){
-		$isExist = $this->studentModel->find($studentId);
+		$isExist = $this->student_model->find($studentId);
 
 		if(empty($isExist)){
 			return false;
@@ -312,7 +312,7 @@ class Student extends BaseController
 
 		// check studentid if exist
 		$studentId = trim($student[0]);
-		$isExist = $this->studentModel->find($studentId);
+		$isExist = $this->student_model->find($studentId);
 
 		if(!empty($isExist)){
 			return false;
@@ -320,7 +320,7 @@ class Student extends BaseController
 
 		// check if section exist
 		$section = trim($student[3]);
-		$isExist = $this->sectionModel->where("NAME", $section)->first();
+		$isExist = $this->section_model->where("NAME", $section)->first();
 
 		if(empty($isExist)){
 			return false;

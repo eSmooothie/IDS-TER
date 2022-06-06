@@ -27,7 +27,7 @@ class User extends BaseController{
 
     if($isTeacher){
       // get info
-      $teacher = $this->teacherModel->find($id);
+      $teacher = $this->teacher_model->find($id);
 
       // err if no record found
       if(empty($teacher)){
@@ -50,7 +50,7 @@ class User extends BaseController{
 
       return redirect()->to("/user/teacher");
     }else{
-      $student = $this->studentModel->find($id);
+      $student = $this->student_model->find($id);
 
       // err if no record found
       if(empty($student)){
@@ -162,7 +162,7 @@ class User extends BaseController{
 
     $id = $this->session->get("user_id"); // get session
     $teacher_data = $user_db_util->get_teacher_info($id);
-    $all_school_year = $this->schoolyearModel->orderBy("ID","DESC")->findAll(); // get all school year
+    $all_school_year = $this->schoolyear_model->orderBy("ID","DESC")->findAll(); // get all school year
 
 		$pageTitle = "TEACHER | RATING";
 		$args = [
@@ -201,7 +201,7 @@ class User extends BaseController{
 
     $overall_rating = $compute_rating->get_overall_rating($student_rating["OVERALL"], $peer_rating["OVERALL"], $supervisor_rating["OVERALL"]);
 
-    $school_year_info = $this->schoolyearModel->find($school_year_id);
+    $school_year_info = $this->schoolyear_model->find($school_year_id);
 
     $response = [
       'teacher_id' => $teacher_id,
@@ -225,7 +225,7 @@ class User extends BaseController{
     }
     $teacherId = $this->session->get("user_id");
 
-    $my_comments = $this->evalInfoModel->select("
+    $my_comments = $this->eval_info_model->select("
       `COMMENT`
     ")->where("`EVALUATED_ID`", $teacherId)
     ->where("`COMMENT` IS NOT NULL")
@@ -251,7 +251,7 @@ class User extends BaseController{
     $user_db_util = new UserDButil();
     $id = $this->session->get("user_id"); // get session
     $teacher_data = $user_db_util->get_teacher_info($id);
-    $all_school_year = $this->schoolyearModel->orderBy("ID","DESC")->findAll(); // get all school year
+    $all_school_year = $this->schoolyear_model->orderBy("ID","DESC")->findAll(); // get all school year
 
 
 		$pageTitle = "TEACHER | RATING";
@@ -279,7 +279,7 @@ class User extends BaseController{
     $user_db_util = new UserDButil();
     $id = $this->session->get("user_id"); // get session
     $teacher_data = $user_db_util->get_teacher_info($id);
-    $all_school_year = $this->schoolyearModel->orderBy("ID","DESC")->findAll(); // get all school year
+    $all_school_year = $this->schoolyear_model->orderBy("ID","DESC")->findAll(); // get all school year
 
 		$page_title = "TEACHER | DOWNLOADS";
 		$args = [
@@ -342,7 +342,7 @@ class User extends BaseController{
     $oldPassword = $this->request->getPost("oldPass");
     $newPassword = $this->request->getPost("confirmPass");
 
-    $teacher = $this->teacherModel->find($id);
+    $teacher = $this->teacher_model->find($id);
     $currentPassword = $teacher['PASSWORD'];
 
     $isMatch = password_verify($oldPassword, $currentPassword);
@@ -363,7 +363,7 @@ class User extends BaseController{
       'PASSWORD' => $passwordhash,
     ];
 
-    $this->teacherModel->update($id, $changePass);
+    $this->teacher_model->update($id, $changePass);
     // {end}
     $data = [
       'id' => $id,
@@ -436,7 +436,7 @@ class User extends BaseController{
     $oldPassword = $this->request->getPost("oldPass");
     $newPassword = $this->request->getPost("confirmPass");
 
-    $student = $this->studentModel->find($id);
+    $student = $this->student_model->find($id);
     $currentPassword = $student['PASSWORD'];
 
     $isMatch = (strcmp($oldPassword, $currentPassword) === 0)? true: false;
@@ -457,7 +457,7 @@ class User extends BaseController{
       'PASSWORD' => $password,
     ];
 
-    $this->studentModel->update($id, $changePass);
+    $this->student_model->update($id, $changePass);
     // {end}
     $data = [
       'id' => $id,

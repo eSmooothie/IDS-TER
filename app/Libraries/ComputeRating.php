@@ -14,36 +14,20 @@ namespace App\Libraries;
 
 // get all evaluation info of teacher Y in S.Y. Z as type X
 
-use \App\Models\ActivityLog;
-use \App\Models\Admin;
-use \App\Models\Department;
-use \App\Models\DeptHistory;
+
 use \App\Models\EvalInfo;
 use \App\Models\EvalQuestion;
-use \App\Models\EvalType;
-use \App\Models\Evaluator;
-use \App\Models\ExeCom;
-use \App\Models\ExeComHistory;
 use \App\Models\Rating;
-use \App\Models\Report;
-use \App\Models\SchoolYear;
-use \App\Models\Section;
-use \App\Models\SectionSubject;
-use \App\Models\Student;
-use \App\Models\StudentSection;
-use \App\Models\StudentStatus;
-use \App\Models\Subjects;
-use \App\Models\Teacher;
-use \App\Models\TeacherSubject;
+
 
 class ComputeRating{
 
-    private $evaluation_info_model;
+
     private $evaluation_question_model;
     private $rating_model;
 
     public function __construct(){
-        $this->evaluation_info_model = new EvalInfo();
+
         $this->evaluation_question_model = new EvalQuestion();
         $this->rating_model = new Rating();
     }

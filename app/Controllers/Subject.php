@@ -8,7 +8,7 @@ class Subject extends BaseController{
       return redirect()->to("/admin");
     }
     // do something here
-    $subject = $this->subjectModel->findAll();
+    $subject = $this->subject_model->findAll();
 
     $data = [
 			'id' => $this->session->get("adminID"),
@@ -33,7 +33,7 @@ class Subject extends BaseController{
       'DESCRIPTION' => $name,
     ];
 
-    $this->subjectModel->insert($data);
+    $this->subject_model->insert($data);
 
     $response = [
       "message" => "OK",

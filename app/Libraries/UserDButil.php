@@ -3,18 +3,15 @@ namespace App\Libraries;
 
 use CodeIgniter\I18n\Time;
 
-use \App\Models\ActivityLog;
-use \App\Models\Admin;
+
 use \App\Models\Department;
 use \App\Models\DeptHistory;
 use \App\Models\EvalInfo;
-use \App\Models\EvalQuestion;
-use \App\Models\EvalType;
+
 use \App\Models\Evaluator;
-use \App\Models\ExeCom;
+
 use \App\Models\ExeComHistory;
-use \App\Models\Rating;
-use \App\Models\Report;
+
 use \App\Models\SchoolYear;
 use \App\Models\Section;
 use \App\Models\SectionSubject;
@@ -36,7 +33,7 @@ class UserDButil{
     private $evaluator_model;
     private $section_subject_model;
     private $teacher_model;
-    private $subject_model;
+
     private $student_status_model;
     private $teacher_subject_model;
     private $department_model;
@@ -54,7 +51,6 @@ class UserDButil{
         $this->section_model = new Section();
        
         $this->section_subject_model = new SectionSubject();
-        $this->subject_model = new Subjects();
         $this->student_status_model = new StudentStatus();
 
         $this->teacher_model = new Teacher();

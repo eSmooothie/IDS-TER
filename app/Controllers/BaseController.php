@@ -37,6 +37,34 @@ use \App\Models\TeacherSubject;
 
 class BaseController extends Controller
 {
+	protected $activityLogModel;
+	protected $admin_model;
+	protected $department_model;
+	protected $department_history_model;
+	protected $eval_info_model;
+	protected $eval_question_model;
+	protected $eval_type_model;
+	protected $evaluator_model;
+	protected $execom_model;
+	protected $execom_history_model;
+
+	protected $rating_model;
+	protected $report_model;
+
+	protected $schoolyear_model;
+
+	protected $section_model;
+
+	protected $section_subject_model;
+
+	protected $student_model;
+	protected $student_section_model;
+	protected $student_status_model;
+
+	protected $subject_model;
+	protected $teacher_subject_model;
+	protected $teacher_model;
+	
 	use ResponseTrait;
 	/**
 	 * Instance of the main Request object.
@@ -68,34 +96,34 @@ class BaseController extends Controller
 
 
 		$this->activityLogModel = new ActivityLog();
-		$this->adminModel = new Admin();
-		$this->departmentModel = new Department();
-		$this->departmentHistoryModel = new DeptHistory();
+		$this->admin_model = new Admin();
+		$this->department_model = new Department();
+		$this->department_history_model = new DeptHistory();
 
-		$this->evalInfoModel = new EvalInfo();
-		$this->evalQuestionModel = new EvalQuestion();
-		$this->evalTypeModel = new EvalType();
-		$this->evaluatorModel = new Evaluator();
+		$this->eval_info_model = new EvalInfo();
+		$this->eval_question_model = new EvalQuestion();
+		$this->eval_type_model = new EvalType();
+		$this->evaluator_model = new Evaluator();
 
-		$this->execomModel = new ExeCom();
-		$this->execomHistoryModel = new ExeComHistory();
+		$this->execom_model = new ExeCom();
+		$this->execom_history_model = new ExeComHistory();
 
-		$this->ratingModel = new Rating();
-		$this->reportModel = new Report();
+		$this->rating_model = new Rating();
+		$this->report_model = new Report();
 
-		$this->schoolyearModel = new SchoolYear();
+		$this->schoolyear_model = new SchoolYear();
 
-		$this->sectionModel = new Section();
+		$this->section_model = new Section();
 
-		$this->sectionSubjectModel = new SectionSubject();
+		$this->section_subject_model = new SectionSubject();
 
-		$this->studentModel = new Student();
-		$this->studentSectionModel = new StudentSection();
-		$this->studentStatusModel = new StudentStatus();
+		$this->student_model = new Student();
+		$this->student_section_model = new StudentSection();
+		$this->student_status_model = new StudentStatus();
 
-		$this->subjectModel = new Subjects();
-		$this->teacherSubjectModel = new TeacherSubject();
-		$this->teacherModel = new Teacher();
+		$this->subject_model = new Subjects();
+		$this->teacher_subject_model = new TeacherSubject();
+		$this->teacher_model = new Teacher();
 
 		// preload services
 		$this->session = \Config\Services::session();
@@ -111,7 +139,7 @@ class BaseController extends Controller
 	 * @return Array $sy
 	 */
 	public function getCurrentSchoolYear(): array {
-		$sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+		$sy = $this->schoolyear_model->orderBy("ID","DESC")->first();
 		return $sy;
 	}
 

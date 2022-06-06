@@ -9,7 +9,7 @@ class Teacher extends BaseController{
       return redirect()->to("/admin");
     }
     // do something
-    $teacherData = $this->teacherModel->select("
+    $teacherData = $this->teacher_model->select("
                                             `teacher`.`ID` AS `ID`,
                                             `teacher`.`LN` AS `LN`,
                                             `teacher`.`FN` AS `FN`,
@@ -22,7 +22,7 @@ class Teacher extends BaseController{
                                           ->orderBy("LN","ASC")
                                           ->findAll();
 
-    $department = $this->departmentModel->findAll();
+    $department = $this->department_model->findAll();
 
     $sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | TEACHER";
@@ -51,7 +51,7 @@ class Teacher extends BaseController{
       return redirect()->to("/admin/teacher/");
     }
     // do something
-    $teacherData = $this->teacherModel
+    $teacherData = $this->teacher_model
     ->select("
     `teacher`.`ID` AS `ID`,
     `teacher`.`FN` AS `FN`,
@@ -67,7 +67,7 @@ class Teacher extends BaseController{
     ->find($id);
 
     // get teacher subjects
-    $subjectHandles = $this->teacherSubjectModel->select(
+    $subjectHandles = $this->teacher_subject_model->select(
       "
       `tchr_subj_lst`.`ID` AS `ID`,
       `subject`.`DESCRIPTION` AS `SUBJECT_NAME`,
@@ -108,7 +108,7 @@ class Teacher extends BaseController{
       return redirect()->to("/admin/teacher/");
     }
     // get teacher data
-    $teacherData = $this->teacherModel
+    $teacherData = $this->teacher_model
     ->select("
     `teacher`.`ID` AS `ID`,
     `teacher`.`FN` AS `FN`,
@@ -124,8 +124,8 @@ class Teacher extends BaseController{
     ->find($id);
 
     // get current teacher subject
-    $currSY = $this->schoolyearModel->orderBy("ID","DESC")->first();
-    $currentSubjects = $this->teacherSubjectModel
+    $currSY = $this->schoolyear_model->orderBy("ID","DESC")->first();
+    $currentSubjects = $this->teacher_subject_model
     ->select("
     `subject`.`ID` AS `ID`,
     `subject`.`DESCRIPTION` AS `DESCRIPTION`
@@ -138,10 +138,10 @@ class Teacher extends BaseController{
     $subjectSY = null;
 
     if(empty($currentSubjects)){
-      $schoolYear = $this->schoolyearModel->findAll();
+      $schoolYear = $this->schoolyear_model->findAll();
       foreach ($schoolYear as $key => $value) {
         $sy_id = $value['ID'];
-        $currentSubjects = $this->teacherSubjectModel
+        $currentSubjects = $this->teacher_subject_model
         ->select("
         `subject`.`ID` AS `ID`,
         `subject`.`DESCRIPTION` AS `DESCRIPTION`,
@@ -161,9 +161,9 @@ class Teacher extends BaseController{
     }
   
     // get all subject
-    $subjects = $this->subjectModel->findAll();
+    $subjects = $this->subject_model->findAll();
 
-    $departments = $this->departmentModel->findAll();
+    $departments = $this->department_model->findAll();
 
     $sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | TEACHER";
@@ -214,7 +214,7 @@ class Teacher extends BaseController{
     }
     // do something
     // get teacher data
-    $teacherData = $this->teacherModel
+    $teacherData = $this->teacher_model
     ->select("
     `teacher`.`ID` AS `ID`,
     `teacher`.`FN` AS `FN`,
@@ -230,8 +230,8 @@ class Teacher extends BaseController{
     ->find($id);
 
     // get current teacher subject
-    $currSY = $this->schoolyearModel->orderBy("ID","DESC")->first();
-    $currentSubjects = $this->teacherSubjectModel
+    $currSY = $this->schoolyear_model->orderBy("ID","DESC")->first();
+    $currentSubjects = $this->teacher_subject_model
     ->select("
     `subject`.`ID` AS `ID`,
     `subject`.`DESCRIPTION` AS `DESCRIPTION`,
@@ -244,10 +244,10 @@ class Teacher extends BaseController{
     $subjectSY = null;
 
     if(empty($currentSubjects)){
-      $schoolYear = $this->schoolyearModel->findAll();
+      $schoolYear = $this->schoolyear_model->findAll();
       foreach ($schoolYear as $key => $value) {
         $sy_id = $value['ID'];
-        $currentSubjects = $this->teacherSubjectModel
+        $currentSubjects = $this->teacher_subject_model
         ->select("
         `subject`.`ID` AS `ID`,
         `subject`.`DESCRIPTION` AS `DESCRIPTION`,
@@ -264,11 +264,11 @@ class Teacher extends BaseController{
       }
     }
     // get all subject
-    $subjects = $this->subjectModel->findAll();
+    $subjects = $this->subject_model->findAll();
 
-    $departments = $this->departmentModel->findAll();
+    $departments = $this->department_model->findAll();
 
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->findAll();
+    $sy = $this->schoolyear_model->orderBy("ID","DESC")->findAll();
 
     $sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | TEACHER";
@@ -318,7 +318,7 @@ class Teacher extends BaseController{
     }
 
     // check if id is already exist.
-    $isExist = $this->teacherModel->find($id);
+    $isExist = $this->teacher_model->find($id);
     if($isExist){
       $response = [
         "message" => "ID already exist.",
@@ -340,7 +340,7 @@ class Teacher extends BaseController{
       'IS_LECTURER' => (empty($isLecturer))? 0:1,
     ];
 
-    $this->teacherModel->insert($teacherData);
+    $this->teacher_model->insert($teacherData);
 
      // {end}
     $data = [];
@@ -374,7 +374,7 @@ class Teacher extends BaseController{
     $updateData['ON_LEAVE'] = (empty($onLeave))? 0:1;
     $updateData['IS_LECTURER'] = (empty($isLecturer))? 0:1;
 
-    $this->teacherModel->update($id, $updateData);
+    $this->teacher_model->update($id, $updateData);
     // {end}
     $data = [
       'updateData' => $updateData,
@@ -396,7 +396,7 @@ class Teacher extends BaseController{
     $new = $this->request->getPost("newPassword");
     $re = $this->request->getPost("confirmPassword");
 
-    $teacherData = $this->teacherModel->find($id);
+    $teacherData = $this->teacher_model->find($id);
 
     if(!password_verify($old, $teacherData['PASSWORD'])){
       $response = [
@@ -428,7 +428,7 @@ class Teacher extends BaseController{
       'PASSWORD' => $hash_password,
     ];
 
-    $this->teacherModel->update($id, $update);
+    $this->teacher_model->update($id, $update);
     // {end}
     $data = [];
     $response = [
@@ -445,16 +445,16 @@ class Teacher extends BaseController{
     $id = $this->request->getPost("id");
     $subjects = $this->request->getPost("subjects[]");
 
-    $currSY = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $currSY = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
     // delete current all subjects
-    $this->teacherSubjectModel
+    $this->teacher_subject_model
     ->where("TEACHER_ID", $id)
     ->where("SCHOOL_YEAR_ID", $currSY['ID'])
     ->delete();
 
     foreach ($subjects as $key => $subjectId) {
-      $isExist = $this->teacherSubjectModel
+      $isExist = $this->teacher_subject_model
       ->where("TEACHER_ID", $id)
       ->where("SUBJECT_ID", $subjectId)
       ->where("SCHOOL_YEAR_ID", $currSY['ID'])
@@ -467,7 +467,7 @@ class Teacher extends BaseController{
           'SCHOOL_YEAR_ID' => $currSY['ID'],
         ];
 
-        $this->teacherSubjectModel->insert($add);
+        $this->teacher_subject_model->insert($add);
       }
     }
     // {end}
@@ -494,7 +494,7 @@ class Teacher extends BaseController{
       'DEPARTMENT_ID' => $newDeptId,
     ];
 
-    $this->teacherModel->update($id, $updateData);
+    $this->teacher_model->update($id, $updateData);
 
     // {end}
     $data = [
@@ -520,15 +520,15 @@ class Teacher extends BaseController{
 
     $interval = 30;
 
-    $evaluator = $this->evaluatorModel->where("TEACHER_ID", $id)->first();
+    $evaluator = $this->evaluator_model->where("TEACHER_ID", $id)->first();
 
     if(empty($evaluator)){
       $data = [
         'TEACHER_ID' => $id
       ];
 
-      $this->evaluatorModel->insert($data);
-      $evaluator_id = $this->evaluatorModel->insertID;
+      $this->evaluator_model->insert($data);
+      $evaluator_id = $this->evaluator_model->insertID;
     }else{
       $evaluator_id = $evaluator['ID'];
     }
@@ -537,7 +537,7 @@ class Teacher extends BaseController{
     $lowerBound = $min->toDateTimeString();
 
     $where = "EVALUATOR_ID LIKE '$evaluator_id' AND DATE_EVALUATED BETWEEN '$lowerBound' AND '$upperBound'";
-    $eval_info = $this->evalInfoModel
+    $eval_info = $this->eval_info_model
     ->select("
       `eval_info`.`ID` AS `EVAL_INFO_ID`,
       `teacher`.`ID` AS `TEACHER_ID`,

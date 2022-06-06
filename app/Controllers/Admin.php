@@ -17,10 +17,10 @@ class Admin extends BaseController
 		if(!$this->session->has("adminID")){
 			return redirect()->to("/admin");
 		}
-		$school_year = $this->schoolyearModel->orderBy("ID","DESC")->first();
+		$school_year = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
-		$countStudents = $this->studentModel->countAll();
-		$countTeacher = $this->teacherModel->countAll();
+		$countStudents = $this->student_model->countAll();
+		$countTeacher = $this->teacher_model->countAll();
 
 		
 		$sessionId = $this->session->get("adminID");
@@ -47,7 +47,7 @@ class Admin extends BaseController
 		$to = $this->request->getGet("end_yr");
 
 		$to_match = "$from-$to";
-		$match_school_year = $this->schoolyearModel
+		$match_school_year = $this->schoolyear_model
 		->like('SY',$to_match)
 		->findAll();
 
@@ -76,7 +76,7 @@ class Admin extends BaseController
 		$is_retain_dept_chair = !empty($this->request->getPost("is_retain_dept_chair"));
 		$is_retain_execom = !empty($this->request->getPost("is_retain_execom"));
 
-		$curr_school_year_id = $this->schoolyearModel->orderBy("ID","DESC")->first()['ID'];
+		$curr_school_year_id = $this->schoolyear_model->orderBy("ID","DESC")->first()['ID'];
 
 		$status_code = 200;
 		$message = [];
@@ -92,8 +92,8 @@ class Admin extends BaseController
 			"SEMESTER" => $semester
 		];
 
-		$this->schoolyearModel->insert($new_school_year);
-		$new_school_year_id = $this->schoolyearModel->insertID;
+		$this->schoolyear_model->insert($new_school_year);
+		$new_school_year_id = $this->schoolyear_model->insertID;
 		
 		if($is_retain_teacher_subject){
 			$query = $this->teacherSubjectModel
@@ -134,7 +134,7 @@ class Admin extends BaseController
 		}
 
 		if($is_retain_dept_chair){
-			$query = $this->departmentHistoryModel
+			$query = $this->department_history_model
 			->select("
 				DEPARTMENT_ID,
 				TEACHER_ID,
@@ -145,7 +145,7 @@ class Admin extends BaseController
 
 			// update all dept
 			if(!empty($query)){
-				$this->departmentHistoryModel->insertBatch($query);
+				$this->department_history_model->insertBatch($query);
 			}else{
 				$status_code = 500;
 				array_push($message, ["retain_dept_chairperson"=>"Failed: No data from previous school year."]);
@@ -172,7 +172,7 @@ class Admin extends BaseController
 		}
 
 		if($status_code == 500){
-			$this->schoolyearModel->delete(["ID"=>$new_school_year_id]);
+			$this->schoolyear_model->delete(["ID"=>$new_school_year_id]);
 			array_push($message, ["schoolyear"=>"Failed: Abort creating new schoolyear due to errors."]);
 		}
 
@@ -187,32 +187,26 @@ class Admin extends BaseController
 		return $this->setResponseFormat('json')->respond($response, 200);
 	}
 
-	public function verifyCredentials(){
+	public function verify_credentials(){
 		header("Content-type:application/json");
 		$username = $this->request->getPost("username");
 		$password = $this->request->getPost("password");
-		$admin = $this->adminModel->where("username", $username)
-								->where("password", $password)
-								->first();
+		$admin = $this->admin_model
+		->where("username", $username)
+		->where("password", $password)
+		->first();
 
-		$data = (!empty($admin))? true:false;
-		if(!empty($admin)){
-		$this->session->set("adminID",$admin['ID']);
+		$is_exist = !empty($admin);
+
+		if($is_exist){
+			$this->session->set("adminID",$admin['ID']);
 		}
+
 		$response = [
-		"message" => "OK",
-		"data" => $data,
+			"message" => "OK",
+			"data" => $is_exist,
 		];
+
 		return $this->setResponseFormat('json')->respond($response, 200);
 	}
 }
-
-
-// public function verifyCredentials(){
-//   header("Content-type:application/json");
-  // $response = [
-  //   "message" => "OK",
-  //   "data" => $data,
-  // ];
-//   return $this->setResponseFormat('json')->respond($response, 200);
-// }

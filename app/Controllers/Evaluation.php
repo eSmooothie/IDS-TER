@@ -15,7 +15,7 @@ class Evaluation extends BaseController{
     }
     // do something here
     $id = $this->session->get("user_id");
-    $evaluator = $this->evaluatorModel
+    $evaluator = $this->evaluator_model
     ->where("TEACHER_ID", $id)
     ->first();
 
@@ -23,29 +23,29 @@ class Evaluation extends BaseController{
       $create = [
         'TEACHER_ID' => $id,
       ];
-      $this->evaluatorModel->insert($create);
-      $evaluator_id = $this->evaluatorModel->insertID;
+      $this->evaluator_model->insert($create);
+      $evaluator_id = $this->evaluator_model->insertID;
     }else{
       $evaluator_id = $evaluator['ID'];
     }
 
     // check if done rated
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $sy = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
-    $isExist = $this->evalInfoModel
+    $isExist = $this->eval_info_model
     ->where("EVALUATOR_ID", $evaluator_id)
     ->where("EVALUATED_ID", $evaluated)
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->where("EVAL_TYPE_ID", 2)
     ->countAllResults();
 
-    $questions = $this->evalQuestionModel
+    $questions = $this->eval_question_model
     ->where("EVAL_TYPE_ID", 2)
     ->where("IS_REMOVE", 0)
     ->orderBy("ID","ASC")
     ->findAll();
 
-    $teacher = $this->teacherModel->find($evaluated);
+    $teacher = $this->teacher_model->find($evaluated);
 
     $args = [
       'evaluator_id' => $evaluator_id,
@@ -73,7 +73,7 @@ class Evaluation extends BaseController{
     $user_db_util = new UserDButil();
 
     $student_id = $this->session->get("user_id");
-    $evaluator = $this->evaluatorModel
+    $evaluator = $this->evaluator_model
     ->where("STUDENT_ID", $student_id)
     ->first();
 
@@ -81,24 +81,24 @@ class Evaluation extends BaseController{
       $create = [
         'STUDENT_ID' => $student_id,
       ];
-      $this->evaluatorModel->insert($create);
-      $evaluator_id = $this->evaluatorModel->insertID;
+      $this->evaluator_model->insert($create);
+      $evaluator_id = $this->evaluator_model->insertID;
     }else{
       $evaluator_id = $evaluator['ID'];
     }
 
     // check if done rated
-    $curr_school_year = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $curr_school_year = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
     $is_done = $user_db_util->is_done_evaluated($evaluator_id, $evaluated_id, $curr_school_year['ID'], 1, $subject_id);
 
-    $questions = $this->evalQuestionModel
+    $questions = $this->eval_question_model
     ->where("EVAL_TYPE_ID", 1)
     ->where("IS_REMOVE", 0)
     ->orderBy("ID","ASC")
     ->findAll();
 
-    $teacher = $this->teacherModel->find($evaluated_id);
+    $teacher = $this->teacher_model->find($evaluated_id);
 
     $args = [
       'evaluator_id' => $evaluator_id,
@@ -125,7 +125,7 @@ class Evaluation extends BaseController{
     }
     // do something here
     $id = $this->session->get("user_id");
-    $evaluator = $this->evaluatorModel
+    $evaluator = $this->evaluator_model
     ->where("TEACHER_ID", $id)
     ->first();
 
@@ -133,29 +133,29 @@ class Evaluation extends BaseController{
       $create = [
         'TEACHER_ID' => $id,
       ];
-      $this->evaluatorModel->insert($create);
-      $evaluator_id = $this->evaluatorModel->insertID;
+      $this->evaluator_model->insert($create);
+      $evaluator_id = $this->evaluator_model->insertID;
     }else{
       $evaluator_id = $evaluator['ID'];
     }
 
     // check if done rated
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $sy = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
-    $isExist = $this->evalInfoModel
+    $isExist = $this->eval_info_model
     ->where("EVALUATOR_ID", $evaluator_id)
     ->where("EVALUATED_ID", $evaluated)
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->where("EVAL_TYPE_ID", 3)
     ->countAllResults();
 
-    $questions = $this->evalQuestionModel
+    $questions = $this->eval_question_model
     ->where("EVAL_TYPE_ID", 3)
     ->where("IS_REMOVE", 0)
     ->orderBy("ID","ASC")
     ->findAll();
 
-    $teacher = $this->teacherModel->find($evaluated);
+    $teacher = $this->teacher_model->find($evaluated);
 
     $args = [
       'evaluator_id' => $evaluator_id,
@@ -179,7 +179,7 @@ class Evaluation extends BaseController{
     $eval_type_id = $this->request->getPost("eval_type");
 
     // create eval info
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $sy = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
     $eval_info = [
       'EVALUATOR_ID' => $evaluator_id,
@@ -196,12 +196,12 @@ class Evaluation extends BaseController{
       $eval_info['COMMENT'] = $comment;
     }
 
-    $this->evalInfoModel->insert($eval_info);
-    $eval_info_id =  $this->evalInfoModel->insertID;
+    $this->eval_info_model->insert($eval_info);
+    $eval_info_id =  $this->eval_info_model->insertID;
 
     // get the rating
     $ratings = [];
-    $questions = $this->evalQuestionModel
+    $questions = $this->eval_question_model
     ->where("EVAL_TYPE_ID", $eval_type_id)
     ->findAll();
 
@@ -216,7 +216,7 @@ class Evaluation extends BaseController{
         'EVAL_INFO_ID' => $eval_info_id,
       ];
 
-      $this->ratingModel->insert($rate);
+      $this->rating_model->insert($rate);
 
       array_push($ratings, $rate);
     }

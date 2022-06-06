@@ -7,9 +7,9 @@ class Department extends BaseController{
     if(!$this->session->has("adminID")){
       return redirect()->to("/admin");
     }
-    $currSY = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $currSY = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
-    $rawDept = $this->departmentModel->findAll();
+    $rawDept = $this->department_model->findAll();
 
     $department = [];
 
@@ -17,7 +17,7 @@ class Department extends BaseController{
       $deptId = $value['ID'];
       $deptName = $value['NAME'];
 
-      $currChairperson = $this->departmentHistoryModel
+      $currChairperson = $this->department_history_model
       ->select("
       `teacher`.`ID` AS `ID`,
       `teacher`.`FN` AS `FN`,
@@ -59,7 +59,7 @@ class Department extends BaseController{
       return redirect()->to("/admin/department");
     }
 
-    $school_year = $this->schoolyearModel->orderBy("ID","DESC")->findAll();
+    $school_year = $this->schoolyear_model->orderBy("ID","DESC")->findAll();
 
     if(!empty($this->session->getFlashData("viewChairperson"))){
       $sy = $this->session->getFlashData("viewChairperson");
@@ -67,7 +67,7 @@ class Department extends BaseController{
       $sy = $school_year[0]['ID'];
     }
 
-    $chairperson = $this->departmentHistoryModel
+    $chairperson = $this->department_history_model
     ->select("
     `teacher`.`ID` AS `ID`,
     `teacher`.`FN` AS `FN`,
@@ -79,8 +79,8 @@ class Department extends BaseController{
     ->where("`dept_hist`.`DEPARTMENT_ID`", $id)
     ->first();
 
-    $teacher = $this->teacherModel->where("DEPARTMENT_ID",$id)->findAll();
-    $department = $this->departmentModel->find($id);
+    $teacher = $this->teacher_model->where("DEPARTMENT_ID",$id)->findAll();
+    $department = $this->department_model->find($id);
     // do something here
     $data = [
       'id' => $this->session->get("adminID"),
@@ -106,7 +106,7 @@ class Department extends BaseController{
       return redirect()->to("/admin/department");
     }
 
-    $school_year = $this->schoolyearModel->orderBy("ID","DESC")->findAll();
+    $school_year = $this->schoolyear_model->orderBy("ID","DESC")->findAll();
 
     if(!empty($this->session->getFlashData("viewChairperson"))){
       $sy = $this->session->getFlashData("viewChairperson");
@@ -114,7 +114,7 @@ class Department extends BaseController{
       $sy = $school_year[0]['ID'];
     }
 
-    $chairperson = $this->departmentHistoryModel
+    $chairperson = $this->department_history_model
     ->select("
     `teacher`.`ID` AS `ID`,
     `teacher`.`FN` AS `FN`,
@@ -125,8 +125,8 @@ class Department extends BaseController{
     ->where("`dept_hist`.`DEPARTMENT_ID`", $id)
     ->first();
 
-    $department = $this->departmentModel->find($id);
-    $teachers = $this->teacherModel->where("DEPARTMENT_ID",$id)->findAll();
+    $department = $this->department_model->find($id);
+    $teachers = $this->teacher_model->where("DEPARTMENT_ID",$id)->findAll();
     // do something here
     $data = [
       'id' => $this->session->get("adminID"),
@@ -152,7 +152,7 @@ class Department extends BaseController{
     $update = [
       'NAME' => $name,
     ];
-    $this->departmentModel->update($id, $update);
+    $this->department_model->update($id, $update);
     // {end}
     $data = [
       'id' => $id,
@@ -171,9 +171,9 @@ class Department extends BaseController{
     $id = $this->request->getPost("id");
     $chairperson = $this->request->getPost("chairperson");
 
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $sy = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
-    $isExist = $this->departmentHistoryModel
+    $isExist = $this->department_history_model
     ->where("DEPARTMENT_ID", $id)
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->first();
@@ -185,9 +185,9 @@ class Department extends BaseController{
         'SCHOOL_YEAR_ID' => $sy['ID'],
       ];
 
-      $this->departmentHistoryModel->insert($data);
+      $this->department_history_model->insert($data);
     }else{
-      $this->departmentHistoryModel
+      $this->department_history_model
       ->where("DEPARTMENT_ID", $id)
       ->where("SCHOOL_YEAR_ID", $sy['ID'])
       ->set("TEACHER_ID", $chairperson)
@@ -215,8 +215,8 @@ class Department extends BaseController{
       return redirect()->to("/admin/department");
     }
 
-    $school_year = $this->schoolyearModel->orderBy("ID","DESC")->findAll();
-    $department = $this->departmentModel->find($id);
+    $school_year = $this->schoolyear_model->orderBy("ID","DESC")->findAll();
+    $department = $this->department_model->find($id);
 
     $data = [
       'id' => $this->session->get("adminID"),

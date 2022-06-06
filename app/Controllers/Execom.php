@@ -21,7 +21,7 @@ class Execom extends BaseController{
     `execom_hist`.`SCHOOL_YEAR_ID` = '3'
     ) AS `b`";
 
-    $execom = $this->execomModel
+    $execom = $this->execom_model
     ->select("
     `execom`.`ID` AS `ID`,
     `execom`.`NAME` AS `POSITION`,
@@ -59,16 +59,16 @@ class Execom extends BaseController{
       return redirect()->to("/admin/execom");
     }
     // do something here
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $sy = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
-    $execom = $this->execomModel->find($id);
+    $execom = $this->execom_model->find($id);
 
-    $currentAssign = $this->execomHistoryModel
+    $currentAssign = $this->execom_history_model
     ->where("EXECOM_ID", $id)
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->first();
 
-    $formerAssign = $this->execomHistoryModel
+    $formerAssign = $this->execom_history_model
     ->select("
     `execom_hist`.`EXECOM_ID` AS `EXECOM_ID`,
     `execom_hist`.`SCHOOL_YEAR_ID` AS `SY_ID`,
@@ -81,7 +81,7 @@ class Execom extends BaseController{
     ->orderby("`execom_hist`.`SCHOOL_YEAR_ID`","DESC")
     ->findAll();
 
-    $teachers = $this->teacherModel->orderBy("LN","ASC")->findAll();
+    $teachers = $this->teacher_model->orderBy("LN","ASC")->findAll();
 
     $sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | TEACHER";
@@ -110,15 +110,15 @@ class Execom extends BaseController{
     // do something here
     $id = $this->request->getPost("id");
     $teacher_id = $this->request->getPost("teacher");
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $sy = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
-    $isExist = $this->execomHistoryModel
+    $isExist = $this->execom_history_model
     ->where("EXECOM_ID", $id)
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->first();
 
     if(!empty($isExist)){
-      $this->execomHistoryModel
+      $this->execom_history_model
       ->where("EXECOM_ID", $id)
       ->where("SCHOOL_YEAR_ID", $sy['ID'])
       ->set("TEACHER_ID", $teacher_id)
@@ -130,7 +130,7 @@ class Execom extends BaseController{
         'SCHOOL_YEAR_ID' => $sy['ID'],
       ];
 
-      $this->execomHistoryModel->insert($data);
+      $this->execom_history_model->insert($data);
     }
     // {end}
     $data = [

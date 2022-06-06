@@ -33,8 +33,8 @@ class Questionaire extends BaseController
 		}
 
 		$asType = ["STUDENT","PEER","SUPERVISOR"];
-		$type = $this->evalTypeModel->find($id);
-		$questionaire = $this->evalQuestionModel
+		$type = $this->eval_type_model->find($id);
+		$questionaire = $this->eval_question_model
 		->where("EVAL_TYPE_ID", $type['ID'])
 		->where("IS_REMOVE", 0)
 		->orderBy("ID","ASC")
@@ -67,7 +67,7 @@ class Questionaire extends BaseController
 
 		
 		$asType = ["STUDENT","PEER","SUPERVISOR"];
-		$question = $this->evalQuestionModel->find($questionId);
+		$question = $this->eval_question_model->find($questionId);
 
 		$sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | STUDENT";
@@ -97,7 +97,7 @@ class Questionaire extends BaseController
 
 		$data = ["QUESTION" => $new];
 		
-		$this->evalQuestionModel->update($qid, $data);
+		$this->eval_question_model->update($qid, $data);
 
 		$response = [
 			"message" => "OK",
@@ -141,7 +141,7 @@ class Questionaire extends BaseController
 
 		$data = ["QUESTION" => $new, "EVAL_TYPE_ID" => $type];
 		
-		$this->evalQuestionModel->insert($data);
+		$this->eval_question_model->insert($data);
 
 		$response = [
 			"message" => "OK",
@@ -157,7 +157,7 @@ class Questionaire extends BaseController
 
 		
 		$asType = ["STUDENT","PEER","SUPERVISOR"];
-		$question = $this->evalQuestionModel->find($questionId);
+		$question = $this->eval_question_model->find($questionId);
 
 		$sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | STUDENT";
@@ -187,7 +187,7 @@ class Questionaire extends BaseController
 			'IS_REMOVE' => 1,
 		];
 
-		$this->evalQuestionModel->update($qid, $data);
+		$this->eval_question_model->update($qid, $data);
 
 		$response = [
 			"message" => "OK",

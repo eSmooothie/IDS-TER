@@ -39,7 +39,7 @@ class PdfController extends BaseController{
     $user_db_util = new UserDButil();
 
     $id = $this->session->get("user_id");
-    $school_year = $this->schoolyearModel->find($school_year_id);
+    $school_year = $this->schoolyear_model->find($school_year_id);
     $teacher_data = $user_db_util->get_teacher_info($teacher_id);
 
     $department = $teacher_data['department_data'];
@@ -47,18 +47,18 @@ class PdfController extends BaseController{
     $supervisor = null;
 
     if($teacher_data['is_supervisor']){
-      $principal = $this->execomHistoryModel->where("EXECOM_ID", 1)
+      $principal = $this->execom_history_model->where("EXECOM_ID", 1)
       ->where("SCHOOL_YEAR_ID", $school_year_id)
       ->first();
 
-      $supervisor = $this->teacherModel->find($principal['TEACHER_ID']);
+      $supervisor = $this->teacher_model->find($principal['TEACHER_ID']);
     }else{
-      $chairperson = $this->departmentHistoryModel->where("DEPARTMENT_ID", $department['ID'])
+      $chairperson = $this->department_history_model->where("DEPARTMENT_ID", $department['ID'])
       ->where("SCHOOL_YEAR_ID", $school_year_id)
       ->first();
 
       if(!empty($chairperson)){
-        $supervisor = $this->teacherModel->find($chairperson['TEACHER_ID']);
+        $supervisor = $this->teacher_model->find($chairperson['TEACHER_ID']);
       }
     }
 
@@ -93,7 +93,7 @@ class PdfController extends BaseController{
     $user_db_util = new UserDButil();
 
     $id = $this->session->get("user_id");
-    $school_year = $this->schoolyearModel->find($school_year_id);
+    $school_year = $this->schoolyear_model->find($school_year_id);
     $teacher_data = $user_db_util->get_teacher_info($id);
 
     $department = $teacher_data['department_data'];
@@ -101,18 +101,18 @@ class PdfController extends BaseController{
     $supervisor = null;
 
     if($teacher_data['is_supervisor']){
-      $principal = $this->execomHistoryModel->where("EXECOM_ID", 1)
+      $principal = $this->execom_history_model->where("EXECOM_ID", 1)
       ->where("SCHOOL_YEAR_ID", $school_year_id)
       ->first();
 
-      $supervisor = $this->teacherModel->find($principal['TEACHER_ID']);
+      $supervisor = $this->teacher_model->find($principal['TEACHER_ID']);
     }else{
-      $chairperson = $this->departmentHistoryModel->where("DEPARTMENT_ID", $department['ID'])
+      $chairperson = $this->department_history_model->where("DEPARTMENT_ID", $department['ID'])
       ->where("SCHOOL_YEAR_ID", $school_year_id)
       ->first();
 
       if(!empty($chairperson)){
-        $supervisor = $this->teacherModel->find($chairperson['TEACHER_ID']);
+        $supervisor = $this->teacher_model->find($chairperson['TEACHER_ID']);
       }
     }
 
@@ -147,9 +147,9 @@ class PdfController extends BaseController{
       return redirect()->to("/");
     }
 
-    $department = $this->departmentModel->find($department_id);
-    $school_year = $this->schoolyearModel->find($school_year_id);
-    $teachers = $this->teacherModel->where("DEPARTMENT_ID", $department_id)->findAll();
+    $department = $this->department_model->find($department_id);
+    $school_year = $this->schoolyear_model->find($school_year_id);
+    $teachers = $this->teacher_model->where("DEPARTMENT_ID", $department_id)->findAll();
 
     foreach ($teachers as $key => $value) {
       $teacher_id = $value['ID'];
@@ -160,18 +160,18 @@ class PdfController extends BaseController{
       $supervisor = null;
 
       if($teacher['is_supervisor']){
-        $principal = $this->execomHistoryModel->where("EXECOM_ID", 1)
+        $principal = $this->execom_history_model->where("EXECOM_ID", 1)
         ->where("SCHOOL_YEAR_ID", $school_year_id)
         ->first();
 
-        $supervisor = $this->teacherModel->find($principal['TEACHER_ID']);
+        $supervisor = $this->teacher_model->find($principal['TEACHER_ID']);
       }else{
-        $chairperson = $this->departmentHistoryModel->where("DEPARTMENT_ID", $department['ID'])
+        $chairperson = $this->department_history_model->where("DEPARTMENT_ID", $department['ID'])
         ->where("SCHOOL_YEAR_ID", $school_year_id)
         ->first();
 
         if(!empty($chairperson)){
-          $supervisor = $this->teacherModel->find($chairperson['TEACHER_ID']);
+          $supervisor = $this->teacher_model->find($chairperson['TEACHER_ID']);
         }
       }
 
@@ -389,7 +389,7 @@ class PdfController extends BaseController{
     // tbody
 
     // comments
-    $evalinfo = $this->evalInfoModel->where("EVALUATED_ID", $teacher['ID'])
+    $evalinfo = $this->eval_info_model->where("EVALUATED_ID", $teacher['ID'])
     ->where("SCHOOL_YEAR_ID", $school_year['ID'])
     ->where("EVAL_TYPE_ID", 1)
     ->findAll();
