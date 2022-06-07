@@ -1,8 +1,8 @@
 
   <!-- CONTENT -->
-  <div class=" w-full col-span-7 p-2">
+  <div class=" w-full col-span-7 p-2 space-y-3">
     <!-- SYSTEM INFO -->
-    <div class="w-full grid grid-cols-3 bg-gray-100 pb-2 pt-2 rounded-md mb-3">
+    <div class="w-full grid grid-cols-3 bg-gray-100 pb-2 pt-2 rounded-md">
       <div class=" flex flex-col items-center justify-center">
         <span class="text-2xl font-bold"><i class="fa fa-calendar" aria-hidden="true"></i>&emsp;<?php echo "{$school_year['SY']} : {$school_year['SEMESTER']}"; ?></span>
         <span class="text-sm">School Year : Semester</span>
@@ -17,18 +17,36 @@
       </div>
     </div>
     <!--  -->
+    <div class=" space-y-1 wrapper">
+      <?php foreach($to_config_section as $key => $value){
+        $id = $value['SECTION_ID'];
+        $lv = $value['SECTION_GRADE_LV'];
+        $name = $value['SECTION_NAME'];
+       ?>
+        <div class="p-2 bg-yellow-200 rounded-md sys-msg">
+          <span class=" font-medium">WARNING:</span> No subject detected in 
+          <span class=" font-medium italic"><?php echo $name; ?></span>. Try to add subject
+          <a href="<?php echo "$base_url/admin/section/grade/$lv/$id/edit"; ?>" class=" text-blue-600">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+        </div>
+      <?php } ?>
+      <button class="show-more hidden bg-blue-500 px-3 py-2 rounded-md font-medium hover:bg-blue-400" type="button">Show more</button>
+    </div>
+    <!--  -->
     <div class=" bg-gray-100 p-2 rounded-md mb-10">
       <p class=" mb-1">Actions</p>
       <div class="px-2 pb-7 pt-9 grid grid-cols-3 gap-7 border border-gray-400 rounded-md mb-3">
           <button class=" w-full h-full p-2 bg-blue-500 hover:bg-blue-400 rounded-md flex justify-start items-center space-x-2" 
           data-tooltip-target="tooltip-new-sy" 
           data-modal-toggle="modal-new-sy"
+          data-tooltip-placement="top"
           type="button" >
             <span class=" text-3xl"><i class="fa-solid fa-calendar-plus"></i></span>
             <span class="">New school year</span>
           </button>
-          <div id="tooltip-new-sy" role="tooltip" class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700">
-              Create new school year
+          <div id="tooltip-new-sy" role="tooltip" class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 shadow-sm opacity-0 tooltip">
+          Create new school year
               <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
       </div>

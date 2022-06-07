@@ -1,29 +1,12 @@
 <!-- content -->
-<div class="w-full p-2">
+<div class="w-full p-2 col-span-7">
   <!-- CURRENT USER INFO -->
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <div class="mb-5">
       <span class=" text-xl font-bold"><?php echo "{$studentData['LN']}, {$studentData['FN']}"; ?></span>
     </div>
-    <div class="grid grid-cols-12 text-center gap-x-4">
-      <span class=" bg-gray-300 rounded-full border border-gray-400 py-2 px-3 text-xs flex items-center justify-center"><?php echo "{$studentData['ID']}"; ?></span>
-      <span class="rounded-full border py-2 px-3 text-xs flex items-center justify-center 
-      border-gray-400 bg-gray-300">
-        <?php echo ($studentData['IS_ACTIVE'])? "Active":"In Active"; ?></span>
-        <?php
-        $currStatus = $status[0];
-        $latestSection = $sections[0];
-         ?>
-      <span class="rounded-full border py-2 px-3 text-xs flex items-center justify-center border-gray-400 bg-gray-300">
-        <?php echo ($currStatus['STATUS'])? "Cleared":"Not cleared"; ?>
-      </span>
-      <span class="rounded-full border border-gray-400 bg-gray-300 py-2 px-3 text-xs flex items-center justify-center">Grade <?php echo "{$latestSection['SECTION_GRADE_LV']}"; ?></span>
-      <span class="rounded-full border border-blue-400 bg-blue-300 py-2 px-3 text-xs flex items-center justify-center hover:bg-blue-200 hover:cursor-pointer">
-        <a class="" href="<?php echo $base_url."/admin/section/grade/{$latestSection['SECTION_GRADE_LV']}/{$latestSection['SECTION_ID']}"; ?>">
-          <?php echo "{$latestSection['SECTION_NAME']}"; ?>
-        </a>
-      </span>
-      <span class="rounded-full border border-gray-400 bg-gray-300 py-2 px-3 text-xs flex items-center justify-center"><?php echo "{$latestSection['SY']}"; ?></span>
+    <div class="">
+      
     </div>
   </div>
   <div class="p-3 bg-gray-100 rounded-md mb-3">
@@ -50,9 +33,8 @@
       <tbody>
         <?php
           foreach($sections as $key => $value){
-            $id = $value['SECTION_ID'];
-            $name = $value['SECTION_NAME'];
-            $grade_lv = $value['SECTION_GRADE_LV'];
+            $name = empty($value['SECTION_NAME'])? "NOT ENROLLED":$value['SECTION_NAME'];
+            $grade_lv = empty($value['SECTION_GRADE_LV'])? "NOT ENROLLED":$value['SECTION_GRADE_LV'];
             $sy = $value['SY'];
             $sem = $value['SEMESTER'];
             $status = $value['STATUS'];

@@ -48,7 +48,20 @@ $(document).ready(function(e){
     });
   });
 
+  let warnings_len = parseInt($('.sys-msg').length);
+  if (warnings_len > 3) {
+    $('.sys-msg:gt(2)').hide();
+    $('.show-more').removeClass("hidden").addClass("block");
+    $('.show-more').text("Show more ("+ (warnings_len - 3).toString() + ")")
+  }
 
+  $('.show-more').on('click', function() {
+    //toggle elements with class .ty-compact-list that their index is bigger than 2
+    $('.sys-msg:gt(2)').toggle();
+    //change text of show more element
+    let text = "Show more ("+ (warnings_len - 3).toString() +")";
+    $(this).text() === text ? $(this).text('Show less') : $(this).text(text);
+  });
 });
 
 $(document).ajaxStart(function(){

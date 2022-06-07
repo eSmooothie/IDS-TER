@@ -14,17 +14,37 @@ class Admin extends BaseController
 			return redirect()->to("/admin");
 		}
 		$school_year = $this->schoolyear_model->orderBy("ID","DESC")->first();
+		$curr_school_year_id = $school_year['ID'];
 
 		$countStudents = $this->student_model->countAll();
 		$countTeacher = $this->teacher_model->countAll();
 
-		
-		$sessionId = $this->session->get("adminID");
+		$ttl_subj_in_sec_sql = "(
+			SELECT 
+				`SECTION_ID` AS `SECTION_ID`,
+				COUNT(*) AS `TTL`
+			FROM 
+			`sec_subj_lst` 
+			WHERE `SCHOOL_YEAR_ID`='$curr_school_year_id'
+			GROUP BY `SECTION_ID`
+			) AS `TTL_SUBJ`";
+
+		$to_config_section = $this->section_model
+		->select("
+			`section`.`ID` AS `SECTION_ID`,
+			`section`.`GRADE_LV` AS `SECTION_GRADE_LV`,
+			`section`.`NAME` AS `SECTION_NAME`,
+			`TTL_SUBJ`.`TTL` AS `TTL_SUBJ`")
+		->join($ttl_subj_in_sec_sql,"`section`.`ID` = `TTL_SUBJ`.`SECTION_ID`","LEFT")
+		->where("`section`.`IS_ACTIVE`",1)
+		->findAll();
+
 		$pageTitle = "ADMIN | DASHBOARD";
 		$args = [
 			'school_year' => $school_year,
 			'countStudent' => $countStudents,
 			'countTeacher' => $countTeacher,
+			'to_config_section' => $to_config_section,
 		];
 
 		$data = $this->map_page_parameters(
@@ -92,7 +112,7 @@ class Admin extends BaseController
 		$new_school_year_id = $this->schoolyear_model->insertID;
 		
 		if($is_retain_teacher_subject){
-			$query = $this->teacherSubjectModel
+			$query = $this->teacher_subject_model
 			->select("
 				TEACHER_ID,
 				SUBJECT_ID,
@@ -103,7 +123,7 @@ class Admin extends BaseController
 
 			// update all teacher handled subject
 			if(!empty($query)){
-				$this->teacherSubjectModel->insertBatch($query);
+				$this->teacher_subject_model->insertBatch($query);
 			}else{
 				$status_code = 500;
 				array_push($message, ["retain_teacher_subject"=>"Failed: No data from previous school year."]);
@@ -111,7 +131,7 @@ class Admin extends BaseController
 		}
 
 		if($is_retain_student_sec){
-			$query = $this->studentSectionModel
+			$query = $this->student_section_model
 			->select("
 				STUDENT_ID,
 				SECTION_ID,
@@ -122,10 +142,26 @@ class Admin extends BaseController
 
 			// update all student section
 			if(!empty($query)){
-				$this->studentSectionModel->insertBatch($query);
+				$this->student_section_model->insertBatch($query);
 			}else{
 				$status_code = 500;
 				array_push($message, ["retain_student_section"=>"Failed: No data from previous school year."]);
+			}
+
+			$query = $this->student_status_model
+			->select("
+				0 AS `STATUS`,
+				$new_school_year_id AS `SCHOOL_YEAR_ID`,
+				STUDENT_ID
+			")->where("SCHOOL_YEAR_ID", $curr_school_year_id)
+			->findAll();
+
+			// create evaluation clearance for new sy
+			if(!empty($query)){
+				$this->student_status_model->insertBatch($query);
+			}else{
+				$status_code = 500;
+				array_push($message, ["create_student_status"=>"Failed: No data from previous school year."]);
 			}
 		}
 
@@ -149,7 +185,7 @@ class Admin extends BaseController
 		}
 
 		if($is_retain_execom){
-			$query = $this->execomHistoryModel
+			$query = $this->execom_history_model
 			->select("
 				EXECOM_ID,
 				TEACHER_ID,
@@ -160,7 +196,7 @@ class Admin extends BaseController
 
 			// update all teacher handled subject
 			if(!empty($query)){
-				$this->execomHistoryModel->insertBatch($query);
+				$this->execom_history_model->insertBatch($query);
 			}else{
 				$status_code = 500;
 				array_push($message, ["retain_execom"=>"Failed: No data from previous school year."]);

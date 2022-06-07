@@ -62,10 +62,10 @@ $routes->post("/admin/questionaire/add", "Questionaire::add");
 $routes->post("/admin/questionaire/remove", "Questionaire::remove");
 // admin:students
 $routes->get("/admin/student", "Student::index");
-$routes->get("/admin/student/add", "Student::addStudent");
-$routes->get("/admin/student/view/(:any)", "Student::viewStudent/$1");
+$routes->get("/admin/student/add", "Student::add_student_page");
+$routes->get("/admin/student/view/(:any)", "Student::view_student_page/$1");
 
-$routes->get("/list/student", "Student::getStudents");
+$routes->get("/list/student", "Student::get_students");
 
 $routes->post("/admin/student/add/csv", "Student::addNewStudentCSV");
 $routes->post("/admin/student/add/individual", "Student::addNewStudentIndividual");

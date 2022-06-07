@@ -17,44 +17,43 @@ class Student extends BaseController
 			return redirect()->to("/admin");
 		}
 
-		$sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | STUDENT";
-		$args = [
-			
-		];
+		$args = [];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
 
 		echo view("admin/layout/header", $data);
-		echo view("admin/pages/nav",$data);
 		echo view("admin/pages/student", $data);
 		echo view("admin/layout/footer");
 	}
 
-	public function getStudents(){
+	public function get_students(){
 		header("Content-type:application/json");
-		
+		if(!$this->session->has("adminID")){
+			$response = [
+				"message" => "Invalid API call."
+			];
+			return $this->setResponseFormat('json')->respond($response, 400);
+		}
+
 		$pageNumber = $this->request->getGet("pageNumber");
 		$keyword = $this->request->getGet("keyword");
 
 		$sy = $this->schoolyear_model->orderBy("ID","DESC")->first(); // get current school year
-
+		$curr_schoolyear_id = $sy['ID'];
+		$searchExpression = "`STUDENT`.`ID` IS NOT NULL";
 		if(!empty($keyword)){
 			$searchExpression = "`STUDENT`.`ID` LIKE '%$keyword%' OR ".
 			"`STUDENT`.`FN` LIKE '%$keyword%' OR ".
 			"`STUDENT`.`LN` LIKE '%$keyword%' OR ".
-			"`SECTION`.`NAME` LIKE '%$keyword%' AND ".
-			"";
-		}else{
-			$searchExpression = "`STUD_STATUS`.`SCHOOL_YEAR_ID` = '{$sy['ID']}'";
+			"`SECTION`.`NAME` LIKE '%$keyword%'";
 		}
 
-		$student_section = "(SELECT * FROM `STUDENT_SECTION` WHERE `STUDENT_SECTION`.`SCHOOL_YEAR_ID` = '".$sy['ID']."') AS `STUDENT_SECTION`";
-		$student_status = "(SELECT `STUDENT_ID`, `STATUS` FROM `STUD_STATUS` WHERE `STUD_STATUS`.`SCHOOL_YEAR_ID` = '".$sy['ID']."') AS `STUDENT_STATUS`";
+		$student_section = "(SELECT `SECTION_ID`,`STUDENT_ID` FROM `STUDENT_SECTION` WHERE `STUDENT_SECTION`.`SCHOOL_YEAR_ID` = '$curr_schoolyear_id') AS `STUDENT_SECTION`";
+		$student_status = "(SELECT `STUDENT_ID`, `STATUS` FROM `STUD_STATUS` WHERE `STUD_STATUS`.`SCHOOL_YEAR_ID` = '$curr_schoolyear_id') AS `STUDENT_STATUS`";
 		$students = $this->student_model
 		->select("
 			`STUDENT`.`ID` AS `STUDENT_ID`,
@@ -66,7 +65,7 @@ class Student extends BaseController
 		->join($student_section,"`STUDENT_SECTION`.`STUDENT_ID` = `STUDENT`.`ID`","LEFT")
 		->join("`SECTION`","`STUDENT_SECTION`.`SECTION_ID` = `SECTION`.`ID`","LEFT")
 		->join($student_status,"`STUDENT_STATUS`.`STUDENT_ID` = `STUDENT`.`ID`","LEFT")
-		// ->where($searchExpression)
+		->where($searchExpression)
 		->orderBy("`STUDENT`.`LN`","ASC")
 		->findAll(20,$pageNumber * 20);
 
@@ -81,7 +80,7 @@ class Student extends BaseController
 		return $this->setResponseFormat('json')->respond($response, 200);
 	}
 
-	public function viewStudent($id = false){
+	public function view_student_page($id = false){
 		if(!$this->session->has("adminID")){
 			return redirect()->to("/admin");
 		}
@@ -91,72 +90,72 @@ class Student extends BaseController
 
 		$studentData = $this->student_model->find($id);
 
-		$sections = $this->student_section_model
+		$student_section_sql = "(
+			SELECT `student_section`.`ID` AS `ID`,
+				`student_section`.`STUDENT_ID` AS `STUDENT_ID`,
+				`student_section`.`SCHOOL_YEAR_ID` AS `SCHOOL_YEAR_ID`,
+				`section`.`NAME` AS `SEC_NAME`,
+				`section`.`GRADE_LV` AS `SEC_GRADE_LV`
+			FROM
+				`student_section`
+			INNER JOIN `section` ON `section`.`ID` = `student_section`.`SECTION_ID`
+			WHERE
+				`student_section`.`STUDENT_ID` = '$id'
+		) AS `sec`";
+
+		$sections = $this->schoolyear_model
 		->select("
-			`student_section`.`ID` AS `STUDENT_SECTION_ID`,
-			`section`.`ID` AS `SECTION_ID`,
-			`section`.`NAME` AS `SECTION_NAME`,
-			`section`.`GRADE_LV` AS `SECTION_GRADE_LV`,
 			`school_year`.`ID` AS `SCHOOL_YEAR_ID`,
 			`school_year`.`SY` AS `SY`,
 			`school_year`.`SEMESTER` AS `SEMESTER`,
+			`sec`.`SEC_NAME` AS `SECTION_NAME`,
+			`sec`.`SEC_GRADE_LV` AS `SECTION_GRADE_LV`,
 			`stud_status`.`STATUS` AS `STATUS`
 		")
-		->join("`stud_status`","`stud_status`.`STUDENT_ID` = `student_section`.`STUDENT_ID` AND `stud_status`.`SCHOOL_YEAR_ID` = `student_section`.`SCHOOL_YEAR_ID`")
-		->join("`section`","`section`.`ID` = `student_section`.`SECTION_ID`")
-		->join("`school_year`","`school_year`.`ID` = `student_section`.`SCHOOL_YEAR_ID`")
-		->where("`student_section`.`STUDENT_ID`",$id)
-		->orderBy("`student_section`.`SCHOOL_YEAR_ID`","DESC")
+		->join($student_section_sql,"`sec`.`SCHOOL_YEAR_ID` = `school_year`.`ID`","LEFT")
+		->join("`stud_status`","`stud_status`.`STUDENT_ID` = `sec`.`STUDENT_ID` AND `stud_status`.`SCHOOL_YEAR_ID` = `school_year`.`ID`", "LEFT")
+		->orderBy("`school_year`.`ID`","DESC")
 		->findAll();
 
-		$status = $this->student_status_model->where("STUDENT_ID", $id)
-		->orderBy("SCHOOL_YEAR_ID","DESC")
-		->findAll();
-
-		$sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | STUDENT";
 		$args = [
 			'base_url' => base_url(),
 			'studentData' => $studentData,
 			'sections' => $sections,
-			'status' => $status,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
 
 		echo view("admin/layout/header", $data);
-		echo view("admin/pages/nav",$data);
 		echo view("admin/pages/studentData", $data);
 		echo view("admin/layout/footer");
 	}
 
-	public function addStudent(){
+	public function add_student_page(){
 		if(!$this->session->has("adminID")){
 			return redirect()->to("/admin");
 		}
 
-		$sections = $this->section_model->where('IS_ACTIVE',1)
+		$sections = $this->section_model
+		->where('IS_ACTIVE',1)
 		->orderBy("NAME","ASC")
 		->findAll();
 
-		$sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | STUDENT";
+
 		$args = [
 			'sections' => $sections,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
 
 		echo view("admin/layout/header", $data);
-		echo view("admin/pages/nav",$data);
 		echo view("admin/pages/addStudent", $data);
 		echo view("admin/layout/footer");
 	}

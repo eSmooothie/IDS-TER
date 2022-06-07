@@ -57,7 +57,7 @@ function loadStudent(){
     $.ajax({type:'get',url:url,data:formData,})
     .done(function(data){
         studentData = data["data"];
-        console.log(studentData);
+        console.log(data);
         for (let index = 0; index < studentData.length; index++) {
             const element = studentData[index];
             let id = element["STUDENT_ID"];
