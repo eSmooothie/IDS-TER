@@ -5,12 +5,8 @@ namespace App\Controllers;
 use App\Libraries\UserDButil;
 class Admin extends BaseController
 {
-	public function index(){
-		$data = $this->map_page_parameters("IDS | TER");
-		
-		echo view("admin/layout/header",$data);
+	public function index(){		
 		echo view("admin/index");
-		echo view("admin/layout/footer");
 	}
 
 	public function dashboard(){

@@ -20,10 +20,11 @@
     <div class=" bg-gray-100 p-2 rounded-md mb-10">
       <p class=" mb-1">Actions</p>
       <div class="px-2 pb-7 pt-9 grid grid-cols-3 gap-7 border border-gray-400 rounded-md mb-3">
-          <button class=" w-full h-full p-2 bg-blue-500 hover:bg-blue-400 rounded-md" 
+          <button class=" w-full h-full p-2 bg-blue-500 hover:bg-blue-400 rounded-md flex justify-start items-center space-x-2" 
           data-tooltip-target="tooltip-new-sy" 
           data-modal-toggle="modal-new-sy"
           type="button" >
+            <span class=" text-3xl"><i class="fa-solid fa-calendar-plus"></i></span>
             <span class="">New school year</span>
           </button>
           <div id="tooltip-new-sy" role="tooltip" class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700">
@@ -35,67 +36,70 @@
       <p class=" mb-1">Quick links</p>
       <div class="px-2 pb-7 pt-9 grid grid-cols-3 gap-7 border border-gray-400 rounded-md">
         <!-- Student -->
-        <a href="<?php echo $base_url; ?>/admin/student" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/student" 
+        class="w-full h-full flex items-center p-2 bg-blue-500 hover:bg-blue-400 rounded-md space-x-2">
           <span class=" text-3xl"><i class="fa fa-users"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Student</p>
-            <span class=" text-xs">Manage IDS Students</span>
+            <span class=" text-sm">Manage IDS Students</span>
           </div>
         </a>
         <!-- Teacher -->
-        <a href="<?php echo $base_url; ?>/admin/teacher" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
-          <span class=" text-3xl mr-3"><i class="fas fa-user-tie"></i></span>
+        <a href="<?php echo $base_url; ?>/admin/teacher" 
+        class="w-full h-full flex items-center p-2 bg-blue-500 hover:bg-blue-400 rounded-md space-x-2">
+          <span class=" text-3xl"><i class="fas fa-user-tie"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Teacher</p>
-            <span class=" text-xs">Manage IDS Teachers</span>
+            <span class=" text-sm">Manage IDS Teachers</span>
           </div>
         </a>
         <!-- Execom -->
-        <a href="<?php echo $base_url; ?>/admin/execom" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/execom" 
+        class="w-full h-full flex items-center p-2 bg-blue-500 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fas fa-user-secret" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Executive Committee</p>
-            <span class=" text-xs">Manage Executive Committee</span>
+            <span class=" text-sm">Manage Executive Committee</span>
           </div>
         </a>        
         <!-- Section -->
-        <a href="<?php echo $base_url; ?>/admin/section" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/section" class="w-full h-full flex items-center p-2 bg-blue-500 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fab fa-buromobelexperte"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Section</p>
-            <span class=" text-xs">Manage IDS Sections</span>
+            <span class=" text-sm">Manage IDS Sections</span>
           </div>
         </a>
         <!-- Department -->
-        <a href="<?php echo $base_url; ?>/admin/department" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/department" class="w-full h-full flex items-center p-2 bg-blue-500 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fa fa-th-list" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Department</p>
-            <span class=" text-xs">Manage IDS Departments</span>
+            <span class=" text-sm">Manage IDS Departments</span>
           </div>
         </a>
         <!-- Subject -->
-        <a href="<?php echo $base_url; ?>/admin/subject" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/subject" class="w-full h-full flex items-center p-2 bg-blue-500 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fa fa-list" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Subjects</p>
-            <span class=" text-xs">Manage Subject</span>
+            <span class=" text-sm">Manage Subject</span>
           </div>
         </a>
         <!-- Manage Questionnaire -->
-        <a href="<?php echo $base_url; ?>/admin/questionaire" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/questionaire" class="w-full h-full flex items-center p-2 bg-blue-500 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fa fa-list-ol" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Questionnaire</p>
-            <span class=" text-xs">Manage evaluation questions</span>
+            <span class=" text-sm">Manage evaluation questions</span>
           </div>
         </a>
         <!-- Activit log -->
-        <a href="<?php echo $base_url; ?>/admin/activitylog" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/activitylog" class="w-full h-full flex items-center p-2 bg-blue-500 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fas fa-clipboard-list"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Activity Log</p>
-            <span class=" text-xs">Activity Logs</span>
+            <span class=" text-sm">Activity Logs</span>
           </div>
         </a>
         
