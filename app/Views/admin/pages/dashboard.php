@@ -1,4 +1,4 @@
-
+  <script src="<?php echo "$base_url/assets/js/adminDashboard.js"; ?>" charset="utf-8"></script>
   <!-- CONTENT -->
   <div class=" w-full col-span-7 p-2 space-y-3">
     <!-- SYSTEM INFO -->
@@ -17,7 +17,7 @@
       </div>
     </div>
     <!--  -->
-    <div class=" space-y-1 wrapper">
+    <div class=" space-y-1 wrapper hidden">
       <?php foreach($to_config_section as $key => $value){
         $id = $value['SECTION_ID'];
         $lv = $value['SECTION_GRADE_LV'];
@@ -221,4 +221,4 @@ bg-black bg-opacity-30 hidden">
         </div>
   </div>
 </div>
-<script src="<?php echo "$base_url/assets/js/adminDashboard.js"; ?>" charset="utf-8"></script>
+

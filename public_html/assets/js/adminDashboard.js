@@ -47,7 +47,11 @@ $(document).ready(function(e){
       done:done,
     });
   });
+});
 
+$(document).ready(function(e){
+  $(".wrapper").removeClass("hidden");
+  
   let warnings_len = parseInt($('.sys-msg').length);
   if (warnings_len > 3) {
     $('.sys-msg:gt(2)').hide();
