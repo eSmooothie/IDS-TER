@@ -4,13 +4,12 @@ IDS Teacher Efficiency Rating is a web application that allows the student to ra
 On other hand, teachers can also rate their colleagues. In addition, they can also view and download their rating and comments.
 
 # Tools
-  - Codeigniter 4
-  - phpMyAdmin
-  - WAMP
-  - JQuery
-  - Tailwind CSS
-  - Flowbite
-  - PHP v7.4
+  - [Codeigniter](https://codeigniter.com/)
+  - phpMyAdmin (XAMPP)
+  - Apache (XAMPP)
+  - [JQuery](https://jquery.com/)
+  - [Tailwind CSS](https://tailwindcss.com/)
+  - [Flowbite](https://flowbite.com/)
 
 
 ### 🤝 Open for collaborator 
