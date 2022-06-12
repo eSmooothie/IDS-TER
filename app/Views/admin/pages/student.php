@@ -21,14 +21,14 @@
           bg-white w-full border border-gray-300 
           rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none 
           focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm searchStudent
-          " placeholder="Search for student..." type="text" name="search"/>
+          " placeholder="Search a student..." type="text" name="search"/>
         </label>
         <div class="flex justify-between items-center col-span-4">
           <button id="prevBtn" class="hover:bg-blue-400 pt-2 pb-2 pl-9 pr-9 rounded-md bg-blue-500" onclick="pagination(-1);">
             <i class="fa-solid fa-caret-left"></i>
           </button>
           <p class="m-0" id="pageNumber">Page </p>
-          <button id="nextBtn" class="hover:bg-blue-400 pt-2 pb-2 pl-9 pr-9 rounded-md bg-blue-500" onclick="pagination(1);">
+          <button id="nextBtn" class="hover:bg-blue-400 pt-2 pb-2 pl-9 pr-9 rounded-md bg-blue-500 " onclick="pagination(1);">
             <i class="fa-solid fa-caret-right"></i>
           </button>
         </div>

@@ -4,6 +4,7 @@ const td = document.createElement("td");
 
 var pageNumber = 0;
 var searchKeyword = ""; 
+var next_btn_is_disabled = false;
 
 $(document).ready(
     function(){
@@ -33,7 +34,12 @@ function pagination(value){
     if(pageNumber + value < 0){
         return;
     }
-    pageNumber = pageNumber + value;
+    if(next_btn_is_disabled & value > 0){
+        pageNumber = pageNumber
+    }else{
+        pageNumber = pageNumber + value;
+    }
+    
 
     loadStudent();
 }
@@ -57,7 +63,17 @@ function loadStudent(){
     $.ajax({type:'get',url:url,data:formData,})
     .done(function(data){
         studentData = data["data"];
-        console.log(data);
+        
+        if(studentData.length < 20){
+            $("#nextBtn").attr("disabled");
+            $("#nextBtn").removeClass("hover:bg-blue-400 bg-blue-500").addClass("bg-blue-400");
+            next_btn_is_disabled = true;
+        }else{
+            next_btn_is_disabled = false;
+            $("#nextBtn").removeAttr("disabled");
+            $("#nextBtn").removeClass("bg-blue-400").addClass("hover:bg-blue-400 bg-blue-500");
+        }
+
         for (let index = 0; index < studentData.length; index++) {
             const element = studentData[index];
             let id = element["STUDENT_ID"];
