@@ -24,26 +24,23 @@ class Teacher extends BaseController{
 
     $department = $this->department_model->findAll();
 
-    $sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | TEACHER";
 		$args = [
-      'teacherData' => $teacherData,
-      'departmentData' => $department,
+      'teacher_data' => $teacherData,
+      'department_data' => $department,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
 
     echo view("admin/layout/header", $data);
-    echo view("admin/pages/nav",$data);
 		echo view("admin/pages/teachers", $data);
 		echo view("admin/layout/footer");
   }
 
-  public function viewTeacher($id = false){
+  public function view_teacher_page($id = false){
     if(!$this->session->has("adminID")){
       return redirect()->to("/admin");
     }
@@ -53,54 +50,47 @@ class Teacher extends BaseController{
     // do something
     $teacherData = $this->teacher_model
     ->select("
-    `teacher`.`ID` AS `ID`,
-    `teacher`.`FN` AS `FN`,
-    `teacher`.`LN` AS `LN`,
-    `teacher`.`MOBILE_NO` AS `MOBILE_NO`,
-    `teacher`.`PROFILE_PICTURE` AS `PROFILE_PICTURE`,
-    `teacher`.`IS_LECTURER` AS `IS_LECTURER`,
-    `teacher`.`ON_LEAVE` AS `ON_LEAVE`,
-    `department`.`ID` AS `DEPARTMENT_ID`,
-    `department`.`NAME` AS `DEPARTMENT`
-    ")
+      `teacher`.`ID` AS `ID`,
+      `teacher`.`FN` AS `FN`,
+      `teacher`.`LN` AS `LN`,
+      `teacher`.`MOBILE_NO` AS `MOBILE_NO`,
+      `teacher`.`PROFILE_PICTURE` AS `PROFILE_PICTURE`,
+      `teacher`.`IS_LECTURER` AS `IS_LECTURER`,
+      `teacher`.`ON_LEAVE` AS `ON_LEAVE`,
+      `department`.`ID` AS `DEPARTMENT_ID`,
+      `department`.`NAME` AS `DEPARTMENT`")
     ->join("`department`","`department`.`ID` = `teacher`.`DEPARTMENT_ID`","LEFT")
     ->find($id);
 
     // get teacher subjects
-    $subjectHandles = $this->teacher_subject_model->select(
-      "
+    $subjectHandles = $this->teacher_subject_model->select("
       `tchr_subj_lst`.`ID` AS `ID`,
       `subject`.`DESCRIPTION` AS `SUBJECT_NAME`,
       `school_year`.`SY` AS `YEAR`,
-      `school_year`.`SEMESTER` AS `SEMESTER`
-      "
-    )
+      `school_year`.`SEMESTER` AS `SEMESTER`")
     ->join("`subject`","`tchr_subj_lst`.`SUBJECT_ID` = `subject`.`ID`","LEFT")
     ->join("`school_year`","`tchr_subj_lst`.`SCHOOL_YEAR_ID` = `school_year`.`ID`","LEFT")
     ->where("`tchr_subj_lst`.`TEACHER_ID` =", $id)
     ->orderBy("`ID`","DESC")
     ->findAll();
 
-    $sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | TEACHER";
 		$args = [
       'teacherData' => $teacherData,
       'subjectHandles' => $subjectHandles,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
 
     echo view("admin/layout/header", $data);
-    echo view("admin/pages/nav",$data);
     echo view("admin/pages/viewTeacher", $data);
     echo view("admin/layout/footer");
   }
 
-  public function editTeacher($id = false){
+  public function edit_teacher_page($id = false){
     if(!$this->session->has("adminID")){
       return redirect()->to("/admin");
     }
@@ -165,7 +155,6 @@ class Teacher extends BaseController{
 
     $departments = $this->department_model->findAll();
 
-    $sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | TEACHER";
 		$args = [
       'teacherData' => $teacherData,
@@ -176,8 +165,7 @@ class Teacher extends BaseController{
       'departments' => $departments,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
@@ -200,12 +188,11 @@ class Teacher extends BaseController{
       $data['subjectFormMessage'] = null;
     }
     echo view("admin/layout/header", $data);
-    echo view("admin/pages/nav",$data);
     echo view("admin/pages/editTeacher", $data);
     echo view("admin/layout/footer");
   }
 
-  public function downloadEvaluation($id = false){
+  public function download_teacher_evaluation_page($id = false){
     if(!$this->session->has("adminID")){
       return redirect()->to("/admin");
     }
@@ -270,7 +257,6 @@ class Teacher extends BaseController{
 
     $sy = $this->schoolyear_model->orderBy("ID","DESC")->findAll();
 
-    $sessionId = $this->session->get("adminID");
 		$pageTitle = "ADMIN | TEACHER";
 		$args = [
       'teacherData' => $teacherData,
@@ -282,27 +268,25 @@ class Teacher extends BaseController{
       'sy' => $sy,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
 
     echo view("admin/layout/header", $data);
-    echo view("admin/pages/nav",$data);
     echo view("admin/pages/downloadTeacherEval", $data);
     echo view("admin/layout/footer");
   }
 
-  public function add(){
+  public function add_teacher(){
     header("Content-type:application/json");
     // do something here
     $id = $this->request->getPost("id");
     $fn = $this->request->getPost("fn");
     $ln = $this->request->getPost("ln");
-    $isLecturer = $this->request->getPost("isLecturer");
+    $is_lecturer = $this->request->getPost("is_lecturer");
     $password = $this->request->getPost("password");
-    $mobileNumber = $this->request->getPost("mobileNumber");
+    $mobile_number = $this->request->getPost("mobile_number");
     $department = $this->request->getPost("department");
 
     // check if inputted id is valid
@@ -311,20 +295,22 @@ class Teacher extends BaseController{
 
     if(!$isValid){
       $response = [
+        "status_code" => 400,
         "message" => "Invalid ID format",
         "data" => null,
       ];
-      return $this->setResponseFormat('json')->respond($response, 202);
+      return $this->setResponseFormat('json')->respond($response, 200);
     }
 
     // check if id is already exist.
     $isExist = $this->teacher_model->find($id);
     if($isExist){
       $response = [
-        "message" => "ID already exist.",
+        "status_code" => 400,
+        "message" => "ID#$id already exist.",
         "data" => null,
       ];
-      return $this->setResponseFormat('json')->respond($response, 202);
+      return $this->setResponseFormat('json')->respond($response, 200);
     }
 
     // hash password
@@ -335,9 +321,9 @@ class Teacher extends BaseController{
       'FN' => $fn,
       'LN' => $ln,
       'PASSWORD' => $hash_password,
-      'MOBILE_NO' => $mobileNumber,
+      'MOBILE_NO' => $mobile_number,
       'DEPARTMENT_ID' => $department,
-      'IS_LECTURER' => (empty($isLecturer))? 0:1,
+      'IS_LECTURER' => $is_lecturer,
     ];
 
     $this->teacher_model->insert($teacherData);
@@ -345,6 +331,7 @@ class Teacher extends BaseController{
      // {end}
     $data = [];
     $response = [
+      "status_code" => 200,
       "message" => "OK",
       "data" => null,
     ];

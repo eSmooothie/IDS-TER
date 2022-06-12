@@ -227,22 +227,25 @@ class PdfController extends BaseController{
 
     $n = 1; // question number
     foreach ($rating["student"]["RATING"] as $key => $value) {
-      $ratings[$n]["STUDENT"] = round($value["avg_rate"], 2);
+      $avg_rate = (empty($value["avg_rate"]))? 0:$value["avg_rate"];
+      $ratings[$n]["STUDENT"] = round($avg_rate, 2);
       $n += 1;
     }
     $n = 1;
     foreach ($rating["peer"]["RATING"] as $key => $value) {
-      $ratings[$n]["PEER"] = round($value["avg_rate"], 2);
+      $avg_rate = (empty($value["avg_rate"]))? 0:$value["avg_rate"];
+      $ratings[$n]["PEER"] = round($avg_rate, 2);
       $n += 1;
     }
     $n = 1;
     foreach ($rating["supervisor"]["RATING"] as $key => $value) {
-      $ratings[$n]["SUPERVISOR"] = round($value["avg_rate"], 2);
+      $avg_rate = (empty($value["avg_rate"]))? 0:$value["avg_rate"];
+      $ratings[$n]["SUPERVISOR"] = round($avg_rate, 2);
       $n += 1;
     }
 
     for ($i=1; $i < $n; $i++) {
-      $student_rate = (!empty($ratings[$i]["STUDENT"]))? $ratings[$i]["STUDENT"]:"";
+      $student_rate = (!empty($ratings[$i]["STUDENT"]))? $ratings[$i]["STUDENT"]:"0";
       $peer_rate = $ratings[$i]["PEER"];
       $supervisor_rate = $ratings[$i]["SUPERVISOR"];
 
@@ -330,7 +333,7 @@ class PdfController extends BaseController{
     }
 
     for ($i=1; $i < $n; $i++) {
-      $student_rate = (!empty($ratings[$i]["STUDENT"]))? $ratings[$i]["STUDENT"]:"";
+      $student_rate = (!empty($ratings[$i]["STUDENT"]))? $ratings[$i]["STUDENT"]:"0";
       $peer_rate = $ratings[$i]["PEER"];
       $supervisor_rate = $ratings[$i]["SUPERVISOR"];
 

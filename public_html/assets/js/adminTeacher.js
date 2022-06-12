@@ -37,10 +37,10 @@ $(document).ready(function(){
     var method = 'post';
     var path = '/admin/teacher/add';
     var done = function(data, textStatus, xhr ){
-      var statusCode = xhr.status;
-      if(statusCode == 202){
-        var response = xhr.responseJSON;
-        var message = response['message'];
+     
+      var statusCode = data["status_code"];
+      if(statusCode == 400){
+        var message = data['message'];
         $("#errContainer").removeClass("hidden");
         $("#errMessage").html(message);
       }else{

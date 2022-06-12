@@ -67,18 +67,18 @@ $routes->get("/admin/student/view/(:any)", "Student::view_student_page/$1");
 
 $routes->get("/list/student", "Student::get_students");
 
-$routes->post("/admin/student/add/csv", "Student::addNewStudentCSV");
-$routes->post("/admin/student/add/individual", "Student::addNewStudentIndividual");
+$routes->post("/admin/student/add/csv", "Student::add_new_student_csv");
+$routes->post("/admin/student/add/individual", "Student::add_new_student_individual");
 // admin:teacher
 $routes->get("/admin/teacher", "Teacher::index");
-$routes->get("/admin/teacher/view/(:segment)", "Teacher::viewTeacher/$1");
-$routes->get("/admin/teacher/view/(:segment)/edit", "Teacher::editTeacher/$1");
-$routes->get("/admin/teacher/view/(:segment)/downloads", "Teacher::downloadEvaluation/$1");
+$routes->get("/admin/teacher/view/(:segment)", "Teacher::view_teacher_page/$1");
+$routes->get("/admin/teacher/view/(:segment)/edit", "Teacher::edit_teacher_page/$1");
+$routes->get("/admin/teacher/view/(:segment)/downloads", "Teacher::download_teacher_evaluation_page/$1");
 
 $routes->post("/admin/teacher/editProfileInfo", "Teacher::editProfileInfo");
 $routes->post("/admin/teacher/editPassword", "Teacher::editPassword");
 $routes->post("/admin/teacher/addSubject", "Teacher::addSubject");
-$routes->post("/admin/teacher/add", "Teacher::add");
+$routes->post("/admin/teacher/add", "Teacher::add_teacher");
 $routes->post("/admin/teacher/editDepartment", "Teacher::editDepartment");
 $routes->post("/admin/teacher/recentActivity/(:segment)", "Teacher::recentActivity/$1");
 // admin:department

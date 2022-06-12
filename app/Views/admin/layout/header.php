@@ -21,7 +21,7 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);">
   <div class="w-52 hidden md:block bg-gray-100 min-h-full fixed border-r border-black">
     <div class="p-5">
       <div class="flex justify-center">
-        <a href="<?php echo base_url(); ?>/admin"><img src="/assets/img/hornet_400x400.jpg" alt="" 
+        <a href="#"><img src="/assets/img/hornet_400x400.jpg" alt="" 
           class="rounded-full w-20 hover:animate-pulse"
         ></a>
       </div>

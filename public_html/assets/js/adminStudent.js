@@ -101,9 +101,11 @@ function loadStudent(){
 function generateTableRow({id,fn,ln,section,status, bg_status,} = {}){
     const studentContainer = tr.cloneNode();
     studentContainer.classList.add("bg-white");
-    studentContainer.classList.add("border-b");
+    // studentContainer.classList.add("");
     studentContainer.classList.add("text-gray-500");
     studentContainer.classList.add("hover:bg-gray-200");
+    studentContainer.classList.add("odd:bg-white");
+    studentContainer.classList.add("even:bg-gray-100");
 
     const idContainer = th.cloneNode();
     idContainer.setAttribute("scope","row");
