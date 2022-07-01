@@ -1,7 +1,7 @@
 <!-- content -->
 <div class="w-full p-2 col-span-7 space-y-3" id="studentsColContainer">
   <div class="p-3 bg-gray-100 rounded-md">
-    <a href="<?php echo "$base_url/admin/student"; ?>" class="hover:bg-blue-400 rounded-md bg-blue-500 px-4 py-2">
+    <a href="<?php echo "$base_url/admin/student"; ?>" class="hover:bg-blue-400 rounded-md bg-blue-300  px-4 py-2">
       <i class="fas fa-arrow-left"></i>
       <span class="font-medium">Back</span>
     </a>
@@ -38,7 +38,7 @@
           hover:file:bg-blue-100" 
           accept=".csv" id="formFile" name="bulkEnroll"/>
       </label>
-      <button type="submit" class="hover:bg-blue-400 rounded-md px-5 bg-blue-500 py-2 font-medium">Submit</button>
+      <button type="submit" class="hover:bg-blue-400 rounded-md px-5 bg-blue-300  py-2 font-medium">Submit</button>
     </form>
   </div>
   <!-- Individual -->
@@ -94,7 +94,7 @@
         </div>
       </div>
       <div class=" flex justify-end">
-        <button type="submit" class="hover:bg-blue-400 rounded-md px-5 bg-blue-500 py-2 font-medium">Submit</button>
+        <button type="submit" class="hover:bg-blue-400 rounded-md px-5 bg-blue-300  py-2 font-medium">Submit</button>
       </div>
       
     </form>

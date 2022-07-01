@@ -2,7 +2,7 @@
 <div class="w-full p-2 col-span-7 space-y-3">
   <!-- nav -->
   <div class="p-3 bg-gray-100 rounded-md">
-    <button class="block text-black bg-blue-500 hover:bg-blue-400 focus:ring-4
+    <button class="block text-black bg-blue-300  hover:bg-blue-400 focus:ring-4
      focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center" 
      type="button" data-modal-toggle="add_teacher_modal">
       <i class="fas fa-plus"></i> Add Teacher
@@ -34,7 +34,7 @@
         </div>
     </div>
 
-    <table class="mb-5 min-w-full">
+    <table class="mb-5 min-w-full border border-gray-400">
       <thead class="border bg-gray-300">
         <tr class="">
           <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">ID</th>
@@ -74,10 +74,8 @@
 </div>
 
 <!-- Main modal -->
-<div id="add_teacher_modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed 
-top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-  <div class="flex justify-center w-full">
-    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+<div id="add_teacher_modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+    <div class="relative w-full max-w-2xl h-full py-5">
           <!-- Modal content -->
           <div class="relative bg-white rounded-lg shadow">
               <!-- Modal header -->
@@ -189,7 +187,6 @@ top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
               </form>
           </div>
       </div>
-  </div>
 
 </div>
 

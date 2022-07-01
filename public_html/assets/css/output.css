@@ -934,6 +934,22 @@ input:checked + .toggle-bg {
   bottom: 0px;
 }
 
+.top-9 {
+  top: 2.25rem;
+}
+
+.top-\[10\%\] {
+  top: 10%;
+}
+
+.top-\[20\%\] {
+  top: 20%;
+}
+
+.top-44 {
+  top: 11rem;
+}
+
 .z-10 {
   z-index: 10;
 }
@@ -981,6 +997,16 @@ input:checked + .toggle-bg {
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
+}
+
+.my-20 {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+
+.my-3 {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
 .mt-3 {
@@ -1063,6 +1089,10 @@ input:checked + .toggle-bg {
   margin-left: 1rem;
 }
 
+.mt-56 {
+  margin-top: 14rem;
+}
+
 .block {
   display: block;
 }
@@ -1133,6 +1163,10 @@ input:checked + .toggle-bg {
 
 .h-9 {
   height: 2.25rem;
+}
+
+.h-32 {
+  height: 8rem;
 }
 
 .max-h-80 {
@@ -1754,6 +1788,10 @@ input:checked + .toggle-bg {
   padding: 0.625rem;
 }
 
+.p-32 {
+  padding: 8rem;
+}
+
 .py-3 {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
@@ -1870,6 +1908,10 @@ input:checked + .toggle-bg {
 
 .pr-3 {
   padding-right: 0.75rem;
+}
+
+.pt-32 {
+  padding-top: 8rem;
 }
 
 .text-left {
@@ -2321,6 +2363,11 @@ input:checked + .toggle-bg {
 .hover\:bg-blue-500:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(63 131 248 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-red-500:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(240 82 82 / var(--tw-bg-opacity));
 }
 
 .hover\:text-blue-700:hover {

@@ -20,18 +20,18 @@
   <!-- NAV BAR -->
   <div class="px-3 py-5 bg-gray-100 rounded-md mb-3">
     <div class="space-x-4">
-      <a href="<?php echo "$base_url/admin/teacher/view/{$teacherData['ID']}"; ?>" class=" bg-blue-500 hover:bg-blue-400
-       border px-3 py-2 rounded-md text-blue-100 space-x-2 hover:text-black">
+      <a href="<?php echo "$base_url/admin/teacher/view/{$teacherData['ID']}"; ?>" class=" bg-blue-300  hover:bg-blue-400
+       border px-3 py-2 rounded-md text-black space-x-2 ">
         <i class="fa fa-eye"></i>
         <span>View</span>
       </a>
-      <a href="<?php echo "$base_url/admin/teacher/view/{$teacherData['ID']}/edit"; ?>" class=" bg-blue-500 hover:bg-blue-400
-       border px-3 py-2 rounded-md text-blue-100 space-x-2 hover:text-black">
+      <a href="<?php echo "$base_url/admin/teacher/view/{$teacherData['ID']}/edit"; ?>" class=" bg-blue-300  hover:bg-blue-400
+       border px-3 py-2 rounded-md text-black space-x-2 ">
         <i class="fas fa-cog"></i>
         <span>Edit</span>
       </a>
-      <a href="<?php echo "$base_url/admin/teacher/view/{$teacherData['ID']}/downloads"; ?>" class=" bg-blue-500 hover:bg-blue-400
-       border px-3 py-2 rounded-md text-blue-100 space-x-2 hover:text-black">
+      <a href="<?php echo "$base_url/admin/teacher/view/{$teacherData['ID']}/downloads"; ?>" class=" bg-blue-300  hover:bg-blue-400
+       border px-3 py-2 rounded-md text-black space-x-2 ">
         <i class="fas fa-download"></i>
         <span>Downloads</span>
       </a>
@@ -44,21 +44,21 @@
   <!-- HANDLE SUBJECTS -->
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <p class="font-bold text-xl mb-2">Handled subjects</p>
-    <table class="mb-3 min-w-full">
-      <thead class="border bg-gray-300">
+    <table class="mb-3 min-w-full border border-gray-400">
+      <thead class=" bg-gray-300">
         <tr>
           <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">School Year (Semester)</th>
           <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Subject</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="">
         <?php
           foreach ($subjectHandles as $key => $subject) {
             $subjectName = $subject['SUBJECT_NAME'];
             $year = $subject['YEAR'];
             $semester = $subject['SEMESTER'];
             ?>
-            <tr class="hover:bg-gray-200 text-left">
+            <tr class="hover:bg-gray-200 text-left odd:bg-white even:bg-gray-100">
               <td class="py-4 px-6 text-sm  whitespace-nowrap">
                 <?php echo "$year ($semester)";?>
               </td>
