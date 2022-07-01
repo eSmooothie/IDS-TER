@@ -5,6 +5,7 @@ const td = document.createElement("td");
 var pageNumber = 0;
 var searchKeyword = ""; 
 var next_btn_is_disabled = false;
+var prev_btn_is_disabled = false;
 
 $(document).ready(
     function(){
@@ -31,16 +32,21 @@ $(document).ready(
 });
 
 function pagination(value){
-    if(pageNumber + value < 0){
+    
+
+    if(pageNumber + value < 0 ){
         return;
-    }
+    }    
+
     if(next_btn_is_disabled & value > 0){
         pageNumber = pageNumber
     }else{
         pageNumber = pageNumber + value;
+        prev_btn_is_disabled = false;
+        $("#prevBtn").removeAttr("disabled");
+        $("#prevBtn").removeClass("bg-gray-200").addClass("hover:bg-blue-400 bg-blue-300");
     }
     
-
     loadStudent();
 }
 
@@ -64,14 +70,18 @@ function loadStudent(){
     .done(function(data){
         studentData = data["data"];
         
+        if(pageNumber == 0){
+            $("#prevBtn").attr("disabled");
+            $("#prevBtn").removeClass("hover:bg-blue-400 bg-blue-300").addClass("bg-gray-200");
+        }
         if(studentData.length < 20){
             $("#nextBtn").attr("disabled");
-            $("#nextBtn").removeClass("hover:bg-blue-400 bg-blue-500").addClass("bg-blue-400");
+            $("#nextBtn").removeClass("hover:bg-blue-400 bg-blue-300").addClass("bg-gray-200");
             next_btn_is_disabled = true;
         }else{
             next_btn_is_disabled = false;
             $("#nextBtn").removeAttr("disabled");
-            $("#nextBtn").removeClass("bg-blue-400").addClass("hover:bg-blue-400 bg-blue-500");
+            $("#nextBtn").removeClass("bg-gray-200").addClass("hover:bg-blue-400 bg-blue-300");
         }
 
         for (let index = 0; index < studentData.length; index++) {

@@ -3,7 +3,7 @@
   
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <a href="<?php echo "$base_url/admin/student/add"; ?>" 
-    class=" hover:bg-blue-400 py-2 px-9 rounded-md bg-blue-500 space-x-2">
+    class=" hover:bg-blue-400 py-2 px-9 rounded-md bg-blue-300 space-x-2">
       <i class="fas fa-plus"></i> 
       <span>Add students</span>
     </a>
@@ -24,11 +24,11 @@
           " placeholder="Search a student..." type="text" name="search"/>
         </label>
         <div class="flex justify-between items-center col-span-4">
-          <button id="prevBtn" class="hover:bg-blue-400 pt-2 pb-2 pl-9 pr-9 rounded-md bg-blue-500" onclick="pagination(-1);">
+          <button id="prevBtn" class="pt-2 pb-2 pl-9 pr-9 rounded-md bg-gray-200" onclick="pagination(-1);">
             <i class="fa-solid fa-caret-left"></i>
           </button>
           <p class="m-0" id="pageNumber">Page </p>
-          <button id="nextBtn" class="hover:bg-blue-400 pt-2 pb-2 pl-9 pr-9 rounded-md bg-blue-500 " onclick="pagination(1);">
+          <button id="nextBtn" class="hover:bg-blue-400 pt-2 pb-2 pl-9 pr-9 rounded-md bg-blue-300 " onclick="pagination(1);">
             <i class="fa-solid fa-caret-right"></i>
           </button>
         </div>

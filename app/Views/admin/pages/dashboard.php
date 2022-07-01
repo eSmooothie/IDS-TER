@@ -17,7 +17,7 @@
       </div>
     </div>
     <!--  -->
-    <div class=" space-y-1 wrapper hidden">
+    <div class=" space-y-2 wrapper hidden">
       <?php foreach($to_config_section as $key => $value){
         $id = $value['SECTION_ID'];
         $lv = $value['SECTION_GRADE_LV'];
@@ -26,7 +26,7 @@
         <div class="p-2 bg-yellow-200 rounded-md sys-msg">
           <span class=" font-medium">WARNING:</span> No subject detected in 
           <span class=" font-medium italic"><?php echo $name; ?></span>. Try to add subject
-          <a href="<?php echo "$base_url/admin/section/grade/$lv/$id/edit"; ?>" class=" text-blue-600">
+          <a href="<?php echo "$base_url/admin/section/grade/$lv/$id/edit"; ?>" class=" text-blue-700">
             <i class="fa-solid fa-arrow-up-right-from-square"></i>
           </a>
         </div>
