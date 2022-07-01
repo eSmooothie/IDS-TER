@@ -31,13 +31,13 @@
           </a>
         </div>
       <?php } ?>
-      <button class="show-more hidden bg-blue-500 px-3 py-2 rounded-md font-medium hover:bg-blue-400" type="button">Show more</button>
+      <button class="show-more hidden bg-blue-300 px-3 py-2 rounded-md font-medium hover:bg-blue-400" type="button">Show more</button>
     </div>
     <!--  -->
     <div class=" bg-gray-100 p-2 rounded-md mb-10">
       <p class=" mb-1">Actions</p>
       <div class="px-2 pb-7 pt-9 grid grid-cols-3 gap-7 border border-gray-400 rounded-md mb-3">
-          <button class=" w-full h-full p-2 bg-blue-500 hover:bg-blue-400 rounded-md flex justify-start items-center space-x-2" 
+          <button class=" w-full h-full p-2 bg-blue-300 hover:bg-blue-400 rounded-md flex justify-start items-center space-x-2" 
           data-tooltip-target="tooltip-new-sy" 
           data-modal-toggle="modal-new-sy"
           data-tooltip-placement="top"
@@ -55,7 +55,7 @@
       <div class="px-2 pb-7 pt-9 grid grid-cols-3 gap-7 border border-gray-400 rounded-md">
         <!-- Student -->
         <a href="<?php echo $base_url; ?>/admin/student" 
-        class="w-full h-full flex items-center p-2 bg-blue-500 hover:bg-blue-400 rounded-md space-x-2">
+        class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md space-x-2">
           <span class=" text-3xl"><i class="fa fa-users"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Student</p>
@@ -64,7 +64,7 @@
         </a>
         <!-- Teacher -->
         <a href="<?php echo $base_url; ?>/admin/teacher" 
-        class="w-full h-full flex items-center p-2 bg-blue-500 hover:bg-blue-400 rounded-md space-x-2">
+        class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md space-x-2">
           <span class=" text-3xl"><i class="fas fa-user-tie"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Teacher</p>
@@ -73,7 +73,7 @@
         </a>
         <!-- Execom -->
         <a href="<?php echo $base_url; ?>/admin/execom" 
-        class="w-full h-full flex items-center p-2 bg-blue-500 space-x-2 hover:bg-blue-400 rounded-md">
+        class="w-full h-full flex items-center p-2 bg-blue-300 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fas fa-user-secret" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Executive Committee</p>
@@ -81,7 +81,7 @@
           </div>
         </a>        
         <!-- Section -->
-        <a href="<?php echo $base_url; ?>/admin/section" class="w-full h-full flex items-center p-2 bg-blue-500 space-x-2 hover:bg-blue-400 rounded-md">
+        <a href="<?php echo $base_url; ?>/admin/section" class="w-full h-full flex items-center p-2 bg-blue-300 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fab fa-buromobelexperte"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Section</p>
@@ -89,7 +89,7 @@
           </div>
         </a>
         <!-- Department -->
-        <a href="<?php echo $base_url; ?>/admin/department" class="w-full h-full flex items-center p-2 bg-blue-500 space-x-2 hover:bg-blue-400 rounded-md">
+        <a href="<?php echo $base_url; ?>/admin/department" class="w-full h-full flex items-center p-2 bg-blue-300 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fa fa-th-list" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Department</p>
@@ -97,7 +97,7 @@
           </div>
         </a>
         <!-- Subject -->
-        <a href="<?php echo $base_url; ?>/admin/subject" class="w-full h-full flex items-center p-2 bg-blue-500 space-x-2 hover:bg-blue-400 rounded-md">
+        <a href="<?php echo $base_url; ?>/admin/subject" class="w-full h-full flex items-center p-2 bg-blue-300 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fa fa-list" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Subjects</p>
@@ -105,7 +105,7 @@
           </div>
         </a>
         <!-- Manage Questionnaire -->
-        <a href="<?php echo $base_url; ?>/admin/questionaire" class="w-full h-full flex items-center p-2 bg-blue-500 space-x-2 hover:bg-blue-400 rounded-md">
+        <a href="<?php echo $base_url; ?>/admin/questionaire" class="w-full h-full flex items-center p-2 bg-blue-300 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fa fa-list-ol" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Questionnaire</p>
@@ -113,7 +113,7 @@
           </div>
         </a>
         <!-- Activit log -->
-        <a href="<?php echo $base_url; ?>/admin/activitylog" class="w-full h-full flex items-center p-2 bg-blue-500 space-x-2 hover:bg-blue-400 rounded-md">
+        <a href="<?php echo $base_url; ?>/admin/activitylog" class="w-full h-full flex items-center p-2 bg-blue-300 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fas fa-clipboard-list"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Activity Log</p>
