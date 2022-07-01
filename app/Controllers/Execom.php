@@ -8,6 +8,10 @@ class Execom extends BaseController{
       return redirect()->to("/admin");
     }
 
+    $current_schoolyear = $this->schoolyear_model->orderBy("ID","DESC")->first();
+
+    $current_schoolyear_id = $current_schoolyear['ID'];
+
     $subquery = "(SELECT 
     `execom_hist`.`EXECOM_ID` AS `EXECOM_ID`,
     `execom_hist`.`SCHOOL_YEAR_ID` AS `SY_ID`,
@@ -18,89 +22,82 @@ class Execom extends BaseController{
     `execom_hist`
     INNER JOIN `teacher` ON `teacher`.`ID` = `execom_hist`.`TEACHER_ID`
     WHERE 
-    `execom_hist`.`SCHOOL_YEAR_ID` = '3'
-    ) AS `b`";
+    `execom_hist`.`SCHOOL_YEAR_ID` = '$current_schoolyear_id'
+    ) AS `appointee`";
 
     $execom = $this->execom_model
     ->select("
-    `execom`.`ID` AS `ID`,
-    `execom`.`NAME` AS `POSITION`,
-    `b`.`TEACHER_ID` AS `TEACHER_ID`,
-    `b`.`TEACHER_LN` AS `TEACHER_LN`,
-    `b`.`TEACHER_FN` AS `TEACHER_FN`
+      `execom`.`ID` AS `ID`,
+      `execom`.`NAME` AS `POSITION`,
+      `appointee`.`TEACHER_ID` AS `TEACHER_ID`,
+      `appointee`.`TEACHER_LN` AS `TEACHER_LN`,
+      `appointee`.`TEACHER_FN` AS `TEACHER_FN`
     ")
-    ->join($subquery, "`execom`.`ID` = `b`.`EXECOM_ID`", "LEFT")
+    ->join($subquery, "`execom`.`ID` = `appointee`.`EXECOM_ID`", "LEFT")
     ->findAll();
 
-    $sessionId = $this->session->get("adminID");
-		$pageTitle = "ADMIN | TEACHER";
+    
+		$pageTitle = "ADMIN | EXECOM";
 		$args = [
       'execom' => $execom,
+      'current_schoolyear' => $current_schoolyear,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
 
     echo view("admin/layout/header", $data);
-		echo view("admin/pages/nav",$data);
 		echo view("admin/pages/execom", $data);
 		echo view("admin/layout/footer");
   }
 
-  public function change($id = false){
+  public function change($execom_id = false){
     if(!$this->session->has("adminID")){
       return redirect()->to("/admin");
     }
 
-    if(!$id){
+    if(!$execom_id){
       return redirect()->to("/admin/execom");
     }
     // do something here
-    $sy = $this->schoolyear_model->orderBy("ID","DESC")->first();
+    $current_school_year = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
-    $execom = $this->execom_model->find($id);
-
-    $currentAssign = $this->execom_history_model
-    ->where("EXECOM_ID", $id)
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->first();
+    $execom = $this->execom_model->find($execom_id);
 
     $formerAssign = $this->execom_history_model
     ->select("
-    `execom_hist`.`EXECOM_ID` AS `EXECOM_ID`,
-    `execom_hist`.`SCHOOL_YEAR_ID` AS `SY_ID`,
-    `execom_hist`.`TEACHER_ID` AS `TEACHER_ID`,
-    `teacher`.`LN` AS `TEACHER_LN`,
-    `teacher`.`FN` AS `TEACHER_FN`
+      `execom_hist`.`EXECOM_ID` AS `EXECOM_ID`,
+      `execom_hist`.`SCHOOL_YEAR_ID` AS `SY_ID`,
+      `execom_hist`.`TEACHER_ID` AS `TEACHER_ID`,
+      `teacher`.`LN` AS `TEACHER_LN`,
+      `teacher`.`FN` AS `TEACHER_FN`
     ")
     ->join("`teacher`","`teacher`.`ID` = `execom_hist`.`TEACHER_ID`","INNER")
-    ->where("`execom_hist`.`EXECOM_ID`", $id)
+    ->where("`execom_hist`.`EXECOM_ID`", $execom_id)
     ->orderby("`execom_hist`.`SCHOOL_YEAR_ID`","DESC")
     ->findAll();
 
+    $currentAssign = $formerAssign[0];
+
     $teachers = $this->teacher_model->orderBy("LN","ASC")->findAll();
 
-    $sessionId = $this->session->get("adminID");
-		$pageTitle = "ADMIN | TEACHER";
+		$pageTitle = "ADMIN | EXECOM";
 		$args = [
       'teachers' => $teachers,
       'execom' => $execom,
       'currentAssign' => $currentAssign,
-      'school_year' => $sy,
+      'school_year' => $current_school_year,
       'formerAssign' => $formerAssign,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
 
     echo view("admin/layout/header", $data);
-    echo view("admin/pages/nav",$data);
     echo view("admin/pages/editExecom", $data);
     echo view("admin/layout/footer");
   }

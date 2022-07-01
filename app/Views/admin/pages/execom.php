@@ -1,5 +1,5 @@
 <!-- content -->
-<div class="w-full p-2">
+<div class="w-full col-span-7 p-2 space-y-3">
 <!-- content -->
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <p class=" text-xl font-bold mb-4">Executive Committee</p>
