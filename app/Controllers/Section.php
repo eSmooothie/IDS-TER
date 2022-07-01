@@ -1,16 +1,6 @@
 <?php
 
 namespace App\Controllers;
-
-// public function newSection(){
-//   header("Content-type:application/json");
-//   $response = [
-//     "message" => "OK",
-//     "data" => $data,
-//   ];
-//   return $this->setResponseFormat('json')->respond($response, 200);
-// }
-
 class Section extends BaseController{
 
   public function index(){
@@ -27,20 +17,17 @@ class Section extends BaseController{
       $gradeLevel[$i] = $sections;
     }
     
-    $sessionId = $this->session->get("adminID");
-		$pageTitle = "ADMIN | STUDENT";
+		$pageTitle = "ADMIN | SECTION";
 		$args = [
       'gradeLevel' => $gradeLevel,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
 
     echo view("admin/layout/header", $data);
-    echo view("admin/pages/nav",$data);
     echo view("admin/pages/section", $data);
     echo view("admin/layout/footer");
   }
@@ -85,8 +72,8 @@ class Section extends BaseController{
     ->where("`stud_status`.`SCHOOL_YEAR_ID`", $sy['ID'])
     ->findAll();
 
-    $sessionId = $this->session->get("adminID");
-		$pageTitle = "ADMIN | STUDENT";
+    
+		$pageTitle = "ADMIN | SECTION";
 		$args = [
       'sectionData' => $sectionData,
       'subjects' => $sectionSubject,
@@ -94,14 +81,12 @@ class Section extends BaseController{
       'schoolyear' => $sy,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
 
     echo view("admin/layout/header", $data);
-    echo view("admin/pages/nav",$data);
     echo view("admin/pages/viewSection", $data);
     echo view("admin/layout/footer");
   }
@@ -125,7 +110,7 @@ class Section extends BaseController{
 
     $allStudents = $this->student_model->findAll();
     // get teacher and its subject teaches
-    $allTeachers = $this->teacherSubjectModel
+    $allTeachers = $this->teacher_subject_model
     ->select("
       `tchr_subj_lst`.`ID` AS `TCHR_SUBJ_LIST`,
       `teacher`.`ID` AS `TEACHER_ID`,
@@ -154,8 +139,8 @@ class Section extends BaseController{
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->findAll();
 
-    $sessionId = $this->session->get("adminID");
-		$pageTitle = "ADMIN | STUDENT";
+    
+		$pageTitle = "ADMIN | SECTION";
 		$args = [
       'sectionData' => $sectionData,
       'schoolyear' => $sy,
@@ -163,11 +148,9 @@ class Section extends BaseController{
       'allStudents' => $allStudents,
       'teachers' => $allTeachers,
       'sectionSubjects' => $sectionSubjects,
-
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
@@ -200,7 +183,6 @@ class Section extends BaseController{
     }
 
     echo view("admin/layout/header", $data);
-    echo view("admin/pages/nav",$data);
     echo view("admin/pages/editSection", $data);
     echo view("admin/layout/footer");
   }
