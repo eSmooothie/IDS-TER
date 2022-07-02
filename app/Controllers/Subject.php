@@ -10,15 +10,13 @@ class Subject extends BaseController{
     // do something here
     $subject = $this->subject_model->findAll();
 
-    $data = [
-			'id' => $this->session->get("adminID"),
-			'pageTitle' => "ADMIN | SUBJECT",
-			'baseUrl' => base_url(),
+    $pageTitle = "ADMIN | SUBJECT";
+    $args = [
       'subjects' => $subject,
-		];
+    ];
+    $data = $this->map_page_parameters($pageTitle, $args);
 
     echo view("admin/layout/header", $data);
-		echo view("admin/pages/nav",$data);
 		echo view("admin/pages/subject", $data);
 		echo view("admin/layout/footer");
   }
@@ -35,19 +33,6 @@ class Subject extends BaseController{
 
     $this->subject_model->insert($data);
 
-    $response = [
-      "message" => "OK",
-      "data" => $data,
-    ];
-    return $this->setResponseFormat('json')->respond($response, 200);
-  }
-
-  public function func_name(){
-    header("Content-type:application/json");
-    // do something here
-
-    // {end}
-    $data = [];
     $response = [
       "message" => "OK",
       "data" => $data,

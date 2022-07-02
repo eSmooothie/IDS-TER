@@ -9,20 +9,19 @@ class Questionaire extends BaseController
 			return redirect()->to("/admin");
 		}
 
-		$sessionId = $this->session->get("adminID");
+		
 		$pageTitle = "ADMIN | STUDENT";
 		$args = [
 			
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
 
 		echo view("admin/layout/header", $data);
-		echo view("admin/pages/nav",$data);
+
 		echo view("admin/pages/questionaire", $data);
 		echo view("admin/layout/footer");
 	}
@@ -40,7 +39,7 @@ class Questionaire extends BaseController
 		->orderBy("ID","ASC")
 		->findAll();
 
-		$sessionId = $this->session->get("adminID");
+		
 		$pageTitle = "ADMIN | STUDENT";
 		$args = [
 			'id' => $id,
@@ -48,14 +47,14 @@ class Questionaire extends BaseController
 			'questions' => $questionaire,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
+			
 			$pageTitle,
 			$args
 		);
 
 		echo view("admin/layout/header", $data);
-		echo view("admin/pages/nav",$data);
+
 		echo view("admin/pages/viewQuestionaire", $data);
 		echo view("admin/layout/footer");
 	}
@@ -69,7 +68,7 @@ class Questionaire extends BaseController
 		$asType = ["STUDENT","PEER","SUPERVISOR"];
 		$question = $this->eval_question_model->find($questionId);
 
-		$sessionId = $this->session->get("adminID");
+		
 		$pageTitle = "ADMIN | STUDENT";
 		$args = [
 			'id' => $id,
@@ -77,14 +76,14 @@ class Questionaire extends BaseController
 			'question' => $question,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
+			
 			$pageTitle,
 			$args
 		);
 
 		echo view("admin/layout/header", $data);
-		echo view("admin/pages/nav",$data);
+
 		echo view("admin/pages/modifyQuestion", $data);
 		echo view("admin/layout/footer");
 	}
@@ -114,21 +113,21 @@ class Questionaire extends BaseController
 		
 		$asType = ["STUDENT","PEER","SUPERVISOR"];
 
-		$sessionId = $this->session->get("adminID");
+		
 		$pageTitle = "ADMIN | STUDENT";
 		$args = [
 			'id' => $id,
 			'type' => $asType[$id - 1],
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
+			
 			$pageTitle,
 			$args
 		);
 
 		echo view("admin/layout/header", $data);
-		echo view("admin/pages/nav",$data);
+
 		echo view("admin/pages/addQuestion", $data);
 		echo view("admin/layout/footer");
 	}
@@ -159,7 +158,7 @@ class Questionaire extends BaseController
 		$asType = ["STUDENT","PEER","SUPERVISOR"];
 		$question = $this->eval_question_model->find($questionId);
 
-		$sessionId = $this->session->get("adminID");
+		
 		$pageTitle = "ADMIN | STUDENT";
 		$args = [
 			'id' => $id,
@@ -167,14 +166,14 @@ class Questionaire extends BaseController
 			'question' => $question,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
+			
 			$pageTitle,
 			$args
 		);
 
 		echo view("admin/layout/header", $data);
-		echo view("admin/pages/nav",$data);
+
 		echo view("admin/pages/removeQuestion", $data);
 		echo view("admin/layout/footer");
 	}

@@ -1,15 +1,16 @@
 <!-- content -->
-<div class="w-full p-2">
+<div class="w-full col-span-7 p-2 space-y-3">
     <!-- NAV -->
-    <div class="p-3 bg-gray-100 rounded-md mb-3">
+    <div class="px-3 py-5 bg-gray-100 rounded-md mb-3 space-y-4">
         <p class=" text-lg font-bold mb-3 uppercase"><?php
+            $name = strtolower($type);
             echo "$type questionnaire";
         ?></p>
-        <a href="<?php 
-            $name = strtolower($type);
-            echo "$base_url/admin/questionaire/$id/$name";
-        ?>" class=" text-blue-600 hover:text-blue-700">
-        <i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back</a>
+        <div class="">
+            <a href="<?php echo "$base_url/admin/questionaire/$id/$name";?>" class=" px-5 py-2.5 font-medium bg-blue-300 hover:bg-blue-400 rounded-md">
+                <i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back
+            </a>
+        </div>
     </div>
     <!-- QUESTION -->
     <div class="p-3 bg-gray-100 rounded-md mb-3">
@@ -21,7 +22,7 @@
                 <input type="hidden" name="id" value="<?php echo "{$question['ID']}";?>">
             </div>
             <div class="">
-                <input type="submit" class="hover:bg-red-400 rounded-full px-5 bg-red-300 p-2" value="Remove">
+                <input type="submit" class="hover:bg-red-400 rounded-md px-5 bg-red-300 py-2.5 hover:cursor-pointer" value="Remove">
             </div>
         </form>
     </div>
