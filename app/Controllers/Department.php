@@ -38,15 +38,13 @@ class Department extends BaseController{
     }
 
     // do something here
-    $data = [
-      'id' => $this->session->get("adminID"),
-      'pageTitle' => "ADMIN | DEPARTMENT",
-      'baseUrl' => base_url(),
-      'department' => $department,
+    $pageTitle = "ADMIN | DEPARTMENT";
+    $args = [
+      'department' => $department
     ];
+    $data = $this->map_page_parameters($pageTitle, $args);
 
     echo view("admin/layout/header",$data);
-    echo view("admin/pages/nav",$data);
     echo view("admin/pages/department",$data);
     echo view("admin/layout/footer");
   }
@@ -81,19 +79,18 @@ class Department extends BaseController{
 
     $teacher = $this->teacher_model->where("DEPARTMENT_ID",$id)->findAll();
     $department = $this->department_model->find($id);
+
     // do something here
-    $data = [
-      'id' => $this->session->get("adminID"),
-      'pageTitle' => "ADMIN | DEPARTMENT",
-      'baseUrl' => base_url(),
+    $pageTitle = "ADMIN | DEPARTMENT";
+    $args = [
       'department' => $department,
       'teachers' => $teacher,
       'chairperson' => $chairperson,
       'school_year' => $school_year,
     ];
+    $data = $this->map_page_parameters($pageTitle, $args);
 
     echo view("admin/layout/header",$data);
-    echo view("admin/pages/nav",$data);
     echo view("admin/pages/viewDepartment",$data);
     echo view("admin/layout/footer");
   }
@@ -116,9 +113,9 @@ class Department extends BaseController{
 
     $chairperson = $this->department_history_model
     ->select("
-    `teacher`.`ID` AS `ID`,
-    `teacher`.`FN` AS `FN`,
-    `teacher`.`LN` AS `LN`
+      `teacher`.`ID` AS `ID`,
+      `teacher`.`FN` AS `FN`,
+      `teacher`.`LN` AS `LN`
     ")
     ->join("teacher","`teacher`.`ID` = `dept_hist`.`TEACHER_ID`","INNER")
     ->where("`dept_hist`.`SCHOOL_YEAR_ID`", $sy)
@@ -128,17 +125,15 @@ class Department extends BaseController{
     $department = $this->department_model->find($id);
     $teachers = $this->teacher_model->where("DEPARTMENT_ID",$id)->findAll();
     // do something here
-    $data = [
-      'id' => $this->session->get("adminID"),
-      'pageTitle' => "ADMIN | DEPARTMENT",
-      'baseUrl' => base_url(),
+    $pageTitle = "ADMIN | DEPARTMENT";
+    $args = [
       'department' => $department,
       'chairperson' => $chairperson,
       'teachers' => $teachers,
     ];
+    $data = $this->map_page_parameters($pageTitle, $args);
 
     echo view("admin/layout/header",$data);
-    echo view("admin/pages/nav",$data);
     echo view("admin/pages/editDepartment",$data);
     echo view("admin/layout/footer");
   }
@@ -218,16 +213,15 @@ class Department extends BaseController{
     $school_year = $this->schoolyear_model->orderBy("ID","DESC")->findAll();
     $department = $this->department_model->find($id);
 
-    $data = [
-      'id' => $this->session->get("adminID"),
-      'pageTitle' => "ADMIN | DEPARTMENT",
-      'baseUrl' => base_url(),
+    $pageTitle = "ADMIN | DEPARTMENT";
+    $args = [
       'department' => $department,
       'school_year' => $school_year,
     ];
 
+    $data = $this->map_page_parameters($pageTitle, $args);
+
     echo view("admin/layout/header",$data);
-    echo view("admin/pages/nav",$data);
     echo view("admin/pages/downloadDepartmentEvaluation",$data);
     echo view("admin/layout/footer");
   }

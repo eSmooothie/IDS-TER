@@ -149,7 +149,10 @@ class PdfController extends BaseController{
 
     $department = $this->department_model->find($department_id);
     $school_year = $this->schoolyear_model->find($school_year_id);
-    $teachers = $this->teacher_model->where("DEPARTMENT_ID", $department_id)->findAll();
+    $teachers = $this->teacher_model
+      ->where("DEPARTMENT_ID", $department_id)
+      ->where("ON_LEAVE", "0")
+      ->findAll();
 
     foreach ($teachers as $key => $value) {
       $teacher_id = $value['ID'];
@@ -318,17 +321,20 @@ class PdfController extends BaseController{
 
     $n = 1; // question number
     foreach ($rating["student"]["RATING"] as $key => $value) {
-      $ratings[$n]["STUDENT"] = round($value["avg"], 2);
+      $avg_rate = (empty($value["avg_rate"]))? 0:$value["avg_rate"];
+      $ratings[$n]["STUDENT"] = round($avg_rate, 2);
       $n += 1;
     }
     $n = 1;
     foreach ($rating["peer"]["RATING"] as $key => $value) {
-      $ratings[$n]["PEER"] = round($value["avg"], 2);
+      $avg_rate = (empty($value["avg_rate"]))? 0:$value["avg_rate"];
+      $ratings[$n]["PEER"] = round($avg_rate, 2);
       $n += 1;
     }
     $n = 1;
     foreach ($rating["supervisor"]["RATING"] as $key => $value) {
-      $ratings[$n]["SUPERVISOR"] = round($value["avg"], 2);
+      $avg_rate = (empty($value["avg_rate"]))? 0:$value["avg_rate"];
+      $ratings[$n]["SUPERVISOR"] = round($avg_rate, 2);
       $n += 1;
     }
 
