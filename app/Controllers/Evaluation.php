@@ -221,6 +221,10 @@ class Evaluation extends BaseController{
       array_push($ratings, $rate);
     }
 
+    if($eval_type_id == 1){
+      $this->count_student_evaluated($evaluator_id);
+    }
+
     // {end}
     $data = [
       'evaluator' => $evaluator_id,
@@ -235,5 +239,26 @@ class Evaluation extends BaseController{
       "data" => $data,
     ];
     return $this->setResponseFormat('json')->respond($response, 200);
+  }
+
+  private function count_student_evaluated($evaluator_id){
+    $user_db_util = new UserDButil();
+
+    $user_id = $this->session->get("user_id");
+
+    $is_cleared = $user_db_util->is_cleared($user_id);
+    
+    $curr_school_year = $user_db_util->get_current_school_year();
+    // update student status
+    $update_status = [
+      'STATUS' => ($is_cleared)? 1 : 0,
+      'DATE' => $this->time->now()->toDateTimeString()
+    ];
+  
+    $this->student_status_model
+      ->where("SCHOOL_YEAR_ID", $curr_school_year['ID'])
+      ->where("STUDENT_ID", $user_id)
+      ->set($update_status)
+      ->update();
   }
 }

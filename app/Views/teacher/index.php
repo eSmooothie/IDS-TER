@@ -55,7 +55,7 @@
         }
         ?>
         <a href="<?php echo "$base_url/user/teacher/rate/supervisor"; ?>" 
-        class="hover:bg-blue-400 rounded-md px-5 bg-blue-300 p-2">RATE AS A SUPERVISOR</a>
+        class="hover:bg-blue-400 rounded-md px-5 bg-blue-300 py-2.5">RATE AS A SUPERVISOR</a>
         <?php
       } ?>
     </div>
