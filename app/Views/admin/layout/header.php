@@ -71,10 +71,10 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);">
       <a href="<?php echo $base_url; ?>/admin/questionaire" class="col-span-3">Questionnaire</a>
     </div>
     <!-- ACTIVITY LOG -->
-    <div class="border border-gray-300 p-2 border-r-0 border-l-0 grid grid-cols-4 hover:bg-gray-300">
+    <!-- <div class="border border-gray-300 p-2 border-r-0 border-l-0 grid grid-cols-4 hover:bg-gray-300">
       <span class=" text-xl"><i class="fas fa-clipboard-list"></i></span>
       <a href="<?php echo $base_url; ?>/admin/activitylog" class="col-span-3">Activity Log</a>
-    </div>
+    </div> -->
     <!-- LOGOUT -->
     <div class="border border-gray-300 p-2 border-r-0 border-l-0 grid grid-cols-4 hover:bg-red-300">
       <span class=" text-xl"><i class="fa fa-sign-out"></i></span>

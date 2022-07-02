@@ -145,7 +145,7 @@
               <form id="form-new-sy">
                 <!-- Modal body -->
                 <div class="p-6 space-y-6">
-                  <span id="modal-new-sy-note">Note: Ignore the month as long the year(1 year = 10 months) is valid, month does not matter.</span>
+                  <span id="modal-new-sy-note"><span class=" font-medium text-teal-600">Note:</span> The system will automatically compute the new school year (10 months) and if it the same school year it will automatically increment the semester by one(1).</span>
                  
                   <div class="flex flex-col mb-3">
                     <label for="start_yr">From</label>
@@ -160,7 +160,7 @@
                     <input type="number" name="semester" id="semester" min="1" value="" class=" border border-gray-300" readonly>
                   </div>
                   <div>
-                    <p class="mb-0">Others</p>
+                    <p class="mb-0">Options</p>
                     <div class="border border-gray-300 p-3">
                       <div class="flex items-center mb-4">
                           <input id="checkbox-retain-teacher-subj" name="is_retain_teacher_subj" 
