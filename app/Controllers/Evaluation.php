@@ -203,6 +203,7 @@ class Evaluation extends BaseController{
     $ratings = [];
     $questions = $this->eval_question_model
     ->where("EVAL_TYPE_ID", $eval_type_id)
+    ->where("IS_REMOVE","0")
     ->findAll();
 
     foreach ($questions as $key => $value) {
@@ -221,6 +222,7 @@ class Evaluation extends BaseController{
       array_push($ratings, $rate);
     }
 
+    log_message("debug","at evaluation.submit: eval_type:$eval_type_id");
     if($eval_type_id == 1){
       $this->count_student_evaluated($evaluator_id);
     }
@@ -248,6 +250,8 @@ class Evaluation extends BaseController{
 
     $is_cleared = $user_db_util->is_cleared($user_id);
     
+    log_message("debug","at evaluation.count_student_evaluated: user_id:$user_id is_cleared:$is_cleared");
+
     $curr_school_year = $user_db_util->get_current_school_year();
     // update student status
     $update_status = [

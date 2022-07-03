@@ -429,6 +429,7 @@ class UserDButil{
 
     public function is_cleared($user_id, $is_student = true){
       if(gettype($is_student) !== "boolean"){
+        log_message("error", "at is_cleared: Wrong datatype passed. var is_student(". gettype($is_student).")");
         return -1;
       }
 

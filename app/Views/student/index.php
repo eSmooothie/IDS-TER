@@ -10,10 +10,16 @@
       <p class=" col-span-3"><?php echo "{$school_year['SEMESTER']}"; ?></p>
 
       <p class="">Section: </p>
-      <p class=" col-span-3"><?php echo "{$student_section['NAME']}"; ?></p>
+      <p class=" col-span-3"><?php echo (!empty($student_section))? $student_section['NAME']:"No data"; ?></p>
 
       <p class="">Has Research and Immersion: </p>
-      <p class=" col-span-3"><?php echo ($student_section['HAS_RNI'])? "Yes":"No"; ?></p>
+      <p class=" col-span-3"><?php 
+        if(!empty($student_section)){
+          echo ($student_section['HAS_RNI'])? "Yes":"No"; 
+        }else{
+          echo "No data";
+        }
+      ?></p>
 
       <p class="">Total Evaluated: </p>
       <p class=" col-span-3"><?php echo "$done_evaluated_counter/".count($student_subjects); ?></p>

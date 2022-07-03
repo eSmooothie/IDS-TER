@@ -20,7 +20,9 @@
         </tr>
         <tr>
           <td class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap">Grade Lv. & Section:</td>
-          <td class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap"> <p class="m-0 ps-2"><?php echo "{$student_section['GRADE_LV']} - {$student_section['NAME']}"; ?></p></td>
+          <td class="py-1 px-6 text-sm text-left font-medium whitespace-nowrap"> <p class="m-0 ps-2">
+            <?php echo (!empty($student_section))? "{$student_section['GRADE_LV']} - {$student_section['NAME']}":"NO DATA"; ?></p>
+          </td>
         </tr>
       </tbody>
     </table>
