@@ -36,11 +36,11 @@
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <div class="">
       <button type="button" name="button" class="hover:bg-blue-400 py-2 
-       px-9 rounded-md bg-blue-300" onclick="changeEditContainer(1);">Edit Students</button>
+       px-9 rounded-md  <?php echo ($selected_tab=="enroll" || empty($selected_tab))?"bg-blue-400 ring-2 ring-blue-600":"bg-blue-300";?>" onclick="changeEditContainer(1);">Edit Students</button>
       <button type="button" name="button" class=" hover:bg-blue-400 py-2 
-       px-9 rounded-md bg-blue-300" onclick="changeEditContainer(2);">Edit Subjects</button>
+       px-9 rounded-md bg-blue-300 <?php echo ($selected_tab=="subject")?"bg-blue-400 ring-2 ring-blue-600":"bg-blue-300";?>" onclick="changeEditContainer(2);">Edit Subjects</button>
       <button type="button" name="button" class=" hover:bg-blue-400 py-2 
-       px-9 rounded-md bg-blue-300" onclick="changeEditContainer(3);">Edit Profile</button>
+       px-9 rounded-md bg-blue-300 <?php echo ($selected_tab=="profile")?"bg-blue-400 ring-2 ring-blue-600":"bg-blue-300";?>" onclick="changeEditContainer(3);">Edit Profile</button>
     </div>
     <!-- Display Err and Succ Messages -->
     <div class="hidden">
@@ -169,7 +169,7 @@
     } ?>
     </div>
     <!-- Enroll new  student -->
-    <div class=" pt-5 mb-10 " id="enrollStudentContainer">
+    <div class=" pt-5 mb-10 <?php echo ($selected_tab=="enroll" || empty($selected_tab))?"":"hidden";?>" id="enrollStudentContainer">
       <p class=" text-lg font-bold mb-3 uppercase">Enroll students</p>
       <div class="">
         <!-- Bulk -->
@@ -268,7 +268,7 @@
     </div>
 
     <!-- Edit subject -->
-    <div class=" pt-5 mb-10 hidden" id="editSubjectContainer">
+    <div class=" pt-5 mb-10 <?php echo ($selected_tab=="subject")?"":"hidden";?>" id="editSubjectContainer">
       <p class=" text-lg font-bold mb-3 uppercase">Setup subjects</p>
       <div class="">
         
@@ -372,7 +372,7 @@
     </div>
 
     <!-- Edit Section -->
-    <div class=" pt-5 mb-10 hidden" id="editSectionContainer">
+    <div class=" pt-5 mb-10 <?php echo ($selected_tab=="profile")?"":"hidden";?>" id="editSectionContainer">
       <p class=" text-lg font-bold mb-3 uppercase">Edit profile</p>
       <!-- MODIFY PROFILE -->
       <div class="border border-gray-400 rounded-md p-3 w-full mb-3">

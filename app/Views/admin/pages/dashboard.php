@@ -26,7 +26,7 @@
         <div class="p-2 bg-yellow-200 rounded-md sys-msg">
           <span class=" font-medium">WARNING:</span> No subject detected in 
           <span class=" font-medium italic"><?php echo $name; ?></span>. Try to add subject
-          <a href="<?php echo "$base_url/admin/section/grade/$lv/$id/edit"; ?>" class=" text-blue-700">
+          <a href="<?php echo "$base_url/admin/section/grade/$lv/$id/edit?stab=subject"; ?>" class=" text-blue-700">
             <i class="fa-solid fa-arrow-up-right-from-square"></i>
           </a>
         </div>

@@ -100,6 +100,9 @@ class Section extends BaseController{
       return redirect()->to("/admin/section");
     }
     
+    $selected_tab = $this->request->getGet("stab");
+    log_message("debug","at Section.edit_section: params:$selected_tab");
+
     $sy = $this->schoolyear_model->orderBy("ID","DESC")->first(); // get current school year
     $sectionData = $this->section_model->where("ID", $sectionId)->first();
     
@@ -148,6 +151,7 @@ class Section extends BaseController{
       'allStudents' => $allStudents,
       'teachers' => $allTeachers,
       'sectionSubjects' => $sectionSubjects,
+      'selected_tab' => ($selected_tab)? $selected_tab:null,
 		];
 
 		$data = $this->map_page_parameters(

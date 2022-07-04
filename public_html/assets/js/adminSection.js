@@ -58,26 +58,14 @@ function changeEditContainer(container) {
     var container2 = document.getElementById('editSubjectContainer');
     var container3 = document.getElementById('editSectionContainer');
     if (container == 1) {
-        container1.classList.remove("hidden");
-        container2.classList.remove("block");
-        container3.classList.remove("block");
-        container1.classList.add("block");
-        container2.classList.add("hidden");
-        container3.classList.add("hidden");
+        var path = window.location.origin + window.location.pathname + "?stab=enroll";
+        window.location.replace(path);
     } else if (container == 2) {
-        container1.classList.remove("block");
-        container2.classList.remove("hidden");
-        container3.classList.remove("block");
-        container1.classList.add("hidden");
-        container2.classList.add("block");
-        container3.classList.add("hidden");
+        var path = window.location.origin + window.location.pathname + "?stab=subject";
+        window.location.replace(path);
     } else if (container == 3) {
-        container1.classList.remove("block");
-        container2.classList.remove("block");
-        container3.classList.remove("hidden");
-        container1.classList.add("hidden");
-        container2.classList.add("hidden");
-        container3.classList.add("block");
+        var path = window.location.origin + window.location.pathname + "?stab=profile";
+        window.location.replace(path);
     }
 }
 
