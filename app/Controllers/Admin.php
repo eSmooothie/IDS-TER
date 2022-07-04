@@ -36,6 +36,7 @@ class Admin extends BaseController
 			`section`.`NAME` AS `SECTION_NAME`,
 			`TTL_SUBJ`.`TTL` AS `TTL_SUBJ`")
 		->join($ttl_subj_in_sec_sql,"`section`.`ID` = `TTL_SUBJ`.`SECTION_ID`","LEFT")
+		->where("`TTL_SUBJ`.`TTL` IS NULL")
 		->where("`section`.`IS_ACTIVE`",1)
 		->findAll();
 
