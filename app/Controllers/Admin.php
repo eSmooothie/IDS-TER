@@ -148,22 +148,6 @@ class Admin extends BaseController
 				$status_code = 500;
 				array_push($message, ["retain_student_section"=>"Failed: No data from previous school year."]);
 			}
-
-			$query = $this->student_status_model
-			->select("
-				0 AS `STATUS`,
-				$new_school_year_id AS `SCHOOL_YEAR_ID`,
-				STUDENT_ID
-			")->where("SCHOOL_YEAR_ID", $curr_school_year_id)
-			->findAll();
-
-			// create evaluation clearance for new sy
-			if(!empty($query)){
-				$this->student_status_model->insertBatch($query);
-			}else{
-				$status_code = 500;
-				array_push($message, ["create_student_status"=>"Failed: No data from previous school year."]);
-			}
 		}
 
 		if($is_retain_dept_chair){
@@ -209,12 +193,29 @@ class Admin extends BaseController
 			array_push($message, ["schoolyear"=>"Failed: Abort creating new schoolyear due to errors."]);
 		}
 
+		// create new clearance for all students in database
+		log_message("info","at Admin.new_school_year: Creating new clearances for all student.");
+		$query = $this->student_status_model
+		->select("
+			0 AS `STATUS`,
+			$new_school_year_id AS `SCHOOL_YEAR_ID`,
+			STUDENT_ID
+		")->where("SCHOOL_YEAR_ID", $curr_school_year_id)
+		->findAll();
+
+		if(!empty($query)){
+			$this->student_status_model->insertBatch($query);
+		}else{
+			$status_code = 500;
+			array_push($message, ["create_student_status"=>"Failed: No data from previous school year."]);
+		}
+
+		var_dump($query);
 		sleep(2);
 
 		$response = [
 			"status_code" => $status_code,
 			"err_message" => $message,
-			"debug" => (isset($query))? $query:null,
 		];
 
 		return $this->setResponseFormat('json')->respond($response, 200);
