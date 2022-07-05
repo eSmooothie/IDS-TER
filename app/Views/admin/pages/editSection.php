@@ -172,34 +172,6 @@
     <div class=" pt-5 mb-10 <?php echo ($selected_tab=="enroll" || empty($selected_tab))?"":"hidden";?>" id="enrollStudentContainer">
       <p class=" text-lg font-bold mb-3 uppercase">Enroll students</p>
       <div class="">
-        <!-- Bulk -->
-        <form id="bulkEnroll" class="border border-gray-400 p-3 rounded-md mb-3">
-          <div class="">
-            <label for="" class="font-bold">Bulk</label>
-          </div>
-          <div class="mb-3">
-            <span class="mb-4 block text-sm">Note: CSV format comma separated. Example: 2018-000,LN,FN</span>
-            <input type="hidden" name="sectionId" value="<?php echo "{$sectionData['ID']}"; ?>">
-            <label class="block mb-4">
-              <span class="sr-only">Upload CSV file</span>
-              <input type="file" class="block w-1/2 text-sm rounded-full text-black bg-gray-300
-                file:mr-4 file:py-2 file:px-4 file:text-black
-                file:rounded-full file:border-0
-                file:text-sm file:font-semibold
-                file:bg-blue-300 file:cursor-pointer
-                hover:file:bg-blue-100" 
-                accept=".csv" id="formFile" name="csvFile"/>
-            </label>
-            <button data-tooltip-target="button-under-construction" type="submit" name="button" class="hover:bg-yellow-400 rounded-md px-5 bg-yellow-300 p-2">
-              <i class="fa-solid fa-person-digging"></i>
-              Submit
-            </button>
-            <div id="button-under-construction" role="tooltip" class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700">
-                Work In Progress
-                <div class="tooltip-arrow" data-popper-arrow></div>
-            </div>
-          </div>
-        </form>
         <!-- INDIVIDUAL -->
         <div class="border border-gray-300 p-3 rounded-md">
           <div class="">
@@ -271,6 +243,35 @@
             <button type="button" class="hover:bg-blue-400 rounded-md px-5 bg-blue-300 p-2" name="button" id="enroll" value="<?php echo "${sectionData['ID']}"; ?>">Enroll</button>
           </div>
         </div>
+
+        <!-- Bulk -->
+        <form id="bulkEnroll" class="border border-gray-300 p-3 rounded-md mb-3">
+          <div class="">
+            <label for="" class="font-bold">Bulk</label>
+          </div>
+          <div class="mb-3">
+            <span class="mb-4 block text-sm">Note: CSV format comma separated. Example: 2018-000,LN,FN</span>
+            <input type="hidden" name="sectionId" value="<?php echo "{$sectionData['ID']}"; ?>">
+            <label class="block mb-4">
+              <span class="sr-only">Upload CSV file</span>
+              <input type="file" class="block w-1/2 text-sm rounded-full text-black bg-gray-300
+                file:mr-4 file:py-2 file:px-4 file:text-black
+                file:rounded-full file:border-0
+                file:text-sm file:font-semibold
+                file:bg-blue-300 file:cursor-pointer
+                hover:file:bg-blue-100" 
+                accept=".csv" id="formFile" name="csvFile"/>
+            </label>
+            <button data-tooltip-target="button-under-construction" type="submit" name="button" class="hover:bg-yellow-400 rounded-md px-5 bg-yellow-300 p-2">
+              <i class="fa-solid fa-person-digging"></i>
+              Submit
+            </button>
+            <div id="button-under-construction" role="tooltip" class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700">
+                Work In Progress
+                <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
 
