@@ -1,5 +1,30 @@
 var toEnroll = [];
+var rawdata_enrollee = {};
+// set the modal menu element
+const confirmation_enrollee_modal_target = document.getElementById('confirmation-enrollee-modal');
+
+// options with default values
+const options = {
+    placement: 'center-center',
+    backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40',
+    onHide: () => {
+        console.log('modal is hidden');
+    },
+    onShow: () => {
+        console.log('modal is shown');
+    },
+    onToggle: () => {
+        console.log('modal has been toggled');
+    }
+};
+
+var confirmation_enrollee_modal;
+
+var to_enroll_students_formdata;
+
 $(document).ready(function () {
+    confirmation_enrollee_modal = new Modal(confirmation_enrollee_modal_target, options);
+
     var updateSectionSubject = document.getElementById('updateSectionSubject');
     if (updateSectionSubject != null) {
         updateSectionSubject.addEventListener("click", function () {
@@ -104,6 +129,7 @@ function remove(element) {
     trData.children[3].innerHTML = "<button onclick=\"add(this);\" class=\"bg-blue-300 px-4 py-3 rounded-md studentDataE\" type=\"button\" name=\"button\" value=\"" + value + "\">" + "<i class=\"fas fa-plus\"></i>" + "</button>";
     toAllStudentBody.prepend(trData);
     let index = toEnroll.indexOf(value);
+    delete rawdata_enrollee[value];
     if (index > -1) {
         toEnroll.splice(index, 1);
     }
@@ -115,6 +141,13 @@ function add(element) {
     var toEnrollTbody = document.getElementById('tbodyEnrollee');
     trData.children[3].innerHTML = "<button onclick=\"remove(this);\" class=\"bg-red-300 px-4 py-3 rounded-md removeEnrollee\" type=\"button\" name=\"button\" value=\"" + value + "\">" + "<i class=\"fas fa-times\"></i>" + "</button>";
     toEnrollTbody.append(trData);
+
+    rawdata_enrollee[value] = {
+        'fn':trData.children[2].textContent,
+        'ln':trData.children[1].textContent,
+        'id':value
+    }
+
     toEnroll.push(value);
 }
 $("#editSectionForm").submit(function (e) {
@@ -126,6 +159,7 @@ $("#editSectionForm").submit(function (e) {
     };
     sendPostRequest(path, formData, done);
 });
+
 $("#removeSectionForm").submit(function (e) {
     e.preventDefault();
     var formData = $(this).serializeArray();
@@ -141,6 +175,7 @@ $("#removeSectionForm").submit(function (e) {
     }
     sendPostRequest(path, formData, done);
 });
+
 $("#bulkEnroll").submit(function (e) {
     e.preventDefault();
     var form = document.getElementById('bulkEnroll');
@@ -164,20 +199,55 @@ $("#bulkEnroll").submit(function (e) {
         }
     });
 });
+
 $("#enroll").on("click", function () {
     if (toEnroll.length > 0) {
-        var path = "/admin/section/student/enroll";
+        
         var formData = {
             'enrollee': toEnroll,
             'id': $(this).val(),
         };
-        var done = function (data) {
-            // console.log(data);
-            window.location.reload();
+        
+        $("#list-of-students-to-enroll").empty();
+
+        var list_of_student_to_enroll_element = document.getElementById('list-of-students-to-enroll');
+       
+        for (const key in rawdata_enrollee) {
+            if (Object.hasOwnProperty.call(rawdata_enrollee, key)) {
+                const student = rawdata_enrollee[key];
+                var li = document.createElement("li");
+                li.innerHTML = student.ln + ", " + student.fn + " (" + student.id + ")";
+
+                list_of_student_to_enroll_element.append(li);
+            }
         }
-        sendPostRequest(path, formData, done);
+
+        confirmation_enrollee_modal.toggle();
+        // toggle the modal
+       
+
+        to_enroll_students_formdata = formData;
+        // console.log(formData);
     }
 });
+
+
+$(".confirmation-enrollment-modal-close").on('click',function(e){
+    e.preventDefault();
+    confirmation_enrollee_modal.toggle();
+});
+
+$(".confirmation-enrollment-modal-accept").on('click',function(e){
+    e.preventDefault();
+    var path = "/admin/section/student/enroll";
+    var done = function (data) {
+        // console.log(data);
+        window.location.reload();
+    }
+    // console.log(to_enroll_students_formdata);
+    sendPostRequest(path, to_enroll_students_formdata, done);
+});
+
 $("#newSection").submit(function (e) {
     e.preventDefault();
     var formData = $(this).serializeArray();
