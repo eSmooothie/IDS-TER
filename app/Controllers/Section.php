@@ -239,8 +239,16 @@ class Section extends BaseController{
     return $this->setResponseFormat('json')->respond($response, 200);
   }
 
+  //TODO: FIX BULK ENROLL
   public function enrollStudentsCSV(){
     header("Content-type:application/json");
+    $response = [
+      "message" => "ERROR: Work In Progress.",
+      "data" => null,
+    ];
+
+    return $this->setResponseFormat('json')->respond($response, 200);
+
     $csvFile = $this->request->getFile("csvFile");
     $sectionId = $this->request->getPost("sectionId");
 

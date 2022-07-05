@@ -176,29 +176,30 @@ $("#removeSectionForm").submit(function (e) {
     sendPostRequest(path, formData, done);
 });
 
-$("#bulkEnroll").submit(function (e) {
-    e.preventDefault();
-    var form = document.getElementById('bulkEnroll');
-    var formData = new FormData(form);
-    let baseUrl = window.location.origin;
-    let apiPath = "/admin/section/student/enroll/csv";
-    let url = baseUrl + apiPath;
-    $.ajax({
-        type: 'post',
-        url: url,
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function (data) {
-            window.location.reload();
-        },
-        error: function (xhr, textStatus, errorMessage) {
-            $("#ServerErrContainer").removeClass("hidden");
-            document.getElementById('ServerErrMessage').innerHTML = xhr.responseJSON['message'];
-        }
-    });
-});
+//TODO: FIX BULK ENROLL
+// $("#bulkEnroll").submit(function (e) {
+//     e.preventDefault();
+//     var form = document.getElementById('bulkEnroll');
+//     var formData = new FormData(form);
+//     let baseUrl = window.location.origin;
+//     let apiPath = "/admin/section/student/enroll/csv";
+//     let url = baseUrl + apiPath;
+//     $.ajax({
+//         type: 'post',
+//         url: url,
+//         data: formData,
+//         cache: false,
+//         contentType: false,
+//         processData: false,
+//         success: function (data) {
+//             window.location.reload();
+//         },
+//         error: function (xhr, textStatus, errorMessage) {
+//             $("#ServerErrContainer").removeClass("hidden");
+//             document.getElementById('ServerErrMessage').innerHTML = xhr.responseJSON['message'];
+//         }
+//     });
+// });
 
 $("#enroll").on("click", function () {
     if (toEnroll.length > 0) {

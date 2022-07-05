@@ -178,7 +178,7 @@
             <label for="" class="font-bold">Bulk</label>
           </div>
           <div class="mb-3">
-            <span class="mb-4 block text-xs">Note: CSV format comma separated. Example: 2018-000,LN,FN</span>
+            <span class="mb-4 block text-sm">Note: CSV format comma separated. Example: 2018-000,LN,FN</span>
             <input type="hidden" name="sectionId" value="<?php echo "{$sectionData['ID']}"; ?>">
             <label class="block mb-4">
               <span class="sr-only">Upload CSV file</span>
@@ -190,7 +190,14 @@
                 hover:file:bg-blue-100" 
                 accept=".csv" id="formFile" name="csvFile"/>
             </label>
-            <button type="submit" name="button" class="hover:bg-blue-400 rounded-md px-5 bg-blue-300 p-2">Submit</button>
+            <button data-tooltip-target="button-under-construction" type="submit" name="button" class="hover:bg-yellow-400 rounded-md px-5 bg-yellow-300 p-2">
+              <i class="fa-solid fa-person-digging"></i>
+              Submit
+            </button>
+            <div id="button-under-construction" role="tooltip" class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700">
+                Work In Progress
+                <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
           </div>
         </form>
         <!-- INDIVIDUAL -->
