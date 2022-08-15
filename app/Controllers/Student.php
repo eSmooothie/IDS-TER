@@ -44,29 +44,29 @@ class Student extends BaseController
 
 		$sy = $this->schoolyear_model->orderBy("ID","DESC")->first(); // get current school year
 		$curr_schoolyear_id = $sy['ID'];
-		$searchExpression = "`STUDENT`.`ID` IS NOT NULL";
+		$searchExpression = "`student`.`ID` IS NOT NULL";
 		if(!empty($keyword)){
-			$searchExpression = "`STUDENT`.`ID` LIKE '%$keyword%' OR ".
-			"`STUDENT`.`FN` LIKE '%$keyword%' OR ".
-			"`STUDENT`.`LN` LIKE '%$keyword%' OR ".
-			"`SECTION`.`NAME` LIKE '%$keyword%'";
+			$searchExpression = "`student`.`ID` LIKE '%$keyword%' OR ".
+			"`student`.`FN` LIKE '%$keyword%' OR ".
+			"`student`.`LN` LIKE '%$keyword%' OR ".
+			"`section`.`NAME` LIKE '%$keyword%'";
 		}
 
-		$student_section = "(SELECT `SECTION_ID`,`STUDENT_ID` FROM `STUDENT_SECTION` WHERE `STUDENT_SECTION`.`SCHOOL_YEAR_ID` = '$curr_schoolyear_id') AS `STUDENT_SECTION`";
-		$student_status = "(SELECT `STUDENT_ID`, `STATUS` FROM `STUD_STATUS` WHERE `STUD_STATUS`.`SCHOOL_YEAR_ID` = '$curr_schoolyear_id') AS `STUDENT_STATUS`";
+		$student_section = "(SELECT `SECTION_ID`,`STUDENT_ID` FROM `student_section` WHERE `student_section`.`SCHOOL_YEAR_ID` = '$curr_schoolyear_id') AS `STUDENT_SECTION`";
+		$student_status = "(SELECT `STUDENT_ID`, `STATUS` FROM `stud_status` WHERE `stud_status`.`SCHOOL_YEAR_ID` = '$curr_schoolyear_id') AS `STUDENT_STATUS`";
 		$students = $this->student_model
 		->select("
-			`STUDENT`.`ID` AS `STUDENT_ID`,
-			`STUDENT`.`LN` AS `STUDENT_LN`,
-			`STUDENT`.`FN` AS `STUDENT_FN`,
-			`SECTION`.`NAME` AS `SECTION_NAME`,
+			`student`.`ID` AS `STUDENT_ID`,
+			`student`.`LN` AS `STUDENT_LN`,
+			`student`.`FN` AS `STUDENT_FN`,
+			`section`.`NAME` AS `SECTION_NAME`,
 			`STUDENT_STATUS`.`STATUS` AS `STATUS`
 		")
-		->join($student_section,"`STUDENT_SECTION`.`STUDENT_ID` = `STUDENT`.`ID`","LEFT")
-		->join("`SECTION`","`STUDENT_SECTION`.`SECTION_ID` = `SECTION`.`ID`","LEFT")
-		->join($student_status,"`STUDENT_STATUS`.`STUDENT_ID` = `STUDENT`.`ID`","LEFT")
+		->join($student_section,"`STUDENT_SECTION`.`STUDENT_ID` = `student`.`ID`","LEFT")
+		->join("`section`","`STUDENT_SECTION`.`SECTION_ID` = `section`.`ID`","LEFT")
+		->join($student_status,"`STUDENT_STATUS`.`STUDENT_ID` = `student`.`ID`","LEFT")
 		->where($searchExpression)
-		->orderBy("`STUDENT`.`LN`","ASC")
+		->orderBy("`student`.`LN`","ASC")
 		->findAll(20,$pageNumber * 20);
 
 		$data = $students;
