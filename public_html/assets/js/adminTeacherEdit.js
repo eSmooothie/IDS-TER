@@ -17,6 +17,24 @@ function sendRequest(
 
 $(document).ready(function(){
   //do something
+  $('#confirm-reset').on('click', function(e){
+    e.preventDefault();
+
+    var teacher_id = $(this).data('teacherId');
+    
+    var data = {'teacher_id':teacher_id};
+
+    var done = function(data){
+      window.location.reload();
+    };
+
+    var fail = function(xhr, textStatus, errorMessage){
+      return true;
+    };
+
+    sendRequest("/admin/teacher/reset_password", data, done, fail, 'POST');
+  });
+
   $('#searchSubject').on('keyup',function(){
     var value=$(this).val().toLowerCase();
     $("#listOfSubject tr").filter(function(){

@@ -192,6 +192,34 @@ class Teacher extends BaseController{
     echo view("admin/layout/footer");
   }
 
+  public function reset_password(){
+		header("Content-type:application/json");
+		if(!$this->session->has("adminID")){
+			return redirect()->to("/admin");
+		}
+		
+		$teacher_id = $this->request->getPost("teacher_id");
+
+    // hash password
+    $def_password = "ids_ter_".trim($teacher_id);
+    $hash_password = password_hash($def_password, PASSWORD_DEFAULT);
+
+    $this->teacher_model->set("PASSWORD", $hash_password)
+    ->where("ID", $teacher_id)
+    ->update();
+
+		$data = [
+			'teacher_id' => $teacher_id,
+		];
+
+		$response = [
+			"message" => "OK",
+			"data" => $data,
+		];
+    
+		return $this->setResponseFormat('json')->respond($response, 200);
+	}
+
   public function download_teacher_evaluation_page($id = false){
     if(!$this->session->has("adminID")){
       return redirect()->to("/admin");

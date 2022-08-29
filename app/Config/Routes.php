@@ -79,6 +79,7 @@ $routes->get("/admin/teacher/view/(:segment)", "Teacher::view_teacher_page/$1");
 $routes->get("/admin/teacher/view/(:segment)/edit", "Teacher::edit_teacher_page/$1");
 $routes->get("/admin/teacher/view/(:segment)/downloads", "Teacher::download_teacher_evaluation_page/$1");
 
+$routes->post("/admin/teacher/reset_password", "Teacher::reset_password");
 $routes->post("/admin/teacher/editProfileInfo", "Teacher::editProfileInfo");
 $routes->post("/admin/teacher/editPassword", "Teacher::editPassword");
 $routes->post("/admin/teacher/addSubject", "Teacher::addSubject");
