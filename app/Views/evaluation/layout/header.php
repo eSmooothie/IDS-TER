@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class=" h-100">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,10 +11,11 @@
   <!-- Bootstrap -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>/bootstrap-5.0.2/css/bootstrap.min.css">
   <script src="<?php echo base_url(); ?>/bootstrap-5.0.2/js/bootstrap.min.js" charset="utf-8"></script>
+
   <!-- TinyMCE -->
   <script src="https://cdn.tiny.cloud/1/715z15p0goo0jibbxy5gev7voi0rekzepfc8fxl97vz2wrpo/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
-  <title><?php echo "$pageTitle"; ?></title>
+  <title><?php echo "$page_title"; ?></title>
 
 
   <script>

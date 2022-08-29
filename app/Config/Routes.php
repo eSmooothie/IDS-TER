@@ -35,10 +35,11 @@ $routes->get('/', 'Home::index');
 
 // admin
 $routes->get('/admin', 'Admin::index');
-$routes->post("/admin/login", 'Admin::verifyCredentials');
+$routes->post("/admin/login", 'Admin::verify_credentials');
 
 $routes->get("/admin/dashboard", "Admin::dashboard");
-$routes->post("/admin/schoolyear/new", "Admin::addSchoolYear");
+$routes->post("/admin/new/schoolyear", "Admin::new_school_year");
+$routes->get("/admin/check/schoolyear", "Admin::school_year_is_exist");
 // admin:section
 $routes->get("/admin/section", "Section::index");
 $routes->post("/admin/section/new", "Section::newSection");
@@ -61,23 +62,23 @@ $routes->post("/admin/questionaire/add", "Questionaire::add");
 $routes->post("/admin/questionaire/remove", "Questionaire::remove");
 // admin:students
 $routes->get("/admin/student", "Student::index");
-$routes->get("/admin/student/add", "Student::addStudent");
-$routes->get("/admin/student/view/(:any)", "Student::viewStudent/$1");
+$routes->get("/admin/student/add", "Student::add_student_page");
+$routes->get("/admin/student/view/(:any)", "Student::view_student_page/$1");
 
-$routes->get("/list/student", "Student::getStudents");
+$routes->get("/list/student", "Student::get_students");
 
-$routes->post("/admin/student/add/csv", "Student::addNewStudentCSV");
-$routes->post("/admin/student/add/individual", "Student::addNewStudentIndividual");
+$routes->post("/admin/student/add/csv", "Student::add_new_student_csv");
+$routes->post("/admin/student/add/individual", "Student::add_new_student_individual");
 // admin:teacher
 $routes->get("/admin/teacher", "Teacher::index");
-$routes->get("/admin/teacher/view/(:segment)", "Teacher::viewTeacher/$1");
-$routes->get("/admin/teacher/view/(:segment)/edit", "Teacher::editTeacher/$1");
-$routes->get("/admin/teacher/view/(:segment)/downloads", "Teacher::downloadEvaluation/$1");
+$routes->get("/admin/teacher/view/(:segment)", "Teacher::view_teacher_page/$1");
+$routes->get("/admin/teacher/view/(:segment)/edit", "Teacher::edit_teacher_page/$1");
+$routes->get("/admin/teacher/view/(:segment)/downloads", "Teacher::download_teacher_evaluation_page/$1");
 
 $routes->post("/admin/teacher/editProfileInfo", "Teacher::editProfileInfo");
 $routes->post("/admin/teacher/editPassword", "Teacher::editPassword");
 $routes->post("/admin/teacher/addSubject", "Teacher::addSubject");
-$routes->post("/admin/teacher/add", "Teacher::add");
+$routes->post("/admin/teacher/add", "Teacher::add_teacher");
 $routes->post("/admin/teacher/editDepartment", "Teacher::editDepartment");
 $routes->post("/admin/teacher/recentActivity/(:segment)", "Teacher::recentActivity/$1");
 // admin:department
@@ -98,22 +99,22 @@ $routes->post("/admin/execom/update", "Execom::assign");
 // user::
 $routes->post("/user/login", "User::login");
 // user::teacher
-$routes->get("/user/teacher", "User::teacher");
-$routes->get("/user/teacher/settings", "User::teacherSetting");
-$routes->get("/user/teacher/rate/supervisor", "User::supervisor");
-$routes->get("/user/teacher/analytics/rating", "User::analyticsRating");
-$routes->get("/user/teacher/analytics/comment", "User::analyticsComment");
-$routes->get("/user/teacher/analytics/download", "User::analyticsDownload");
+$routes->get("/user/teacher", "User::teacher_page");
+$routes->get("/user/teacher/settings", "User::teacher_setting_page");
+$routes->get("/user/teacher/rate/supervisor", "User::teacher_supervisor_page");
+$routes->get("/user/teacher/analytics/rating", "User::teacher_analytics_rating_page");
+$routes->get("/user/teacher/analytics/comment", "User::teacher_analytics_comment_page");
+$routes->get("/user/teacher/analytics/download", "User::teacher_analytics_download_page");
 
-$routes->get("/teacher/rating/breakdown/(:num)", "User::getTeacherRating/$1");
-$routes->get("/teacher/comments/(:segment)", "User::getTeacherComments/$1");
+$routes->get("/teacher/rating/breakdown/(:num)", "User::get_teacher_rating/$1");
+$routes->get("/teacher/comments/(:segment)", "User::get_teacher_feedbacks/$1");
 
 $routes->post("/user/teacher/update/password", "User::updateTeacherPassword");
 // user::student
-$routes->get("/user/student", "User::student");
-$routes->get("/user/student/settings", "User::studentSetting");
+$routes->get("/user/student", "User::student_page");
+$routes->get("/user/student/settings", "User::student_settings_page");
 
-$routes->post("/user/student/update/password", "User::updateStudentPassword");
+$routes->post("/user/student/update/password", "User::update_student_password");
 // evaluation
 $routes->get("/evaluate/peer/(:segment)", "Evaluation::peer/$1");
 $routes->get("/evaluate/student/(:segment)/(:segment)", "Evaluation::student/$1/$2");
@@ -121,8 +122,8 @@ $routes->get("/evaluate/supervisor/(:segment)", "Evaluation::supervisor/$1");
 $routes->post("/evaluate/submit", "Evaluation::submit");
 // pdf
 $routes->get("/download/individual/(:segment)", "PdfController::individual/$1");
-$routes->get("/download/individual/(:segment)/(:segment)/(:any)", "PdfController::individualAdmin/$1/$2");
-$routes->get("/download/department/(:segment)/(:segment)/(:any)", "PdfController::department/$1/$2");
+$routes->get("/download/individual/(:segment)/(:segment)/(:any)", "PdfController::individual_admin/$1/$2");
+$routes->get("/download/department/(:segment)/(:segment)/(:any)", "PdfController::bulk_pdf_per_department/$1/$2");
 
 /*
  * --------------------------------------------------------------------

@@ -1,205 +1,123 @@
-<body class="flex min-h-full" style="background-color: #420516;
-background: linear-gradient(90deg, #420516 0%, #B42B51 100%);">
-  <!-- SIDE MENU -->
-  <div class="w-52 hidden md:block bg-gray-100 min-h-full">
-    <div class="p-5">
-      <div class="flex justify-center">
-        <a href="<?php echo base_url(); ?>/admin"><img src="/assets/img/hornet_400x400.jpg" alt="" 
-          class="rounded-full w-20 hover:animate-pulse"
-        ></a>
-      </div>
-      <div class="text-center">
-        <span class="block text-xl">IDS - TER</span>
-        <span class="block text-xxs">INTEGRATED DEVELOPMENTAL SCHOOL <br />TEACHER EFFICIENCY RATING</span>
-      </div>
-    </div>
-    <!-- DASHBOARD -->
-    <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
-      <span class=" text-xl col-span-1"><i class="fas fa-columns"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/dashboard" class="col-span-3">Dashboard</a>
-    </div>
-    <!-- STUDENT -->
-    <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
-      <span class=" text-xl col-span-1"><i class="fa fa-users"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/student" class="col-span-3">Student</a>
-    </div>
-    <!-- TEACHER -->
-    <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
-      <span class=" text-xl"><i class="fas fa-user-tie"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/teacher" class="col-span-3">Teacher</a>
-    </div>
-    <!-- EXECOM -->
-    <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
-      <span class=" text-xl"><i class="fas fa-user-secret"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/execom" class="col-span-3">Executives</a>
-    </div>
-    <!-- SECTION -->
-    <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
-      <span class=" text-xl"><i class="fab fa-buromobelexperte"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/section" class="col-span-3">Section</a>
-    </div>
-    <!-- DEPARTMENT -->
-    <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
-      <span class=" text-xl"><i class="fa fa-th-list" aria-hidden="true"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/department" class="col-span-3">Department</a>
-    </div>
-    <!-- SUBJECT -->
-    <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
-      <span class=" text-xl"><i class="fa fa-list"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/subject" class="col-span-3">Subject</a>
-    </div>
-    <!-- QUESTIONNAIRE -->
-    <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
-      <span class=" text-xl"><i class="fa fa-list-ol" aria-hidden="true"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/questionaire" class="col-span-3">Questionnaire</a>
-    </div>
-    <!-- ACTIVITY LOG -->
-    <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
-      <span class=" text-xl"><i class="fas fa-clipboard-list"></i></span>
-      <a href="<?php echo $baseUrl; ?>/admin/activitylog" class="col-span-3">Activity Log</a>
-    </div>
-    <!-- LOGOUT -->
-    <div class="border border-black p-2 border-r-0 border-l-0 grid grid-cols-4">
-      <span class=" text-xl"><i class="fa fa-sign-out"></i></span>
-      <a href="<?php echo $baseUrl; ?>" class="col-span-3">Log out</a>
-    </div>
-    
-  </div>
+  <script src="<?php echo "$base_url/assets/js/adminDashboard.js"; ?>" charset="utf-8"></script>
   <!-- CONTENT -->
-  <div class=" w-full p-2">
+  <div class=" w-full col-span-7 p-2 space-y-3">
     <!-- SYSTEM INFO -->
-    <div class="w-full grid grid-cols-3 bg-gray-100 pb-2 pt-2 rounded-md mb-3">
+    <div class="w-full grid grid-cols-3 bg-gray-100 pb-2 pt-2 rounded-md">
       <div class=" flex flex-col items-center justify-center">
         <span class="text-2xl font-bold"><i class="fa fa-calendar" aria-hidden="true"></i>&emsp;<?php echo "{$school_year['SY']} : {$school_year['SEMESTER']}"; ?></span>
-        <span class="text-xxs">School Year : Semester</span>
+        <span class="text-sm">School Year : Semester</span>
       </div>
       <div class=" flex flex-col items-center justify-center">
         <span class="text-2xl font-bold"><i class="fas fa-users"></i>&emsp;<?php echo "$countStudent"; ?></span>
-        <span class="text-xxs">Students</span>
+        <span class="text-sm">Number of Students</span>
       </div>
       <div class=" flex flex-col items-center justify-center">
         <span class="text-2xl font-bold"><i class="fas fa-user-tie    "></i>&emsp;<?php echo "$countTeacher"; ?></span>
-        <span class="text-xxs">Teachers</span>
+        <span class="text-sm">Number of Teachers</span>
       </div>
     </div>
     <!--  -->
+    <div class=" space-y-2 wrapper hidden">
+      <?php foreach($to_config_section as $key => $value){
+        $id = $value['SECTION_ID'];
+        $lv = $value['SECTION_GRADE_LV'];
+        $name = $value['SECTION_NAME'];
+       ?>
+        <div class="p-2 bg-yellow-200 rounded-md sys-msg">
+          <span class=" font-medium">WARNING:</span> No subject detected in 
+          <span class=" font-medium italic"><?php echo $name; ?></span>. Try to add subject
+          <a href="<?php echo "$base_url/admin/section/grade/$lv/$id/edit?stab=subject"; ?>" class=" text-blue-700">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+        </div>
+      <?php } ?>
+      <button class="show-more hidden bg-blue-300 px-3 py-2 rounded-md font-medium hover:bg-blue-400" type="button">Show more</button>
+    </div>
+    <!--  -->
     <div class=" bg-gray-100 p-2 rounded-md mb-10">
-      <div class="flex mb-3">
-        <!-- NEW SCHOOL YEAR -->
-        <div class="border border-gray-400 p-2 w-1/2 mr-1 rounded-md">
-          <p class="text-base font-bold mb-3">New School Year</p>
-          <form class="" id="newSchoolYear">
-            <div class="flex mb-2 items-center">
-              <label class=" w-24" for="from">From: </label>
-              <input type="month" min="2018-01" name="from"
-              value="" id="from" class=" w-48 border border-black rounded-md p-2 text-xs" required>
-            </div>
-            <div class="flex items-center mb-2">
-              <label for="to" class=" w-24">To: </label>
-              <input type="month" min="2018-01" name="to"
-              value="" id="to" class=" w-48 border border-black rounded-md p-2 text-xs" required>
-            </div>
-            <div class="flex items-center mb-5">
-              <label for="to" class="w-24">Semester</label>
-              <input type="number" min="1" max="4" name="semester"
-              id="to" class=" w-48 border border-black rounded-md p-2 text-xs" required>
-            </div>
-            <div class="text-danger text-center">
-              <p id="errMessage" class=" text-xs text-red-500"></p>
-            </div>
-            <div class="flex justify-end">
-              <button type="submit" class=" border hover:bg-blue-400 pt-2 pb-2 pl-9 pr-9 rounded-md bg-blue-300">Submit</button>
-            </div>
-          </form>
-        </div>
-        <!-- INSTRUCTION -->
-        <div class="border border-gray-400 p-2 w-1/2 ml-1 rounded-md">
-          <p class="font-bold text-base">Instruction:</p>
-          <p class="mt-3">When creating new school year there are information must be setup before you proceed to evaluation. You must perform following(in order):</p>
-          <ul class=" list-decimal pl-8 mt-3">
-            <li>
-              Update/Edit the teachers handled subjects. 
-              <a href="<?php echo "$baseUrl/admin/teacher"; ?>" class=" text-blue-700 text-xs">GO TO TEACHER PAGE</a>
-            </li>
-            <li>
-              Enroll students in the section and update/edit subjects in section. 
-              <a href="<?php echo "$baseUrl/admin/section"; ?>" class=" text-blue-700 text-xs">GO TO SECTION PAGE</a>
-            </li>
-            <li>
-              Select a chairperson per department.
-              <a href="<?php echo "$baseUrl/admin/department"; ?>" class=" text-blue-700 text-xs">GO TO DEPARTMENT PAGE</a>
-            </li>
-            <li>
-              Assign a teacher in the executive committee.
-              <a href="<?php echo "$baseUrl/admin/execom"; ?>" class=" text-blue-700 text-xs">GO TO EXECOM PAGE</a>
-            </li>
-          </ul>
-        </div>
+      <p class=" mb-1">Actions</p>
+      <div class="px-2 pb-7 pt-9 grid grid-cols-3 gap-7 border border-gray-400 rounded-md mb-3">
+          <button class=" w-full h-full p-2 bg-blue-300 hover:bg-blue-400 rounded-md flex justify-start items-center space-x-2" 
+          data-tooltip-target="tooltip-new-sy" 
+          data-modal-toggle="modal-new-sy"
+          data-tooltip-placement="top"
+          type="button" >
+            <span class=" text-3xl"><i class="fa-solid fa-calendar-plus"></i></span>
+            <span class="">New school year</span>
+          </button>
+          <div id="tooltip-new-sy" role="tooltip" class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 shadow-sm opacity-0 tooltip">
+          Create new school year
+              <div class="tooltip-arrow" data-popper-arrow></div>
+          </div>
       </div>
       <!-- LINKS -->
-      <div class="px-2 pb-7 pt-9 mb- grid grid-cols-3 gap-7 border border-gray-400 rounded-md">
+      <p class=" mb-1">Quick links</p>
+      <div class="px-2 pb-7 pt-9 grid grid-cols-3 gap-7 border border-gray-400 rounded-md">
         <!-- Student -->
-        <a href="<?php echo $baseUrl; ?>/admin/student" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
-          <span class=" text-3xl mr-3"><i class="fa fa-users"></i></span>
+        <a href="<?php echo $base_url; ?>/admin/student" 
+        class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md space-x-2">
+          <span class=" text-3xl"><i class="fa fa-users"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Student</p>
-            <span class=" text-xs">Manage IDS Students</span>
+            <span class=" text-sm">Manage IDS Students</span>
           </div>
         </a>
         <!-- Teacher -->
-        <a href="<?php echo $baseUrl; ?>/admin/teacher" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
-          <span class=" text-3xl mr-3"><i class="fas fa-user-tie"></i></span>
+        <a href="<?php echo $base_url; ?>/admin/teacher" 
+        class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md space-x-2">
+          <span class=" text-3xl"><i class="fas fa-user-tie"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Teacher</p>
-            <span class=" text-xs">Manage IDS Teachers</span>
+            <span class=" text-sm">Manage IDS Teachers</span>
           </div>
         </a>
         <!-- Execom -->
-        <a href="<?php echo $baseUrl; ?>/admin/execom" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/execom" 
+        class="w-full h-full flex items-center p-2 bg-blue-300 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fas fa-user-secret" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Executive Committee</p>
-            <span class=" text-xs">Manage Executive Committee</span>
+            <span class=" text-sm">Manage Executive Committee</span>
           </div>
         </a>        
         <!-- Section -->
-        <a href="<?php echo $baseUrl; ?>/admin/section" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/section" class="w-full h-full flex items-center p-2 bg-blue-300 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fab fa-buromobelexperte"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Section</p>
-            <span class=" text-xs">Manage IDS Sections</span>
+            <span class=" text-sm">Manage IDS Sections</span>
           </div>
         </a>
         <!-- Department -->
-        <a href="<?php echo $baseUrl; ?>/admin/department" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/department" class="w-full h-full flex items-center p-2 bg-blue-300 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fa fa-th-list" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Department</p>
-            <span class=" text-xs">Manage IDS Departments</span>
+            <span class=" text-sm">Manage IDS Departments</span>
           </div>
         </a>
         <!-- Subject -->
-        <a href="<?php echo $baseUrl; ?>/admin/subject" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/subject" class="w-full h-full flex items-center p-2 bg-blue-300 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fa fa-list" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Subjects</p>
-            <span class=" text-xs">Manage Subject</span>
+            <span class=" text-sm">Manage Subject</span>
           </div>
         </a>
         <!-- Manage Questionnaire -->
-        <a href="<?php echo $baseUrl; ?>/admin/questionaire" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/questionaire" class="w-full h-full flex items-center p-2 bg-blue-300 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fa fa-list-ol" aria-hidden="true"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Questionnaire</p>
-            <span class=" text-xs">Manage evaluation questions</span>
+            <span class=" text-sm">Manage evaluation questions</span>
           </div>
         </a>
         <!-- Activit log -->
-        <a href="<?php echo $baseUrl; ?>/admin/activitylog" class="w-full h-full flex items-center p-2 bg-blue-300 hover:bg-blue-400 rounded-md" style="">
+        <a href="<?php echo $base_url; ?>/admin/activitylog" class="w-full h-full flex items-center p-2 bg-blue-300 space-x-2 hover:bg-blue-400 rounded-md">
           <span class=" text-3xl mr-3"><i class="fas fa-clipboard-list"></i></span>
           <div class="">
             <p class=" text-xl font-bold">Activity Log</p>
-            <span class=" text-xs">Activity Logs</span>
+            <span class=" text-sm">Activity Logs</span>
           </div>
         </a>
         
@@ -208,4 +126,99 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);">
     </div>
   </div>
 
-<script src="<?php echo "$baseUrl/assets/js/adminDashboard.js"; ?>" charset="utf-8"></script>
+<!-- Main modal -->
+<div id="modal-new-sy" tabindex="-1" aria-hidden="true" class=" hidden
+  overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+    <div class=" flex justify-center w-full">
+      <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+          <!-- Modal content -->
+          <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+              <!-- Modal header -->
+              <div class="flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600">
+                  <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                      Create new school year
+                  </h3>
+                  <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="modal-new-sy">
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
+                  </button>
+              </div>
+              <form id="form-new-sy">
+                <!-- Modal body -->
+                <div class="p-6 space-y-6">
+                  <span id="modal-new-sy-note"><span class=" font-medium text-teal-600">Note:</span> The system will automatically compute the new school year (10 months) and if it the same school year it will automatically increment the semester by one(1).</span>
+                 
+                  <div class="flex flex-col mb-3">
+                    <label for="start_yr">From</label>
+                    <input type="month" name="start_yr" id="start_yr" required>
+                  </div>
+                  <div class="flex flex-col mb-3">
+                    <label for="end_yr">To</label>
+                    <input type="month" name="end_yr" id="end_yr" class=" border border-gray-300" readonly />
+                  </div>
+                  <div class="flex flex-col mb-3">
+                    <label for="end_yr">Semester</label>
+                    <input type="number" name="semester" id="semester" min="1" value="" class=" border border-gray-300" readonly>
+                  </div>
+                  <div>
+                    <p class="mb-0">Options</p>
+                    <div class="border border-gray-300 p-3">
+                      <div class="flex items-center mb-4">
+                          <input id="checkbox-retain-teacher-subj" name="is_retain_teacher_subj" 
+                          type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                          <label for="checkbox-retain-dept" 
+                          class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Retain teacher handled subjects</label>
+                      </div>
+                      <div id="retain-student-sec" class="flex items-center mb-4">
+                          <input id="checkbox-retain-student-sec" name="is_retain_stud_sec" type="checkbox" 
+                          value="1" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                          <label for="checkbox-retain-dept" 
+                          class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Retain student in section</label>
+                      </div>
+                      <div class="flex items-center mb-4">
+                          <input id="checkbox-retain-dept" name="is_retain_dept_chair" 
+                          type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                          <label for="checkbox-retain-dept" 
+                          class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Retain department chairperson</label>
+                      </div>
+                      <div class="flex items-center mb-4">
+                          <input id="checkbox-retain-execom" name="is_retain_execom" type="checkbox" 
+                          value="1" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                          <label for="checkbox-retain-dept" 
+                          class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Retain executive committee</label>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="flex items-center justify-between p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+                    <button data-modal-toggle="modal-new-sy" type="button" class="text-gray-500 bg-white 
+                    hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border 
+                    border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 
+                    dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 
+                    dark:focus:ring-gray-600">Close</button>
+
+                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 
+                    focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center 
+                    dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                </div>
+              </form>
+          </div>
+      </div>
+    </div>
+</div>
+
+<div id="loading" class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full 
+bg-black bg-opacity-30 hidden">
+  <div class=" flex justify-center w-full items-center h-full">
+        <div class="relative p-4 w-full max-w-2xl h-full md:h-auto flex justify-center">
+          <div class="relative rounded-lg shadow bg-white w-1/2 py-5">
+            <div class="flex justify-center mb-2">
+              <img width="64px" src="<?php echo "$base_url/assets/img/loading_gif.gif"?>" alt="loading...">
+            </div>
+            <p class="text-center">Please wait</p>
+          </div>
+        </div>
+  </div>
+</div>
+

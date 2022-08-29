@@ -1,15 +1,21 @@
-<div class="w-full p-2">
+<div class="w-full col-span-7 p-2">
   <!-- working area -->
   <div class="p-3 bg-gray-100 rounded-md mb-3">
-    <p class="mb-4 text-lg font-bold uppercase">Comments</p>
-    <div class="grid grid-cols-9 text-blue-600">
-      <a href="<?php echo "$baseUrl/user/teacher/analytics/rating"; ?>" class="">
+    <p class="mb-4 text-lg font-bold uppercase">downloads</p>
+    <div class="grid grid-cols-9 gap-x-5">
+    <a href="<?php echo "$base_url/user/teacher/analytics/rating"; ?>" 
+      class=" border border-blue-300 text-center col-span-3 py-2 rounded-md hover:bg-blue-400 
+      bg-blue-500 font-medium">
         <i class="fas fa-star-half-alt"></i>
         Rating</a>
-      <a href="<?php echo "$baseUrl/user/teacher/analytics/comment"; ?>" class="">
+      <a href="<?php echo "$base_url/user/teacher/analytics/comment"; ?>" 
+      class=" border border-blue-300 text-center col-span-3 py-2 rounded-md hover:bg-blue-400 
+      bg-blue-500 font-medium">
         <i class="far fa-comments"></i>
         Comments</a>
-      <a href="<?php echo "$baseUrl/user/teacher/analytics/download"; ?>" class="">
+      <a href="<?php echo "$base_url/user/teacher/analytics/download"; ?>" 
+      class=" border border-blue-300 text-center col-span-3 py-2 rounded-md hover:bg-blue-400 
+      bg-blue-500 font-medium">
         <i class="fas fa-download"></i>
         Download</a>
     </div>
@@ -23,15 +29,15 @@
       </thead>
       <tbody class="text-gray-600">
         <?php
-          foreach ($sy as $key => $value) {
-            $id = $value['ID'];
-            $sy = $value['SY'];
-            $sem = $value['SEMESTER'];
+          foreach ($all_school_year as $key => $value) {
+            $school_year_id = $value['ID'];
+            $school_year = $value['SY'];
+            $school_year_semester = $value['SEMESTER'];
             ?>
             <tr>
-              <th scope="row" class="py-1 px-6 text-sm font-medium whitespace-nowrap text-left"><?php echo "$sy:$sem"; ?></th>
+              <th scope="row" class="py-1 px-6 text-sm font-medium whitespace-nowrap text-left"><?php echo "$school_year:$school_year_semester"; ?></th>
               <td class="py-1 px-6 text-sm font-medium whitespace-nowrap text-center">
-                <a target="_blank" href="<?php echo "$baseUrl/download/individual/$id"; ?>" class="text-blue-600 hover:text-blue-700">Download</a>
+                <a target="_blank" href="<?php echo "$base_url/download/individual/$school_year_id"; ?>" class="text-blue-600 hover:text-blue-700">Download</a>
               </td>
             </tr>
             <?php

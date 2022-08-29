@@ -37,6 +37,34 @@ use \App\Models\TeacherSubject;
 
 class BaseController extends Controller
 {
+	protected $activityLogModel;
+	protected $admin_model;
+	protected $department_model;
+	protected $department_history_model;
+	protected $eval_info_model;
+	protected $eval_question_model;
+	protected $eval_type_model;
+	protected $evaluator_model;
+	protected $execom_model;
+	protected $execom_history_model;
+
+	protected $rating_model;
+	protected $report_model;
+
+	protected $schoolyear_model;
+
+	protected $section_model;
+
+	protected $section_subject_model;
+
+	protected $student_model;
+	protected $student_section_model;
+	protected $student_status_model;
+
+	protected $subject_model;
+	protected $teacher_subject_model;
+	protected $teacher_model;
+	
 	use ResponseTrait;
 	/**
 	 * Instance of the main Request object.
@@ -68,34 +96,34 @@ class BaseController extends Controller
 
 
 		$this->activityLogModel = new ActivityLog();
-		$this->adminModel = new Admin();
-		$this->departmentModel = new Department();
-		$this->departmentHistoryModel = new DeptHistory();
+		$this->admin_model = new Admin();
+		$this->department_model = new Department();
+		$this->department_history_model = new DeptHistory();
 
-		$this->evalInfoModel = new EvalInfo();
-		$this->evalQuestionModel = new EvalQuestion();
-		$this->evalTypeModel = new EvalType();
-		$this->evaluatorModel = new Evaluator();
+		$this->eval_info_model = new EvalInfo();
+		$this->eval_question_model = new EvalQuestion();
+		$this->eval_type_model = new EvalType();
+		$this->evaluator_model = new Evaluator();
 
-		$this->execomModel = new ExeCom();
-		$this->execomHistoryModel = new ExeComHistory();
+		$this->execom_model = new ExeCom();
+		$this->execom_history_model = new ExeComHistory();
 
-		$this->ratingModel = new Rating();
-		$this->reportModel = new Report();
+		$this->rating_model = new Rating();
+		$this->report_model = new Report();
 
-		$this->schoolyearModel = new SchoolYear();
+		$this->schoolyear_model = new SchoolYear();
 
-		$this->sectionModel = new Section();
+		$this->section_model = new Section();
 
-		$this->sectionSubjectModel = new SectionSubject();
+		$this->section_subject_model = new SectionSubject();
 
-		$this->studentModel = new Student();
-		$this->studentSectionModel = new StudentSection();
-		$this->studentStatusModel = new StudentStatus();
+		$this->student_model = new Student();
+		$this->student_section_model = new StudentSection();
+		$this->student_status_model = new StudentStatus();
 
-		$this->subjectModel = new Subjects();
-		$this->teacherSubjectModel = new TeacherSubject();
-		$this->teacherModel = new Teacher();
+		$this->subject_model = new Subjects();
+		$this->teacher_subject_model = new TeacherSubject();
+		$this->teacher_model = new Teacher();
 
 		// preload services
 		$this->session = \Config\Services::session();
@@ -111,28 +139,25 @@ class BaseController extends Controller
 	 * @return Array $sy
 	 */
 	public function getCurrentSchoolYear(): array {
-		$sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+		$sy = $this->schoolyear_model->orderBy("ID","DESC")->first();
 		return $sy;
 	}
 
 	/**
 	 * map the data to be passed in the view
 	 * 
-	 * @param Object $sessionId, 
 	 * @param String $pageTitle,
 	 * @param Array $others = [],
 	 * 
 	 * @return Array $map
 	 */
-	public function mapPageParameters($sessionId, string $pageTitle, array $others = []){
+	public function map_page_parameters(string $pageTitle, array $others = []){
 		$map = [
-			'sessionId' => $sessionId,
-			'pageTitle' => $pageTitle,
-			'baseUrl' => base_url(),
+			'page_title' => $pageTitle,
+			'base_url' => base_url(),
 		];
 
 		foreach($others as $key => $value){
-			// do something
 			$map[$key] = $value;
 		}
 
@@ -185,114 +210,4 @@ class BaseController extends Controller
 		return $content;
 	}
 
-	/**
-	 * Compute the rating of teacher X
-	 *
-	 * @param Object $teacherId
-	 * @param Object $evalTypeId
-	 * @param Object $schoolyearId
-	 *
-	 * @return Array {"rating":[],"overall":}
-	 */
-	public function getRating($teacherId, $evalTypeId, $schoolyearId){
-		// equation
-		// n : Question #
-		// W[n] : Total rating recieve
-		// T[n] : Total person rated
-		// Q[n] : Average rate in `n` question
-		// Q[n] = W[n] / T[n]
-
-		// N : Total number of question
-		// category_ov = sum(Q[n]) / N
-		// overall = student_ov * .5 + peer_ov * .2 + super_ov * .3
-
-		// get all evaluation info of teacher Y in S.Y. Z as type X
-		$evaluationInfo = $this->evalInfoModel
-		->where("EVALUATED_ID", $teacherId)
-		->where("SCHOOL_YEAR_ID", $schoolyearId)
-		->where("EVAL_TYPE_ID", $evalTypeId)
-		->findAll();
-
-		if(empty($evaluationInfo)){
-			$evaluationQuestionaire = $this->evalQuestionModel
-			->where("EVAL_TYPE_ID", $evalTypeId)
-			->where("IS_REMOVE", 0)
-			->orderBy("ID","ASC")
-			->findAll();
-
-		}else{
-			$sample = $evaluationInfo[0];
-
-			$evaluationQuestionaire = $this->ratingModel
-			->select("DISTINCT(EVAL_QUESTION_ID) AS ID")
-			->where("EVAL_INFO_ID", $sample['ID'])
-			->orderBy("ID","ASC")
-			->findAll();
-		}
-
-		
-
-		$rating = [];
-
-		// set rating
-		foreach ($evaluationQuestionaire as $key => $value) {
-			$questionId = $value["ID"];
-
-			$rating[$questionId]["weight"] = 0;
-			$rating[$questionId]["avg"] = 0;
-			$rating[$questionId]["t"] = 0;
-		}
-
-
-		foreach ($evaluationInfo as $key => $info) {
-			$evalInfoId = $info['ID'];
-
-			// add all rating
-			foreach ($evaluationQuestionaire as $key => $question) {
-				$questionId = $question["ID"];
-
-				$rate = $this->ratingModel->where("EVAL_QUESTION_ID", $questionId)
-				->where("EVAL_INFO_ID", $evalInfoId)
-				->first();
-
-				$value = (int)$rate["RATING"];
-
-				$rating[$questionId]["weight"] = $rating[$questionId]["weight"] + $value;
-				$rating[$questionId]["t"] += 1;
-			}
-
-		}
-
-		// Q[n] = W[n] / T[n]
-		foreach ($rating as $key => $value) {
-			if($rating[$key]["t"] != 0){
-					$rating[$key]["avg"] = $rating[$key]["weight"] / $rating[$key]["t"];
-			}
-		}
-
-		// computer over all
-		// N = len(Q[n])
-		// category_ov = sum(Q[n]) / N
-		$sumAvg = 0;
-		foreach ($rating as $key => $value) {
-			$sumAvg = $value["avg"] + $sumAvg;
-		}
-
-		$overall = $sumAvg / count($rating);
-
-		return ["RATING" => $rating, "OVERALL" => $overall];
-	}
-
-	/**
-	 * Compute the overall rating of the teacher
-	 * 
-	 * @param Float $studentOverall
-	 * @param Float $peerOverall
-	 * @param Float $supervisorOverall
-	 * 
-	 * @return Float overall rating
-	 */
-	public function getOverallRating(float $studentOverall,float $peerOverall,float $supervisorOverall){
-		return ($studentOverall * .5) + ($peerOverall * .2) + ($supervisorOverall * .3);
-	}
 }

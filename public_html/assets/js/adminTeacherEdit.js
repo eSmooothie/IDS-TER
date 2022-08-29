@@ -96,7 +96,7 @@ function addSubject(e){
   var parentNode = e.parentNode.parentNode;
   var cloneNode = parentNode.cloneNode(true);
   var buttonElement = cloneNode.children[2];
-  buttonElement.innerHTML = "<button type=\"button\" name=\"button\" class=\"bg-red-400 px-4 py-3 rounded-md\""+
+  buttonElement.innerHTML = "<button type=\"button\" name=\"button\" class=\"bg-red-400 px-4 py-3 rounded-md hover:bg-red-500\""+
     "onclick=\"removeSubject(this);\">" +
     "<i class=\"fas fa-times\"></i></button>";
 

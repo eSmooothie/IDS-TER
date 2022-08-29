@@ -33,7 +33,7 @@
       padding-left: 15px;
       padding-right: 15px;
       ">
-        <?php echo "$baseUrl"; ?>
+        <?php echo "$base_url"; ?>
       </span>
       </p>
     </div>

@@ -1,9 +1,9 @@
 <!-- content -->
-<div class="w-full p-2">
+<div class="w-full p-2 col-span-7 space-y-3">
   <!-- NAV -->
-  <div class="p-3 bg-gray-100 rounded-md mb-3">
-    <button type="button" name="button" class=" ml-5 hover:bg-blue-400 pt-2 pb-2 
-    pl-9 pr-9 rounded-md bg-blue-300"  data-modal-toggle="addSectionModal">
+  <div class="p-3 bg-gray-100 rounded-md">
+    <button type="button" name="button" class="hover:bg-blue-400 px-5 py-2.5
+    rounded-md bg-blue-300"  data-modal-toggle="addSectionModal">
       <i class="fas fa-plus"></i>
       <span>Add Section</span>
     </button>
@@ -13,13 +13,13 @@
     <?php
       foreach ($gradeLevel as $lv => $sections) {
         ?>
-        <div class="border border-black rounded-md p-5">
+        <div class="border border-gray-400 rounded-md p-5">
           <div class="">
             <p class=" text-lg font-bold uppercase text-center mb-3">Grade <?php echo "$lv"; ?></p>
-            <table class="mb-3 min-w-full">
-              <thead class="order bg-gray-300">
+            <table class="mb-3 min-w-full border border-gray-200">
+              <thead class="bg-gray-300">
                 <tr>
-                  <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Name</th>
+                  <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Section Name</th>
                   <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase">Action</th>
                 </tr>
               </thead>
@@ -29,10 +29,10 @@
                     $id = $section['ID'];
                     $name = $section['NAME'];
                     ?>
-                    <tr>
+                    <tr class="odd:bg-white even:bg-gray-100">
                       <td class="py-1 px-6 text-sm  whitespace-nowrap"><?php echo "$name"; ?></td>
                       <td class="py-1 px-6 text-sm font-medium text-center whitespace-nowrap">
-                        <a href="<?php echo "$baseUrl/admin/section/grade/$lv/$id"; ?>" class="text-blue-600 hover:text-blue-900">
+                        <a href="<?php echo "$base_url/admin/section/grade/$lv/$id"; ?>" class="text-blue-600 hover:text-blue-900">
                           <span>View</span>
                         </a>
                       </td>
@@ -68,9 +68,9 @@
             <form class="" id="newSection">
               <!-- Modal body -->
               <div class="p-6 space-y-6">
-                <div class="mb-3 grid grid-cols-3">
-                  <label for="selectGradeLv" class=" flex items-center">Grade Level</label>
-                  <select id="selectGradeLv" class="form-select" aria-label="" name="gradeLevel" class=" col-span-2 w-full rounded-md" required>
+                <div class="">
+                  <label for="selectGradeLv" class=" block">Grade Level</label>
+                  <select id="selectGradeLv" class="rounded-md w-1/2" aria-label="" name="gradeLevel" required>
                     <option value="" selected>Select Grade level</option>
                     <option value="7">Grade 7</option>
                     <option value="8">Grade 8</option>
@@ -80,18 +80,18 @@
                     <option value="12">Grade 12</option>
                   </select>
                 </div>
-                <div class="mb-3 grid grid-cols-3">
-                  <label for="sectionName" class=" flex items-center">Name</label>
-                  <input type="text" class=" col-span-2 rounded-md" id="sectionName" name="sectionName" 
+                <div class="">
+                  <label for="sectionName" class=" block">Section name</label>
+                  <input type="text" class="  rounded-md w-1/2" id="sectionName" name="sectionName" 
                   placeholder="Section Name" required>
                 </div>
-                <div class="mb-3 flex items-center">
+                <div class="flex items-center">
                   <input class="mr-1" type="checkbox" role="switch" id="hasRNI" name="hasRNI" >
                   <label class="ml-3" for="hasRNI">Research and Immersion</label>
                 </div>
               </div>
               <!-- Modal footer -->
-              <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+              <div class="flex items-center justify-between p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
                   <button data-modal-toggle="addSectionModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600">Close</button>
                   <button data-modal-toggle="addSectionModal" type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
               </div>
@@ -100,4 +100,4 @@
     </div>
 </div>
 
-<script src="<?php echo "$baseUrl/assets/js/adminSection.js"; ?>" charset="utf-8"></script>
+<script src="<?php echo "$base_url/assets/js/adminSection.js"; ?>" charset="utf-8"></script>

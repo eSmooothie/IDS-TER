@@ -1,36 +1,38 @@
 <!-- content -->
-<div class="w-full p-2">
-  <!-- NAV -->
+<div class="w-full p-2 col-span-7 space-y-3">
+  <!-- INFO -->
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <div class="">
-      <div class="">
+      <div class="space-y-3">
         <p class=" text-2xl font-bold"><?php echo "${sectionData['NAME']}"; ?></p>
-        <p class=" text-xs"><?php echo "(${schoolyear['SY']}:${schoolyear['SEMESTER']})"; ?></p>
-        <span class=" grid grid-cols-8 gap-x-7 mt-5">
-          <span class=" bg-gray-400 rounded-full text-center py-1">Grade <?php echo $sectionData['GRADE_LV']; ?></span>
-          <span class=" bg-gray-400 rounded-full text-center py-1"><?php echo count($students); ?> Students</span>
-          <span class=" bg-gray-400 rounded-full text-center py-1"><?php echo count($subjects); ?> Subjects</span>
-          <span class=" bg-blue-400 rounded-full text-center py-1">
-            <a href="<?php echo "$baseUrl/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}"; ?>">
-              <i class="fa fa-eye mr-2" aria-hidden="true"></i></i>View
-            </a>
-          </span>
-          <span class=" bg-blue-400 rounded-full text-center py-1">
-            <a href="<?php echo "$baseUrl/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}/edit"; ?>">
-              <i class="fas fa-cog mr-2"></i>Option
-            </a>
-          </span>
-          <!-- TODO: ADD HISTORY PAGE -->
-          <span class=" bg-gray-400 rounded-full text-center py-1">
-            <a href="#">
-              <i class="fas fa-history mr-2"></i>History
-            </a>
-        </span>
-        </span>
+        <div class="">
+          <p class=" ">Grade: <?php echo $sectionData['GRADE_LV']; ?></p>
+          <p class=" ">Number of students: <?php echo count($students); ?></p>
+          <p class=" ">Total subjects: <?php echo count($subjects); ?></p>
+        </div>
       </div>
     </div>
   </div>
-  <!-- SECTION INFO -->
+  <!-- NAV -->
+  <div class="px-3 py-4 bg-gray-100 rounded-md mb-3 space-x-3">
+      
+      <a href="<?php echo "$base_url/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}"; ?>" 
+      class="px-5 py-2.5 bg-blue-300 hover:bg-blue-400 rounded-md">
+        <i class="fa fa-eye mr-2" aria-hidden="true"></i></i>View
+      </a>
+    
+    
+      <a href="<?php echo "$base_url/admin/section/grade/${sectionData['GRADE_LV']}/${sectionData['ID']}/edit"; ?>"
+      class="px-5 py-2.5 bg-blue-300 hover:bg-blue-400 rounded-md">
+        <i class="fas fa-cog mr-2"></i>Option
+      </a>
+    
+      <a href="#" class="px-5 py-2.5 bg-gray-300 hover:bg-gray-400 rounded-md">
+        <i class="fas fa-history mr-2"></i>History
+      </a>
+     
+  </div>
+  <!-- SECTION CONTENT -->
   <div class="p-3 bg-gray-100 rounded-md mb-10 grid grid-cols-2 gap-5">
     <!-- Students -->
     <div class="border rounded-md p-3">
@@ -55,7 +57,7 @@
               <th scope="row" class=" text-left py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap">
                 <?php echo "$id"; ?></th>
               <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
-                <a href="<?php echo ($isActive)? "$baseUrl/admin/student/view/$id":"#"; ?>"
+                <a href="<?php echo ($isActive)? "$base_url/admin/student/view/$id":"#"; ?>"
                 class="<?php echo ($isActive)? "text-blue-600 hover:text-blue-900":"text-gray-900"; ?>"><?php echo "$ln, $fn"; ?></a></td>
               <td class="py-4 px-6 text-sm font-medium whitespace-nowrap text-center <?php echo ($status)? "bg-green-300":"bg-gray-300"; ?>">
                 <?php echo ($status)? "CLEARED":"NOT CLEARED"; ?>
@@ -90,7 +92,7 @@
               <tr>
                 <td class="py-4 px-6 text-sm font-medium whitespace-nowrap"><a href="#"><?php echo $subjectDesc; ?></a></td>
                 <td class="py-4 px-6 text-sm font-medium whitespace-nowrap">
-                  <a href="<?php echo "$baseUrl/admin/teacher/view/$teacherID"; ?>" class="text-blue-600 hover:text-blue-900">
+                  <a href="<?php echo "$base_url/admin/teacher/view/$teacherID"; ?>" class="text-blue-600 hover:text-blue-900">
                     <?php echo "{$teacherLN}, {$teacherFN}"; ?>
                   </a>
                 </td>

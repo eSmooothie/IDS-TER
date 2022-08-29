@@ -1,3 +1,24 @@
+
+
+$(document).ready(function(){
+
+  $("#evaluation").one('submit', function(e){
+    var formData = $(this).serializeArray();
+    
+    console.log(formData);
+  
+    var path = "/evaluate/submit";
+    var done = function(data){
+      // console.log(data);
+      window.location.reload();
+    };
+
+    sendRequest(path, formData, done);
+  });
+
+});
+
+
 function sendRequest(
   path = null,
   formData = null,
@@ -7,7 +28,7 @@ function sendRequest(
     ){
     var baseUrl = window.location.origin;
     var url = baseUrl + path;
-
+    
     $.ajax({
       type:method,
       url:url,
@@ -15,20 +36,10 @@ function sendRequest(
     }).done(done).fail(fail);
 }
 
-$(".evaluation").submit(function(e){
-  e.preventDefault();
-  
-  var formData = $(this).serializeArray();
-  
-  console.log(formData);
 
-  var path = "/evaluate/submit";
-  var done = function(data){
-    // console.log(data);
-    window.location.reload();
-  };
 
-  sendRequest(path, formData, done);
-});
+
+
+
 
 // TODO: Fixed when evaluation is already on the process of submitting submit.

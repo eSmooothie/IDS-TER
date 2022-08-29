@@ -1,5 +1,5 @@
 <!-- content -->
-<div class="w-full p-2">
+<div class="w-full col-span-7 p-2 space-y-3">
 <!-- content -->
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <p class=" text-xl font-bold mb-4">Executive Committee</p>
@@ -30,10 +30,10 @@
           ?>
           <tr class="border border-black text-left">
             <th scope="row" class="border border-gray-500 py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap"><?php echo "$pos"; ?></th>
-            <td class="border border-gray-500 py-4 px-6 text-sm  whitespace-nowrap <?php echo ($teacher_id)? "text-blue-700":"";?> "><a href="<?php echo ($teacher_id)? "$baseUrl/admin/teacher/view/{$teacher_id}":"#"; ?>">
+            <td class="border border-gray-500 py-4 px-6 text-sm  whitespace-nowrap <?php echo ($teacher_id)? "text-blue-700":"";?> "><a href="<?php echo ($teacher_id)? "$base_url/admin/teacher/view/{$teacher_id}":"#"; ?>">
               <?php echo (empty($teacher_id))? "NO TEACHER":"{$teacher_ln}, {$teacher_fn}"; ?>
             </a></td>
-            <td class="border border-gray-500 py-4 px-6 text-sm text-center text-blue-700 whitespace-nowrap"><a href="<?php echo "$baseUrl/admin/execom/change/$id"; ?>">Change</a></td>
+            <td class="border border-gray-500 py-4 px-6 text-sm text-center text-blue-700 whitespace-nowrap"><a href="<?php echo "$base_url/admin/execom/change/$id"; ?>">Change</a></td>
           </tr>
           <?php
         }

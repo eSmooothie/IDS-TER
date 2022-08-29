@@ -2,9 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Libraries\UserDButil;
+
 class Evaluation extends BaseController{
   public function peer($evaluated = false){
-    if(!$this->session->has("userID")){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
 
@@ -12,8 +14,8 @@ class Evaluation extends BaseController{
       return redirect()->to("/");
     }
     // do something here
-    $id = $this->session->get("userID");
-    $evaluator = $this->evaluatorModel
+    $id = $this->session->get("user_id");
+    $evaluator = $this->evaluator_model
     ->where("TEACHER_ID", $id)
     ->first();
 
@@ -21,107 +23,100 @@ class Evaluation extends BaseController{
       $create = [
         'TEACHER_ID' => $id,
       ];
-      $this->evaluatorModel->insert($create);
-      $evaluator_id = $this->evaluatorModel->insertID;
+      $this->evaluator_model->insert($create);
+      $evaluator_id = $this->evaluator_model->insertID;
     }else{
       $evaluator_id = $evaluator['ID'];
     }
 
     // check if done rated
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $sy = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
-    $isExist = $this->evalInfoModel
+    $isExist = $this->eval_info_model
     ->where("EVALUATOR_ID", $evaluator_id)
     ->where("EVALUATED_ID", $evaluated)
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->where("EVAL_TYPE_ID", 2)
     ->countAllResults();
 
-    $questions = $this->evalQuestionModel
+    $questions = $this->eval_question_model
     ->where("EVAL_TYPE_ID", 2)
     ->where("IS_REMOVE", 0)
     ->orderBy("ID","ASC")
     ->findAll();
 
-    $teacher = $this->teacherModel->find($evaluated);
+    $teacher = $this->teacher_model->find($evaluated);
 
-    $data = [
-			'id' => $this->session->get("userID"),
-			'pageTitle' => "EVALUATE | PEER",
-			'baseUrl' => base_url(),
-      // add some variables here
+    $args = [
       'evaluator_id' => $evaluator_id,
       'evaluated' => $teacher,
       'isDone' => ($isExist > 0)? true: false,
       'questions' => $questions,
-		];
+    ];
+
+    $data = $this->map_page_parameters("EVALUATE | PEER", $args);
+
     echo view("evaluation/layout/header", $data);
     echo view("evaluation/peer", $data);
 		echo view("evaluation/layout/footer");
   }
 
-  public function student($evaluated = false, $subject = false){
-    if(!$this->session->has("userID")){
+  public function student($evaluated_id = false, $subject_id = false){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
 
-    if(!$evaluated || !$subject){
+    if(!$evaluated_id || !$subject_id){
       return redirect()->to("/");
     }
-    // do something here
-    $id = $this->session->get("userID");
-    $evaluator = $this->evaluatorModel
-    ->where("STUDENT_ID", $id)
+    
+    $user_db_util = new UserDButil();
+
+    $student_id = $this->session->get("user_id");
+    $evaluator = $this->evaluator_model
+    ->where("STUDENT_ID", $student_id)
     ->first();
 
     if(empty($evaluator)){
       $create = [
-        'STUDENT_ID' => $id,
+        'STUDENT_ID' => $student_id,
       ];
-      $this->evaluatorModel->insert($create);
-      $evaluator_id = $this->evaluatorModel->insertID;
+      $this->evaluator_model->insert($create);
+      $evaluator_id = $this->evaluator_model->insertID;
     }else{
       $evaluator_id = $evaluator['ID'];
     }
 
     // check if done rated
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $curr_school_year = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
+    $is_done = $user_db_util->is_done_evaluated($evaluator_id, $evaluated_id, $curr_school_year['ID'], 1, $subject_id);
 
-    $isExist = $this->evalInfoModel
-    ->where("EVALUATOR_ID", $evaluator_id)
-    ->where("EVALUATED_ID", $evaluated)
-    ->where("SUBJECT_ID", $subject)
-    ->where("SCHOOL_YEAR_ID", $sy['ID'])
-    ->where("EVAL_TYPE_ID", 1)
-    ->countAllResults();
-
-    $questions = $this->evalQuestionModel
+    $questions = $this->eval_question_model
     ->where("EVAL_TYPE_ID", 1)
     ->where("IS_REMOVE", 0)
     ->orderBy("ID","ASC")
     ->findAll();
 
-    $teacher = $this->teacherModel->find($evaluated);
+    $teacher = $this->teacher_model->find($evaluated_id);
 
-    $data = [
-      'id' => $this->session->get("userID"),
-      'pageTitle' => "EVALUATE | STUDENT",
-      'baseUrl' => base_url(),
-      // add some variables here
+    $args = [
       'evaluator_id' => $evaluator_id,
-      'subject_id' => $subject,
-      'evaluated' => $teacher,
-      'isDone' => ($isExist > 0)? true: false,
+      'subject_id' => $subject_id,
+      'evaluated_data' => $teacher,
+      'is_done' => $is_done,
       'questions' => $questions,
     ];
+
+    $data = $this->map_page_parameters("EVALUATE | STUDENT", $args);
+
     echo view("evaluation/layout/header", $data);
     echo view("evaluation/student", $data);
     echo view("evaluation/layout/footer");
   }
 
   public function supervisor($evaluated = false){
-    if(!$this->session->has("userID")){
+    if(!$this->session->has("user_id")){
       return redirect()->to("/");
     }
 
@@ -129,8 +124,8 @@ class Evaluation extends BaseController{
       return redirect()->to("/");
     }
     // do something here
-    $id = $this->session->get("userID");
-    $evaluator = $this->evaluatorModel
+    $id = $this->session->get("user_id");
+    $evaluator = $this->evaluator_model
     ->where("TEACHER_ID", $id)
     ->first();
 
@@ -138,40 +133,39 @@ class Evaluation extends BaseController{
       $create = [
         'TEACHER_ID' => $id,
       ];
-      $this->evaluatorModel->insert($create);
-      $evaluator_id = $this->evaluatorModel->insertID;
+      $this->evaluator_model->insert($create);
+      $evaluator_id = $this->evaluator_model->insertID;
     }else{
       $evaluator_id = $evaluator['ID'];
     }
 
     // check if done rated
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $sy = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
-    $isExist = $this->evalInfoModel
+    $isExist = $this->eval_info_model
     ->where("EVALUATOR_ID", $evaluator_id)
     ->where("EVALUATED_ID", $evaluated)
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->where("EVAL_TYPE_ID", 3)
     ->countAllResults();
 
-    $questions = $this->evalQuestionModel
+    $questions = $this->eval_question_model
     ->where("EVAL_TYPE_ID", 3)
     ->where("IS_REMOVE", 0)
     ->orderBy("ID","ASC")
     ->findAll();
 
-    $teacher = $this->teacherModel->find($evaluated);
+    $teacher = $this->teacher_model->find($evaluated);
 
-    $data = [
-			'id' => $this->session->get("userID"),
-			'pageTitle' => "EVALUATE | SUPERVISOR",
-			'baseUrl' => base_url(),
-      // add some variables here
+    $args = [
       'evaluator_id' => $evaluator_id,
       'evaluated' => $teacher,
       'isDone' => ($isExist > 0)? true: false,
       'questions' => $questions,
 		];
+
+    $data = $this->map_page_parameters("EVALUATE | SUPERVISOR", $args);
+
     echo view("evaluation/layout/header", $data);
     echo view("evaluation/supervisor", $data);
 		echo view("evaluation/layout/footer");
@@ -185,7 +179,7 @@ class Evaluation extends BaseController{
     $eval_type_id = $this->request->getPost("eval_type");
 
     // create eval info
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $sy = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
     $eval_info = [
       'EVALUATOR_ID' => $evaluator_id,
@@ -202,13 +196,14 @@ class Evaluation extends BaseController{
       $eval_info['COMMENT'] = $comment;
     }
 
-    $this->evalInfoModel->insert($eval_info);
-    $eval_info_id =  $this->evalInfoModel->insertID;
+    $this->eval_info_model->insert($eval_info);
+    $eval_info_id =  $this->eval_info_model->insertID;
 
     // get the rating
     $ratings = [];
-    $questions = $this->evalQuestionModel
+    $questions = $this->eval_question_model
     ->where("EVAL_TYPE_ID", $eval_type_id)
+    ->where("IS_REMOVE","0")
     ->findAll();
 
     foreach ($questions as $key => $value) {
@@ -222,9 +217,14 @@ class Evaluation extends BaseController{
         'EVAL_INFO_ID' => $eval_info_id,
       ];
 
-      $this->ratingModel->insert($rate);
+      $this->rating_model->insert($rate);
 
       array_push($ratings, $rate);
+    }
+
+    log_message("debug","at evaluation.submit: eval_type:$eval_type_id");
+    if($eval_type_id == 1){
+      $this->count_student_evaluated($evaluator_id);
     }
 
     // {end}
@@ -243,16 +243,26 @@ class Evaluation extends BaseController{
     return $this->setResponseFormat('json')->respond($response, 200);
   }
 
-  public function func_name(){
-    header("Content-type:application/json");
-    // do something here
+  private function count_student_evaluated($evaluator_id){
+    $user_db_util = new UserDButil();
 
-    // {end}
-    $data = [];
-    $response = [
-      "message" => "OK",
-      "data" => $data,
+    $user_id = $this->session->get("user_id");
+
+    $is_cleared = $user_db_util->is_cleared($user_id);
+    
+    log_message("debug","at evaluation.count_student_evaluated: user_id:$user_id is_cleared:$is_cleared");
+
+    $curr_school_year = $user_db_util->get_current_school_year();
+    // update student status
+    $update_status = [
+      'STATUS' => ($is_cleared)? 1 : 0,
+      'DATE' => $this->time->now()->toDateTimeString()
     ];
-    return $this->setResponseFormat('json')->respond($response, 200);
+  
+    $this->student_status_model
+      ->where("SCHOOL_YEAR_ID", $curr_school_year['ID'])
+      ->where("STUDENT_ID", $user_id)
+      ->set($update_status)
+      ->update();
   }
 }

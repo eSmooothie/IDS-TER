@@ -1,8 +1,9 @@
 {
-  "devDependencies": {
-    "tailwindcss": "^3.0.7"
-  },
   "dependencies": {
-    "@themesberg/flowbite": "^1.2.0"
+    "@themesberg/flowbite": "^1.2.0",
+    "flowbite": "^1.4.5"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.0.24"
   }
 }

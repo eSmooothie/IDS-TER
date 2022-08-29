@@ -9,20 +9,19 @@ class Questionaire extends BaseController
 			return redirect()->to("/admin");
 		}
 
-		$sessionId = $this->session->get("adminID");
+		
 		$pageTitle = "ADMIN | STUDENT";
 		$args = [
 			
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
 
 		echo view("admin/layout/header", $data);
-		echo view("admin/pages/nav",$data);
+
 		echo view("admin/pages/questionaire", $data);
 		echo view("admin/layout/footer");
 	}
@@ -33,14 +32,14 @@ class Questionaire extends BaseController
 		}
 
 		$asType = ["STUDENT","PEER","SUPERVISOR"];
-		$type = $this->evalTypeModel->find($id);
-		$questionaire = $this->evalQuestionModel
+		$type = $this->eval_type_model->find($id);
+		$questionaire = $this->eval_question_model
 		->where("EVAL_TYPE_ID", $type['ID'])
 		->where("IS_REMOVE", 0)
 		->orderBy("ID","ASC")
 		->findAll();
 
-		$sessionId = $this->session->get("adminID");
+		
 		$pageTitle = "ADMIN | STUDENT";
 		$args = [
 			'id' => $id,
@@ -48,14 +47,14 @@ class Questionaire extends BaseController
 			'questions' => $questionaire,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
+			
 			$pageTitle,
 			$args
 		);
 
 		echo view("admin/layout/header", $data);
-		echo view("admin/pages/nav",$data);
+
 		echo view("admin/pages/viewQuestionaire", $data);
 		echo view("admin/layout/footer");
 	}
@@ -67,9 +66,9 @@ class Questionaire extends BaseController
 
 		
 		$asType = ["STUDENT","PEER","SUPERVISOR"];
-		$question = $this->evalQuestionModel->find($questionId);
+		$question = $this->eval_question_model->find($questionId);
 
-		$sessionId = $this->session->get("adminID");
+		
 		$pageTitle = "ADMIN | STUDENT";
 		$args = [
 			'id' => $id,
@@ -77,14 +76,14 @@ class Questionaire extends BaseController
 			'question' => $question,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
+			
 			$pageTitle,
 			$args
 		);
 
 		echo view("admin/layout/header", $data);
-		echo view("admin/pages/nav",$data);
+
 		echo view("admin/pages/modifyQuestion", $data);
 		echo view("admin/layout/footer");
 	}
@@ -97,7 +96,7 @@ class Questionaire extends BaseController
 
 		$data = ["QUESTION" => $new];
 		
-		$this->evalQuestionModel->update($qid, $data);
+		$this->eval_question_model->update($qid, $data);
 
 		$response = [
 			"message" => "OK",
@@ -114,21 +113,21 @@ class Questionaire extends BaseController
 		
 		$asType = ["STUDENT","PEER","SUPERVISOR"];
 
-		$sessionId = $this->session->get("adminID");
+		
 		$pageTitle = "ADMIN | STUDENT";
 		$args = [
 			'id' => $id,
 			'type' => $asType[$id - 1],
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
+			
 			$pageTitle,
 			$args
 		);
 
 		echo view("admin/layout/header", $data);
-		echo view("admin/pages/nav",$data);
+
 		echo view("admin/pages/addQuestion", $data);
 		echo view("admin/layout/footer");
 	}
@@ -141,7 +140,7 @@ class Questionaire extends BaseController
 
 		$data = ["QUESTION" => $new, "EVAL_TYPE_ID" => $type];
 		
-		$this->evalQuestionModel->insert($data);
+		$this->eval_question_model->insert($data);
 
 		$response = [
 			"message" => "OK",
@@ -157,9 +156,9 @@ class Questionaire extends BaseController
 
 		
 		$asType = ["STUDENT","PEER","SUPERVISOR"];
-		$question = $this->evalQuestionModel->find($questionId);
+		$question = $this->eval_question_model->find($questionId);
 
-		$sessionId = $this->session->get("adminID");
+		
 		$pageTitle = "ADMIN | STUDENT";
 		$args = [
 			'id' => $id,
@@ -167,14 +166,14 @@ class Questionaire extends BaseController
 			'question' => $question,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
+			
 			$pageTitle,
 			$args
 		);
 
 		echo view("admin/layout/header", $data);
-		echo view("admin/pages/nav",$data);
+
 		echo view("admin/pages/removeQuestion", $data);
 		echo view("admin/layout/footer");
 	}
@@ -187,7 +186,7 @@ class Questionaire extends BaseController
 			'IS_REMOVE' => 1,
 		];
 
-		$this->evalQuestionModel->update($qid, $data);
+		$this->eval_question_model->update($qid, $data);
 
 		$response = [
 			"message" => "OK",

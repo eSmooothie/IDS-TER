@@ -1,16 +1,6 @@
 <?php
 
 namespace App\Controllers;
-
-// public function newSection(){
-//   header("Content-type:application/json");
-//   $response = [
-//     "message" => "OK",
-//     "data" => $data,
-//   ];
-//   return $this->setResponseFormat('json')->respond($response, 200);
-// }
-
 class Section extends BaseController{
 
   public function index(){
@@ -21,26 +11,23 @@ class Section extends BaseController{
     $gradeLevel = [];
 
     for ($i=7; $i <= 12 ; $i++) {
-      $sections = $this->sectionModel->where("GRADE_LV", $i)
+      $sections = $this->section_model->where("GRADE_LV", $i)
                                     ->where("IS_ACTIVE", 1)
                                     ->findAll();
       $gradeLevel[$i] = $sections;
     }
     
-    $sessionId = $this->session->get("adminID");
-		$pageTitle = "ADMIN | STUDENT";
+		$pageTitle = "ADMIN | SECTION";
 		$args = [
       'gradeLevel' => $gradeLevel,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
 
     echo view("admin/layout/header", $data);
-    echo view("admin/pages/nav",$data);
     echo view("admin/pages/section", $data);
     echo view("admin/layout/footer");
   }
@@ -53,10 +40,10 @@ class Section extends BaseController{
     if(!$gradeLv || !$sectionId){
       return redirect()->to("/admin/section");
     }
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first(); // get current school year
-    $sectionData = $this->sectionModel->where("ID", $sectionId)->first();
+    $sy = $this->schoolyear_model->orderBy("ID","DESC")->first(); // get current school year
+    $sectionData = $this->section_model->where("ID", $sectionId)->first();
 
-    $sectionSubject = $this->sectionSubjectModel
+    $sectionSubject = $this->section_subject_model
     ->select("
       `subject`.`ID` AS `SUBJECT_ID`,
       `subject`.`DESCRIPTION` AS `SUBJECT_DESC`,
@@ -70,7 +57,7 @@ class Section extends BaseController{
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->findAll();
 
-    $studentsInSec = $this->studentSectionModel
+    $studentsInSec = $this->student_section_model
     ->select("
       `student`.`ID` AS `STUDENT_ID`,
       `student`.`LN` AS `STUDENT_LN`,
@@ -85,8 +72,8 @@ class Section extends BaseController{
     ->where("`stud_status`.`SCHOOL_YEAR_ID`", $sy['ID'])
     ->findAll();
 
-    $sessionId = $this->session->get("adminID");
-		$pageTitle = "ADMIN | STUDENT";
+    
+		$pageTitle = "ADMIN | SECTION";
 		$args = [
       'sectionData' => $sectionData,
       'subjects' => $sectionSubject,
@@ -94,14 +81,12 @@ class Section extends BaseController{
       'schoolyear' => $sy,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
 
     echo view("admin/layout/header", $data);
-    echo view("admin/pages/nav",$data);
     echo view("admin/pages/viewSection", $data);
     echo view("admin/layout/footer");
   }
@@ -115,17 +100,20 @@ class Section extends BaseController{
       return redirect()->to("/admin/section");
     }
     
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first(); // get current school year
-    $sectionData = $this->sectionModel->where("ID", $sectionId)->first();
+    $selected_tab = $this->request->getGet("stab");
+    log_message("debug","at Section.edit_section: params:$selected_tab");
+
+    $sy = $this->schoolyear_model->orderBy("ID","DESC")->first(); // get current school year
+    $sectionData = $this->section_model->where("ID", $sectionId)->first();
     
-    $studentsInSec = $this->studentSectionModel
+    $studentsInSec = $this->student_section_model
     ->where("SECTION_ID", $sectionId)
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->findAll();
 
-    $allStudents = $this->studentModel->findAll();
+    $allStudents = $this->student_model->findAll();
     // get teacher and its subject teaches
-    $allTeachers = $this->teacherSubjectModel
+    $allTeachers = $this->teacher_subject_model
     ->select("
       `tchr_subj_lst`.`ID` AS `TCHR_SUBJ_LIST`,
       `teacher`.`ID` AS `TEACHER_ID`,
@@ -139,7 +127,7 @@ class Section extends BaseController{
     ->where("`tchr_subj_lst`.`SCHOOL_YEAR_ID`", $sy['ID'])
     ->findAll();
 
-    $sectionSubjects = $this->sectionSubjectModel
+    $sectionSubjects = $this->section_subject_model
     ->select("
       `sec_subj_lst`.`ID` AS `ID`,
       `teacher`.`ID` AS `TEACHER_ID`,
@@ -154,8 +142,8 @@ class Section extends BaseController{
     ->where("SCHOOL_YEAR_ID", $sy['ID'])
     ->findAll();
 
-    $sessionId = $this->session->get("adminID");
-		$pageTitle = "ADMIN | STUDENT";
+    
+		$pageTitle = "ADMIN | SECTION";
 		$args = [
       'sectionData' => $sectionData,
       'schoolyear' => $sy,
@@ -163,11 +151,10 @@ class Section extends BaseController{
       'allStudents' => $allStudents,
       'teachers' => $allTeachers,
       'sectionSubjects' => $sectionSubjects,
-
+      'selected_tab' => ($selected_tab)? $selected_tab:null,
 		];
 
-		$data = $this->mapPageParameters(
-			$sessionId,
+		$data = $this->map_page_parameters(
 			$pageTitle,
 			$args
 		);
@@ -200,7 +187,6 @@ class Section extends BaseController{
     }
 
     echo view("admin/layout/header", $data);
-    echo view("admin/pages/nav",$data);
     echo view("admin/pages/editSection", $data);
     echo view("admin/layout/footer");
   }
@@ -210,12 +196,12 @@ class Section extends BaseController{
     $enrollee = $this->request->getPost("enrollee");
     $sectionId = $this->request->getPost("id");
     // get current school year
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $sy = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
     // check if student x is already enrolled in curr s.y
     $remove = [];
     foreach ($enrollee as $key => $value) {
-      $check = $this->studentSectionModel->where("STUDENT_ID", $value)
+      $check = $this->student_section_model->where("STUDENT_ID", $value)
                                         ->where("SCHOOL_YEAR_ID", $sy['ID'])
                                         ->first();
       if(!empty($check)){
@@ -235,7 +221,7 @@ class Section extends BaseController{
         'CREATED_AT' => $this->getCurrentDateTime(),
       ];
       array_push($enrolled, $value);
-      $this->studentSectionModel->insert($enroll);
+      $this->student_section_model->insert($enroll);
     }
 
     $data = [
@@ -253,8 +239,16 @@ class Section extends BaseController{
     return $this->setResponseFormat('json')->respond($response, 200);
   }
 
+  //TODO: FIX BULK ENROLL
   public function enrollStudentsCSV(){
     header("Content-type:application/json");
+    $response = [
+      "message" => "ERROR: Work In Progress.",
+      "data" => null,
+    ];
+
+    return $this->setResponseFormat('json')->respond($response, 200);
+
     $csvFile = $this->request->getFile("csvFile");
     $sectionId = $this->request->getPost("sectionId");
 
@@ -299,7 +293,7 @@ class Section extends BaseController{
     foreach ($enrolleeData as $key => $value) {
       $id = $value[0]; // get only the id
       // check if id exist in db
-      $isExist = $this->studentModel->find($id);
+      $isExist = $this->student_model->find($id);
       if($isExist){
         array_push($existStudent, $id);
       }else{
@@ -309,12 +303,12 @@ class Section extends BaseController{
     $this->session->setFlashdata("invalidStudentId", $notExistStudents);
 
     // get current school year
-    $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+    $sy = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
     // check if student x is already enrolled in curr s.y
     $remove = [];
     foreach ($existStudent as $key => $studentId) {
-      $check = $this->studentSectionModel->where("STUDENT_ID", $studentId)
+      $check = $this->student_section_model->where("STUDENT_ID", $studentId)
                                         ->where("SCHOOL_YEAR_ID", $sy['ID'])
                                         ->first();
       if(!empty($check)){
@@ -334,7 +328,7 @@ class Section extends BaseController{
         'CREATED_AT' => $this->getCurrentDateTime(),
       ];
 
-      $this->studentSectionModel->insert($enroll);
+      $this->student_section_model->insert($enroll);
     }
     $this->session->setFlashdata("enrolledStudent", $existStudent);
 
@@ -365,9 +359,9 @@ class Section extends BaseController{
       $subjects = $this->request->getPost("subjects[]");
       $sectionId = $this->request->getPost("sectionId");
 
-      $sy = $this->schoolyearModel->orderBy("ID","DESC")->first();
+      $sy = $this->schoolyear_model->orderBy("ID","DESC")->first();
 
-      $currentSubject = $this->sectionSubjectModel->where("SECTION_ID", $sectionId)
+      $currentSubject = $this->section_subject_model->where("SECTION_ID", $sectionId)
                                                   ->where("SCHOOL_YEAR_ID", $sy['ID'])
                                                   ->findAll();
       $toAdd = [];
@@ -380,7 +374,7 @@ class Section extends BaseController{
       }
 
       // delete existing record
-      $this->sectionSubjectModel->where("SECTION_ID", $sectionId)
+      $this->section_subject_model->where("SECTION_ID", $sectionId)
                                           ->where("SCHOOL_YEAR_ID", $sy['ID'])
                                           ->delete();
       // start adding subject
@@ -395,7 +389,7 @@ class Section extends BaseController{
           'TEACHER_ID' => $teacherId,
           'SCHOOL_YEAR_ID' => $sy['ID'],
         ];
-        $this->sectionSubjectModel->insert($insert);
+        $this->section_subject_model->insert($insert);
       }
 
       $data = [
@@ -430,7 +424,7 @@ class Section extends BaseController{
 
 
       if(!empty($newData)){
-        $this->sectionModel->update($sectionId, $newData);
+        $this->section_model->update($sectionId, $newData);
       }
 
       $data = [
@@ -451,14 +445,14 @@ class Section extends BaseController{
       $confirmatioName = $this->request->getPost("removeSectionName");
 
       // query section
-      $sectionData = $this->sectionModel->find($sectionId);
+      $sectionData = $this->section_model->find($sectionId);
       $isMatch = ($sectionData['NAME'] === $confirmatioName)? true : false;
 
       if($isMatch){
         $inActive = [
           'IS_ACTIVE' => 0,
         ];
-        $this->sectionModel->update($sectionId, $inActive);
+        $this->section_model->update($sectionId, $inActive);
       }
 
       $data = [
@@ -488,7 +482,7 @@ class Section extends BaseController{
       'DATE' => $this->getCurrentDateTime(),
     ];
 
-    $this->sectionModel->insert($data);
+    $this->section_model->insert($data);
 
     $response = [
       "message" => "OK",

@@ -1,25 +1,26 @@
 <!-- content -->
-<div class="w-full p-2">
+<div class="w-full col-span-7 p-2 space-y-3">
   <!-- NAV BAR -->
-  <div class="p-3 bg-gray-100 rounded-md mb-3">
+  <div class="py-4 px-3 bg-gray-100 rounded-md mb-3">
     <p class=" text-xl font-bold mb-4"><?php echo "{$execom['NAME']}"; ?></p>
     <div class="">
-      <a href="<?php echo "$baseUrl/admin/execom"; ?>" class="text-blue-700">
+      <a href="<?php echo "$base_url/admin/execom"; ?>" class="text-black hover:bg-blue-400 bg-blue-300 rounded-md p-2.5 space-x-2">
         <i class="fas fa-arrow-circle-left"></i>
-        Back</a>
+        <span>Back</span>
+      </a>
     </div>
   </div>
   <!-- ASSIGN TEACHER -->
   <div class="p-3 bg-gray-100 rounded-md mb-3">
     <p class="mb-4">
-      Assign new <?php echo "{$execom['NAME']}"; ?> for school year 
+      Assign new <?php echo "{$execom['NAME']}"; ?> for school year:
       <b><?php echo "{$school_year['SY']}:{$school_year['SEMESTER']}"; ?></b>
     </p>
-    <form id="changeTeacher">
+    <form id="changeTeacher" class="space-y-4">
       <input type="hidden" name="id" value="<?php echo "{$execom['ID']}"; ?>">
-      <div class="grid grid-cols-4 mb-3 w-1/5">
-        <label for="newTeacher" class="flex items-center col-span-2">Select teacher</label>
-        <select class="ml-3 col-span-2 w-52 border border-black rounded-md px-3 py-1" name="teacher" id="newTeacher">
+      <div class="space-y-2">
+        <label for="newTeacher" class="flex items-center col-span-2">Select a teacher</label>
+        <select class="border border-black rounded-md px-3 py-1 w-1/2" name="teacher" id="newTeacher">
           <?php foreach ($teachers as $key => $value) {
             $id = $value['ID'];
             $fn = $value['FN'];
@@ -34,8 +35,8 @@
 
         </select>
       </div>
-      <div class="mb-3 w-1/5 flex justify-start">
-        <button type="submit" name="submit" class="hover:bg-blue-400 rounded-full px-5 bg-blue-300 p-2 col-span-4">Submit</button>
+      <div class="flex justify-start">
+        <button type="submit" name="submit" class="hover:bg-blue-400 rounded-md px-5 bg-blue-300 p-2 col-span-4 font-medium">Submit</button>
       </div>
     </form>
   </div>
@@ -44,9 +45,9 @@
     <table class="mb-3 min-w-full">
       <thead class="border bg-gray-300">
         <tr class="">
-          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">ID</th>
-          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">Last Name</th>
-          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">First Name</th>
+          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">TEACHER ID</th>
+          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">teacher Last Name</th>
+          <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase">teacher First Name</th>
           <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-center text-gray-700 uppercase">Action</th>
         </tr>
       </thead>
@@ -62,7 +63,7 @@
               <td class="py-4 px-6 text-sm  whitespace-nowrap"><?php echo "$ln"; ?></td>
               <td class="py-4 px-6 text-sm  whitespace-nowrap"><?php echo "$fn"; ?></td>
               <td class="py-4 px-6 text-sm font-medium text-center whitespace-nowrap">
-                <a href="<?php echo "$baseUrl/admin/teacher/view/$id"; ?>" class="text-blue-600 hover:text-blue-900">View</a>
+                <a href="<?php echo "$base_url/admin/teacher/view/$id"; ?>" class="text-blue-600 hover:text-blue-900">View</a>
               </td>
             </tr>
             <?php
@@ -73,4 +74,4 @@
   </div>
 </div>
 
-<script src="<?php echo "$baseUrl/assets/js/adminExecom.js"; ?>" charset="utf-8"></script>
+<script src="<?php echo "$base_url/assets/js/adminExecom.js"; ?>" charset="utf-8"></script>

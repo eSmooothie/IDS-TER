@@ -25,11 +25,11 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
           </div>
           <div class="text-center">
             <span class="block text-4xl">IDS - TER</span>
-            <span class="block text-xs">INTEGRATED DEVELOPMENTAL SCHOOL <br />TEACHER EFFICIENCY RATING</span>
+            <span class="block text-sm">INTEGRATED DEVELOPMENTAL SCHOOL <br />TEACHER EFFICIENCY RATING</span>
           </div>
         </div>
         <div class="mt-3">
-          <form id="userLogin">
+          <form id="userLogin" action="/user/login" method="POST">
             <!-- Log in as -->
             <div>
               <p class=" text-base">You are?</p>
@@ -57,23 +57,28 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
               </div>
             </div>
             <!-- Username -->
-            <div class="border border-gray-300 rounded-md flex justify-between mb-2">
-              <span class="text-center p-2 w-11 text-black bg-pink-300 rounded-md rounded-r-none" id="label-username"><i class="fas fa-id-card-alt"></i></span>
+            <div class=" rounded-md flex justify-between mb-2 ">
+              <span class="text-center p-2 w-11 text-black bg-pink-300 rounded-md rounded-r-none" id="label-username">
+                <i class="fas fa-id-card-alt"></i></span>
               <input required type="text" name="username" 
-              class="w-full rounded-md rounded-l-none pl-3" 
-              placeholder="ID# (e.g. 20xx-xxxx)" aria-label="Username" aria-describedby="label-username">
+              class="w-full rounded-md rounded-l-none pl-3 border-none" 
+              placeholder="20xx-xxxx" aria-label="Username" aria-describedby="label-username">
             </div>
             <!-- Password -->
-            <div class="border border-gray-300 rounded-md flex justify-between mb-3">
-              <span class="text-center p-2 w-11 text-black bg-pink-300 rounded-md rounded-r-none" id="label-password"><i class="fas fa-key"></i></span>
+            <div class=" rounded-md flex justify-between mb-3">
+              <span class="text-center p-2 w-11 text-black bg-pink-300 rounded-md rounded-r-none" id="label-password">
+                <i class="fas fa-key"></i></span>
               <input required type="password" name="password" 
-              class="w-full rounded-md rounded-l-none pl-3" 
+              class="w-full border-none rounded-md rounded-l-none pl-3 " 
               placeholder="Password" aria-label="Password" aria-describedby="label-password">
             </div>
-            <!-- err message -->
-            <div class="mb-2 text-center text-red-500">
-              <span class="" id="errMsg"></span>
-            </div>
+            
+            <?php if(!empty($sys_msg)){?>
+              <div class="mb-2 text-center text-red-500">
+                <span class="" id="errMsg"><?php echo $sys_msg;?></span>
+              </div>
+            <?php } ?>
+
             <div class="flex justify-center">
               <button type="submit" name="button" class="border hover:bg-pink-400 pt-2 pb-2 pl-9 pr-9 rounded-md bg-pink-300">LOGIN</button>
             </div>
@@ -82,6 +87,6 @@ background: linear-gradient(90deg, #420516 0%, #B42B51 100%);
       </div>
     </div>
   </div>
+
 </body>
 </html>
-<script src="<?php echo base_url(); ?>/assets/js/login.js" charset="utf-8"></script>
