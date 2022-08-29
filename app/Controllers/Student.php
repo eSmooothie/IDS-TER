@@ -119,7 +119,6 @@ class Student extends BaseController
 
 		$pageTitle = "ADMIN | STUDENT";
 		$args = [
-			'base_url' => base_url(),
 			'studentData' => $studentData,
 			'sections' => $sections,
 		];
@@ -251,10 +250,10 @@ class Student extends BaseController
 
 			// insert new student
 			$studentData = [
-				'ID' => $id,
-				'FN' => $fn,
-				'LN' => $ln,
-				'PASSWORD' => strtoupper($section),
+				'ID' => trim($id),
+				'FN' => trim($fn),
+				'LN' => trim($ln),
+				'PASSWORD' => "ids_student_".trim($id),
 			];
 
 			$this->student_model->insert($studentData);
@@ -326,5 +325,50 @@ class Student extends BaseController
 		}
 
 		return true;
+	}
+
+	public function edit_student_page(string $student_id){
+		if(!$this->session->has("adminID")){
+			return redirect()->to("/admin");
+		}
+		if(!$student_id){
+			return redirect()->to("/admin/student");
+		}
+
+		$studentData = $this->student_model->find($student_id);
+		$page_title = "ADMIN | STUDENT";
+		$args = [
+			'studentData' => $studentData,
+		];
+
+		$data = $this->map_page_parameters($page_title, $args);
+		echo view("admin/layout/header", $data);
+		echo view("admin/pages/editStudentData", $data);
+		echo view("admin/layout/footer");
+	}
+
+	public function reset_password(){
+		header("Content-type:application/json");
+		if(!$this->session->has("adminID")){
+			return redirect()->to("/admin");
+		}
+		
+		$student_id = $this->request->getPost("student_id");
+
+		$def_password = "ids_student_".trim($student_id);
+
+		$this->student_model->set('PASSWORD', $def_password)
+		->where("ID", $student_id)
+		->update();
+
+		$data = [
+			'student_id' => $student_id,
+		];
+
+		$response = [
+			"message" => "OK",
+			"data" => $data,
+		];
+		return $this->setResponseFormat('json')->respond($response, 200);
 	}
 }

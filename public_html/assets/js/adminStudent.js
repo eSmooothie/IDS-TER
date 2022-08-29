@@ -151,7 +151,7 @@ function generateTableRow({id,fn,ln,section,status, bg_status,} = {}){
 
     const linkContainer = td.cloneNode();
     const baseUrl = window.location.origin;
-    const link = "<a href=\""+ baseUrl +"/admin/student/view/"+ id +"\" class=\"text-blue-600 hover:text-blue-900\">View</a>";
+    const link = "<a href=\""+ baseUrl +"/admin/student/"+id+"/view"+"\" class=\"text-blue-600 hover:text-blue-900\">View</a>";
     linkContainer.classList = fnContainer.classList;
     linkContainer.classList.add("text-center");
     linkContainer.innerHTML = link;

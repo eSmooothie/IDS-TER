@@ -63,11 +63,15 @@ $routes->post("/admin/questionaire/remove", "Questionaire::remove");
 // admin:students
 $routes->get("/admin/student", "Student::index");
 $routes->get("/admin/student/add", "Student::add_student_page");
-$routes->get("/admin/student/view/(:any)", "Student::view_student_page/$1");
+$routes->get("/admin/student/(:segment)/view", "Student::view_student_page/$1");
+$routes->get("/admin/student/(:segment)/edit", "Student::edit_student_page/$1");
 
 $routes->get("/list/student", "Student::get_students");
 
+$routes->post("/admin/student/reset_password", "Student::reset_password");
+
 $routes->post("/admin/student/add/csv", "Student::add_new_student_csv");
+
 $routes->post("/admin/student/add/individual", "Student::add_new_student_individual");
 // admin:teacher
 $routes->get("/admin/teacher", "Teacher::index");

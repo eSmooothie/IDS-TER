@@ -1,20 +1,20 @@
 <!-- content -->
-<div class="w-full p-2 col-span-7">
+<div class="w-full p-2 col-span-7 space-y-3">
   <!-- CURRENT USER INFO -->
-  <div class="p-3 bg-gray-100 rounded-md mb-3">
-    <div class="mb-5">
+  <div class="p-3 bg-gray-100 rounded-md space-y-2">
+    <span class=" text-sm">student > <?php echo $studentData['ID']; ?> > view</span>
+    <div class="">
       <span class=" text-xl font-bold"><?php echo "{$studentData['LN']}, {$studentData['FN']}"; ?></span>
     </div>
     <div class="">
       
     </div>
   </div>
-  <div class="p-3 bg-gray-100 rounded-md mb-3">
+  <div class="p-3 bg-gray-100 rounded-md">
     <a href="<?php echo "$base_url/admin/student";?>" class=" text-blue-700">
       <i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back
     </a>
-    <!-- TODO: ADD EDIT PAGE -->
-    <a href="#" class=" ml-4 text-black">
+    <a href="<?php echo "$base_url/admin/student/{$studentData['ID']}/edit"; ?>" class=" ml-4 text-blue-700">
       <i class="fas fa-edit    "></i> Edit
     </a>
   </div>
