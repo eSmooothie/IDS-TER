@@ -216,7 +216,7 @@ class Teacher extends BaseController{
 			"message" => "OK",
 			"data" => $data,
 		];
-    
+
 		return $this->setResponseFormat('json')->respond($response, 200);
 	}
 
