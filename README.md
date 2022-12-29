@@ -14,7 +14,7 @@ The IDS Teacher Efficiency Rating is a tool that allows students and teachers to
 
 ### 🤝 Open for collaborator 
 Just drop a message
-  - 📫 [sherwin.sandoval0401@g.msuiit.edu.com](mailto:sherwin.sandoval0401@g.msuiit.edu.com)
+  - 📫 [sherwin.sandoval026@gmail.com](mailto:sherwin.sandoval026@gmail.com)
   - 🔗 [Sherwin Sandoval](https://www.linkedin.com/in/sherwin-sandoval-bab61819b/)
 
 ### Personal Note
